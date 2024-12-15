@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<!-- Import tModLoader mod properties -->
+	<Import Project="..\tModLoader.targets" />
+
+	<!-- General -->
+	<PropertyGroup>
+	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+
+	<!-- References -->
+	<ItemGroup>
+	  <EffectFiles Include="**/*.fx" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Reference Include="NetEasy">
+	    <HintPath>lib\NetEasy_v0.1.8.dll</HintPath>
+	  </Reference>
+	  <Reference Include="NetSerializer">
+	    <HintPath>lib\NetSerializer.dll</HintPath>
+	  </Reference>
+	  <Reference Include="StructureHelper">
+	    <HintPath>lib\StructureHelper.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
+
+	<!-- Compilation -->
+	<Target Name="BuildEffects" BeforeTargets="Build">
+      <Exec Command="@(EffectFiles->'&quot;$(ProjectDir)/Assets/Effects/Compiler/fxc.exe&quot; &quot;%(RecursiveDir)%(FileName)%(Extension)&quot; /T fx_2_0 /nologo /Fo &quot;%(RecursiveDir)%(FileName).fxc&quot; &#xA;&#xD;')" WorkingDirectory="$(ProjectDir)" IgnoreExitCode="false" />
+    </Target>
+
+</Project>

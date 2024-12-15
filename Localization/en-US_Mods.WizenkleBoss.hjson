@@ -1,0 +1,421 @@
+Items: {
+	Test: {
+		DisplayName: Test
+		Tooltip: ""
+	}
+
+	BarrierTelescopeItem: {
+		DisplayName: Ancient Telescope
+		Tooltip: "'An old golden telescope gifted to the Guild Astronomer.'"
+	}
+
+	ObservatoryChairItem: {
+		DisplayName: Observatory Chair
+		Tooltip: ""
+	}
+
+	ObservatoryChartItem: {
+		DisplayName: Constellation Chart
+		Tooltip: "'Depicts a constellation with emphasis on a large yellow star.'"
+	}
+
+	StarryCloudItem: {
+		DisplayName: Starry Cloud Block
+		Tooltip: "'50% off.'"
+	}
+
+	StarryCloudWallItem: {
+		DisplayName: Starry Cloud Wall
+		Tooltip: "'150% off.'"
+	}
+
+	AstronomyNotes: {
+		DisplayName: Astronomy Notes
+		Tooltip: ""
+	}
+
+	ObservatorySatelliteDishItem: {
+		DisplayName: Ancient Satellite Dish
+		Tooltip: "'An old satelite dish crafted out of a desperate attempt to contact instellar beings.'"
+	}
+
+	InterGalacticSludge: {
+		DisplayName: Extra-Dimensional Soup
+		Tooltip:
+			'''
+			I'm not even going to try to explain what you just did.
+			Hides you from non Extra-Dimensional entities, at the cost of no longer being able to use material items.
+			Provides defense and speed boosts.
+			You'll return back to normal reality if you take damage.
+			'''
+	}
+
+	InkDye: {
+		DisplayName: Extra-Dimensional Dye
+		Tooltip: 4D DYE WOOOOOOOOOO!!!!
+	}
+
+	ExtraDimensionalArtifact: {
+		DisplayName: Extra Dimensional Artifact
+		Tooltip: ""
+	}
+}
+
+UI: {
+	Telescope: {
+		MovementKeyPrompt: Use movement keys to pan
+		MovementKeyPromptUnder: You can disable this prompt from this mod's config options
+	}
+}
+
+Tiles: {
+	BarrierTelescopeTile.Hover: Look At
+	ObservatorySatelliteDish.Hover: Select Target
+}
+
+Projectiles: {
+	TestProj.DisplayName: Test Proj
+	DeepSpaceTransmitter.DisplayName: Deep Space Transmitter
+	InkSplat.DisplayName: Ink Splat
+}
+
+Configs: {
+	ZDebugConfig: {
+		DisplayName: Debug Config
+
+		TelescopeDebugText: {
+			Label: "[i:WizenkleBoss/BarrierTelescopeItem] Telescope Debug Text"
+			Tooltip: Enables debuging text while using the telescope.
+		}
+	}
+
+	WizenkleBossConfig: {
+		DisplayName: Main Config
+
+		Headers: {
+			Effects: Effects
+			Sounds: Sounds
+			UI: UI
+		}
+
+		TooltipEffects: {
+			Label: "[i:1875] Tooltip Effects"
+			Tooltip: If this mod's visual effects on item tooltips are enabled or not.
+		}
+
+		Particles: {
+			Label: "[i:3576] Particle Effects"
+			Tooltip: If this mod's visual particles are enabled or not.
+		}
+
+		ParticleCap: {
+			Label: "[i:485] Max Particles"
+			Tooltip: Max amount of particles that can be spawned at once.
+		}
+
+		LaserLoop: {
+			Label: "[i:3541] Laser beam Sounds"
+			Tooltip: If the loud noise of laser beams is audable.
+		}
+
+		VideoOpacity: {
+			Label: "[i:5061] Video Opacity"
+			Tooltip: The opacity that video based effects are drawn with. (0 being invisible, and 1 being visible)
+		}
+
+		VideoVolume: {
+			Label: "[i:5112] Video Volume"
+			Tooltip: The volume of video based effects.
+		}
+
+		TelescopeMovementKeyPrompt: {
+			Label: "[i:WizenkleBoss/ObservatoryChartItem] Screen Pan Prompt"
+			Tooltip: If a key prompt is shown when opening some UI.
+		}
+
+		TelescopeMovementVelocity: {
+			Label: "[i:WizenkleBoss/BarrierTelescopeItem] Telescope Screen Pan Speed"
+			Tooltip: Controls telescope movement speed.
+		}
+
+		SatelliteMovementVelocity: {
+			Label: "[i:WizenkleBoss/ObservatorySatelliteDishItem] Satellite Dish Screen Pan Speed"
+			Tooltip: Controls satellite dish movement speed.
+		}
+	}
+}
+
+WorldGen.Observatory: Killing a socalist
+
+Buffs: {
+	InkDrugBuff: {
+		DisplayName: ████████
+		Description: Man, these edibles aint shi--
+	}
+
+	InkDrugStatBuff: {
+		DisplayName: Legal Extra-Dimensionality Dosage
+		Description: Finally, you can escape the feds.
+	}
+}
+
+rant:
+	'''
+	ohhhhhh a-WHOOPS!!! Looks like you have RETRO/TRIPPY LIGHTING! Because the Terraria devs are incompetent idiots I have to type this :D
+
+	If you're wondering that that means allow me to explain:
+	Your bitchass either has a shit pc and can only run on the lowest graphics OR you think it looks cool (invalid opinion).
+	Why is this a problem though? Shouldn't your shaders work regardless?
+	NOPE!
+	For whatever reason that setting disables ALL screen shaders; as well as water ripples, some tile based effects, and any attempt to use the screen to draw itself.
+
+	So I'm requiring YOU to turn it to either WHITE or COLOR, thanks.
+
+	However, to the Terraria devs who may somehow be reading this.
+	Do you hate shaders?
+	When developing the game did you think disabling them would be a neat config despite now in 1.4.4 having n^78 primitives and shaders all at once, and then NEVER remove that function?
+	Does good code make you flacid?
+	Thank you for ruining my day!
+
+	PS. dm @z_e_n_. on discord if you ACTUALLY got this when loading in and not by looking for it.
+	'''
+rant2: Press escape and then click somewhere in this vauge direction --->
+
+StarNames: {
+	Name0: VACS
+	Name1: FLEUG
+	Name2: FLAP
+	Name3: VLORS
+	Name4: GREAD
+	Name5: CRAEZZAMS
+	Name6: VRUEPLEPS
+	Name7: VRIAMMISH
+	Name8: THIOKSEG
+	Name9: PEGTEG
+	Name10: CLOITS
+	Name11: OBRUK
+	Name12: BRAIR
+	Name13: KEI
+	Name14: COI
+	Name15: VROARRIF
+	Name16: ACIADRITH
+	Name17: UFOOPLUX
+	Name18: APOKREIY
+	Name19: HUAPHIMS
+	Name20: CHIAP
+	Name21: OZA
+	Name22: LEAC
+	Name23: SOIS
+	Name24: XAI
+	Name25: FLIDROAL
+	Name26: IQOOKSUH
+	Name27: OGATRA
+	Name28: FUACHUP
+	Name29: USRACRUAC
+	Name30: AYOIX
+	Name31: GLEAY
+	Name32: HOK
+	Name33: PIUX
+	Name34: GLUC
+	Name35: VLIZRAIY
+	Name36: QUSHAUB
+	Name37: XUZRO
+	Name38: ESHOABBENS
+	Name39: DEITHATS
+	Name40: QAUNT
+	Name41: TREL
+	Name42: FUAP
+	Name43: ASTREC
+	Name44: JAP
+	Name45: GRUVRAH
+	Name46: GLAAJE
+	Name47: WEAYI
+	Name48: NIAPU
+	Name49: GRARTEUL
+	Name50: IWEN
+	Name51: SROOY
+	Name52: AROTS
+	Name53: BLOY
+	Name54: GEA
+	Name55: BEABIR
+	Name56: DROIDREPS
+	Name57: CLEIBSIKT
+	Name58: FAABLUC
+	Name59: HEDOM
+	Name60: PHON
+	Name61: NIAH
+	Name62: EKLAP
+	Name63: EKLI
+	Name64: KAO
+	Name65: CRIUDSAD
+	Name66: EGEOJAH
+	Name67: AKLUECDULT
+	Name68: POPSAH
+	Name69: ZLUSROB
+	Name70: GLICS
+	Name71: VLIAL
+	Name72: KEE
+	Name73: MOS
+	Name74: APUM
+	Name75: OQAKKEOYS
+	Name76: MISRAI
+	Name77: IPROATSIH
+	Name78: VRUSSES
+	Name79: OLEEZTEK
+	Name80: PROO
+	Name81: FLAA
+	Name82: PLENS
+	Name83: SHE/HER
+	Name84: ALEG
+	Name85: FAEDSU
+	Name86: PREEPLUTH
+	Name87: ZLAIKAD
+	Name88: NIGTAB
+	Name89: QEUHINS
+	Name90: ETRIK
+	Name91: WIG
+	Name92: GROO
+	Name93: GREUF
+	Name94: STRITS
+	Name95: DRAASTREM
+	Name96: LIANLED
+	Name97: SEOMIY
+	Name98: OGLIULLAYS
+	Name99: THELSUA
+	Name100: ETIA
+	Name101: VLUKT
+	Name102: PUSH
+	Name103: QAP
+	Name104: QAUR
+	Name105: CLISTRAK
+	Name106: ZLAUZREM
+	Name107: BUBRASH
+	Name108: TROOGRER
+	Name109: IFOKDER
+	Name110: ZEN
+	Name111: WITHER
+	Name112: BUCKLE
+	Name113: LETTUCE
+	Name114: PLUSHIE
+	Name115: EM
+	Name116: IHATEYOUSOUNDCLOUD
+	Name117: SPOL
+	Name118: BI
+	Name119: CLOVER
+	Name120: LENTE
+	Name121: EEP
+	Name122: LUNA
+	Name123: NON-DESCRIPT
+	Name124: TRANS
+	Name125: PEESE
+	Name126: CHURPLEY
+	Name127: BRIDGET
+	Name128: TOASTY
+	Name129: OTTER
+	Name130: SLYVIE
+	Name131: THERANDOMSCAMMER
+	Name132: INTERLOPER
+	Name133: AZZY
+	Name134: LUCI
+	Name135: JAMZTHEAIBITHCBOY
+	Name136: MOCHI
+	Name137: CAPRA
+	Name138: VIX
+	Name139: STARIHATE
+	Name140: BIG
+	Name141: SMOL
+	Name142: SCP
+	Name143: POI
+	Name144: LILY
+	Name145: LOLXD
+	Name146: HELL
+	Name147: BRIGHTBURNER
+	Name148: TWIN
+	Name149: N/A
+	Name150: UNDEFINED
+	Name151: TURTLE
+	Name152: QUEER
+	Name153: CELESTE
+	Name154: "11456"
+	Name155: CORE
+	Name156: lowercase
+	Name157: THE CHICKEN
+	Name158: BEREFT
+	Name159: EMEOCS
+	Name160: SHUH
+	Name161: UTRAICT
+	Name162: EQOA
+	Name163: AKLEO
+	Name164: PEUNTEC
+	Name165: ACAPPIUFT
+	Name166: WOHLIS
+	Name167: SLOMUENT
+	Name168: JEAQACT
+	Name169: WEI
+	Name170: XUNS
+	Name171: ZLAEX
+	Name172: INEUPH
+	Name173: DAAX
+	Name174: TEMIUB
+	Name175: SOAPUPH
+	Name176: PHASSIR
+	Name177: GLICHI
+	Name178: ZRURTEU
+	Name179: HOIX
+	Name180: EBRUE
+	Name181: FUB
+	Name182: XEINT
+	Name183: XOO
+	Name184: MIPAUG
+	Name185: MAAZTAF
+	Name186: ZLUGAIPH
+	Name187: ZROOSTORS
+	Name188: SAMIOSH
+	Name189: XOOTH
+	Name190: NOHITS
+	Name191: ULEEG
+	Name192: BRAA
+	Name193: KRUAM
+	Name194: ABILTOIS
+	Name195: DALSA
+	Name196: EZIMSE
+	Name197: GRUEBBEK
+	Name198: GROOZLIMS
+	Name199: IPROOH
+	Name200: WENT
+	Name201: GLUESH
+	Name202: SLID
+	Name203: ETOAT
+	Name204: JOOMDAY
+	Name205: UCENTUESH
+	Name206: PIOMMEG
+	Name207: CHANLE
+	Name208: CRIUBSIC
+	Name209: CHOF
+	Name210: BULS
+	Name211: SREAFT
+	Name212: GLAUNS
+	Name213: SUS
+	Name214: SUNLEG
+	Name215: GAULSI
+	Name216: EBRAOKA
+	Name217: ILAINSON
+	Name218: CHAALSOTS
+	Name219: OCTOBER
+	Name220: COLON THREE
+	Name221: LEIA
+	Name222: BIRGIR
+	Name223: PINECONIUS
+	Name224: TMODLET
+	Name225: CALMODLET
+	Name226: VAEMA
+	Name227: SAPPHO
+	Name228: TUNAMOD.CS
+	Name229: PRIVATE
+	Name230: PROTECTED
+	Name231: UNSAFE
+	Name232: ASYNC
+	Name233: VIRUAL
+	Name234: VOID
+	ImportantStarName: UNKNOWN
+}

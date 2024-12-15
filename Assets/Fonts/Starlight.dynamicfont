@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<XnaContent xmlns:Graphics="ReLogic.Content.Pipeline">
+	<Asset Type="Graphics:DynamicFontDescription">
+
+		<FontName>Andy</FontName>
+
+		<Size>14</Size>
+
+		<Spacing>0</Spacing>
+
+		<UseKerning>true</UseKerning>
+
+		<Style>Bold</Style>
+
+		<DefaultCharacter>*</DefaultCharacter>
+
+		<VerticalOffset>DefaultFontAscent</VerticalOffset>
+
+		<CharacterRegions>
+			
+			<CharacterRegion>
+				<FontName>Starlight</FontName>
+				<Size>12</Size>
+				<Style>Regular</Style>
+				<Start>&#x20;</Start>
+				<End>&#xA9;</End>
+			</CharacterRegion>
+
+			<CharacterRegion>
+				<FontName>Starlight</FontName>
+				<Size>12</Size>
+				<Style>Regular</Style>
+				<Start>&#xAA;</Start>
+				<End>&#x385;</End>
+			</CharacterRegion>
+
+		</CharacterRegions>
+	</Asset>
+</XnaContent>

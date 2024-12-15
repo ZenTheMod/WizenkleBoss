@@ -1,0 +1,81 @@
+﻿
+[c/ff8484:WIZENKLE]
+★
+[c/d46eb5:G][c/cc6cba:U][c/c46bbf:I][c/bc6ac3:L][c/b369c7:D]
+[c/aa68ca:A][c/a168cd:S][c/9767cf:T][c/8d67d1:R][c/8267d2:O][c/7767d2:N][c/6b66d1:O][c/5f66d0:M][c/5267ce:Y]
+[c/4367cc:M][c/3167c8:O][c/1767c4:D]
+
+⎯⎯⎯Additions⎯⎯⎯
+
+Currently adds:
+★ Chill Furniture
+★ Drugs
+★ Tools, Dye, Pets*
+★ 1 Dope New Mechanic
+★ 1 Boss*
+
+⎯⎯⎯Notes⎯⎯⎯
+
+INCOMPATIBLE WITH THE FOLLOWING MODS:
+★ Better Tooltips
+★ Terraria Overhaul*
+★ Any High FPS Mod*
+
+★ Best played with other content mods kinda like a small addon. (Don't play it with Calamity Mod (it's extremely unbalanced conpared to this mod.))
+
+⎯⎯⎯Credits⎯⎯⎯
+
+Shaders (ShaderToy):
+
+	☆ I am PRAYING I have the rights to use these :33
+
+★ Thanks to @MajorCallisto for their fork of https://www.shadertoy.com/view/Xd23Dh by @iq.
+	☆ https://www.shadertoy.com/view/MfsyRn
+	☆ (I litterally just got some ideas ab how to use lerping/mixing I didnt even use the noise :sob:, but I wanna make sure I credit everyone just in case.)
+
+★ Thanks to @shadmar for their fork of https://www.shadertoy.com/view/MtsSWs by @jackdavenport.
+	☆ https://www.shadertoy.com/view/MsySzy
+
+★ No thanks to past me <- FUCK THIS PERSON
+	☆ https://www.shadertoy.com/view/4fKyzt
+
+★ Thanks to @MysteryPancake for their base shader that I forked.
+	☆ https://www.shadertoy.com/view/dtfSz4 (original)
+	☆ https://www.shadertoy.com/view/XftfzM (my fork)
+
+★ Thanks to @devrique for their base shader that I forked*.
+	☆ https://www.shadertoy.com/view/wllBDM (original)
+	☆ https://www.shadertoy.com/view/ltSXRz (fisheye shader they used made by @ddoodm)
+	☆ https://www.shadertoy.com/view/lcyfzm (my buggy fork)
+
+Shaders (Other):
+
+★ lolxd (Huge overall help)
+
+★ Photonic0 (Main inspo for the planet shader, I don't think I used most of their code tbh)
+	☆ https://www.shadertoy.com/view/MfcfWX (my slightly stupider proper planet shader :3)
+
+★ RecursiveCollapse (The laser shader probably)
+
+Sounds:
+★ Freesound.org (fuck you, fuck you, fuck you, fuck you...)
+★ SoundCloud (fuck you, fuck you, fuck you, fuck you...)
+
+Code:
+★ lion8cake/Kittenbun - IL editing god (bassically jesus)
+★ Lucille Karma - uhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+★ Past me - FUCK THIS PERSON !!!!!!
+
+Special Thanks:
+★ Inspiration - https://youtu.be/fqnJcZiDMDo?t=137 (fucking love this)
+★ Inspiration - Lucille Karma
+★ this fucking chad - https://www.youtube.com/@Colganology
+
+★ Inspiration - If you somehow haven't figured it out by now this mod is HEAVELY inspired by [c/ff7d25:Outer Wilds].
+	☆ Even if you don't enjoy this mod please give this game a try, trust me you'll love it. And also try to avoid spoilers as much as possible.
+
+★ Wither, Bucklebolts, everyone on Lettucord, my annoying ass brother, Outer Wilds devs, Spotify (sanity check), my gender, why am i continuing to write this wth, im gonna, HEL⎯P⎯⎯
+
+
+
+★⎯⎯⎯ Contact @z_e_n_. on discord if you have any pressing questions, ESPECIALLY if you find any bugs, OR i forgot to credit you. ⎯⎯⎯★
