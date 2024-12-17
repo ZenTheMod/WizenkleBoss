@@ -64,7 +64,7 @@ namespace WizenkleBoss.Content.UI
 
                 frostyLensShader.Value.CurrentTechnique.Passes[0].Apply();
 
-                Main.spriteBatch.Draw(telescopeTargetByRequest.GetTarget(), new Rectangle((int)((Main.screenWidth * Main.UIScale) / 2) - (int)(540 * Main.UIScale), (int)((Main.screenHeight * Main.UIScale) / 2) - (int)(540 * Main.UIScale), (int)(1080 * Main.UIScale), (int)(1080 * Main.UIScale)), Color.White);
+                Main.spriteBatch.Draw(telescopeTargetByRequest.GetTarget(), new Rectangle((int)((Main.screenWidth * Main.UIScale) / 2) - 540, (int)((Main.screenHeight * Main.UIScale) / 2) - 540, 1080, 1080), Color.White);
 
                 Main.spriteBatch.End();
                 Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);

@@ -62,7 +62,7 @@ namespace WizenkleBoss.Content.UI
 
                 float interpolator = MathF.Pow(2f, 10 * (openAnimation - 1));
 
-                Rectangle frame = new((int)((Main.screenWidth * Main.UIScale) / 2), (int)((Main.screenHeight * Main.UIScale) / 2), (int)(1080 * Main.UIScale * interpolator), (int)(1080 * Main.UIScale * interpolator));
+                Rectangle frame = new((int)((Main.screenWidth * Main.UIScale) / 2), (int)((Main.screenHeight * Main.UIScale) / 2), (int)(1080 * interpolator), (int)(1080 * interpolator));
 
                 Main.spriteBatch.Draw(satelliteDishTargetByRequest.GetTarget(), frame, null, Color.White * interpolator, 0, TargetSize / 2, SpriteEffects.None, 0f);
 
