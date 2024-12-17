@@ -1,2 +1,2 @@
 # WizenkleBoss
- 'Guild Astronomy Mod' github page bcus stupid - TEST
+ 'Guild Astronomy Mod' github page bcus stupid
