@@ -41,7 +41,7 @@ float4 PixelShaderFunction(float4 sampleColor : COLOR0, float2 coords : TEXCOORD
     dirAvg.y = cos(uTime) * dirAvg.y;
     
         // Add the emboss layer to the base color
-    return col + ((dirAvg.x * embossColor) + (dirAvg.y * embossColor)) * sampleColor;
+    return (col + ((dirAvg.x * embossColor) + (dirAvg.y * embossColor))) * sampleColor;
 }
 
 technique Technique1

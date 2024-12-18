@@ -36,7 +36,7 @@ namespace WizenkleBoss.Assets.Textures
         public static Texture2D Wood { get; private set; }
         public static Texture2D Blink { get; private set; }
         public static Texture2D BlinkOuter { get; private set; }
-        public static Texture2D Iris { get; private set; }
+        public static Texture2D InkDash { get; private set; }
         public static Texture2D TextBoxStars { get; private set; }
         public static Texture2D TelescopeMap { get; private set; }
 
@@ -88,7 +88,7 @@ namespace WizenkleBoss.Assets.Textures
             Blink = LoadTexture2D("Telescope/Blink");
             BlinkOuter = LoadTexture2D("Telescope/BlinkOuter");
 
-            Iris = LoadTexture2D("Iris");
+            InkDash = LoadTexture2D("InkDash");
 
             TextBoxStars = LoadTexture2D("Telescope/TextBoxStars");
 
@@ -122,7 +122,7 @@ namespace WizenkleBoss.Assets.Textures
             Wood = null;
             Blink = null;
             BlinkOuter = null;
-            Iris = null;
+            InkDash = null;
             TextBoxStars = null;
             TelescopeMap = null;
         }

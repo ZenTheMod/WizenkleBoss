@@ -118,7 +118,7 @@ namespace WizenkleBoss.Assets.Helper
         public static bool AnyActiveInk() => 
             Main.projectile.Where(p => p.active && (p.ModProjectile is IDrawInk || p.ModProjectile is IDrawInInk)).Any() || 
             Main.npc.Where(npc => npc.active && (npc.ModNPC is IDrawInk || npc.ModNPC is IDrawInInk)).Any() || 
-            Main.player.Where(p => p.active && p.HasBuff<InkDrugStatBuff>() && p.dye.Length > 0).Any() || 
+            Main.player.Where(p => p.active && (p.HasBuff<InkDrugStatBuff>() || p.HasBuff<InkDrugBuff>()) && p.dye.Length > 0).Any() || 
             Main.LocalPlayer.GetModPlayer<InkPlayer>().Intoxication > 0f;
         public static void DrawInk()
         {
@@ -179,10 +179,26 @@ namespace WizenkleBoss.Assets.Helper
             foreach (var player in Main.player.Where(p => p.active && (p.HasBuff<InkDrugBuff>() || p.HasBuff<InkDrugStatBuff>()) && p.dye.Length > 0))
             {
                 player.heldProj = -1;
-                if (player.HasBuff<InkDrugStatBuff>())
-                    Helper.DrawGhostSimple(Main.Camera, player, player.position - (Main.screenPosition - Main.screenLastPosition));
+                if (player.HasBuff<InkDrugStatBuff>() && player.GetModPlayer<InkPlayer>().InkyArtifact && player.GetModPlayer<InkPlayer>().InkDashCooldown > 0)
+                {
+                    float rot = player.velocity.ToRotation() + MathHelper.PiOver2;
+
+                    rot = MathF.Round(rot / MathHelper.PiOver4) * MathHelper.PiOver4;
+
+                    if (player.GetModPlayer<InkPlayer>().InTile)
+                    {
+                        int count = (int)(((Main.GlobalTimeWrappedHourly * 60) % 60) / 4);
+                        Rectangle frame = TextureRegistry.InkDash.Frame(1, 15, 0, count, 0, 0);
+                        Main.spriteBatch.Draw(TextureRegistry.InkDash, player.Center - Main.screenLastPosition, frame, Color.White, rot, new Vector2(26), 1f, SpriteEffects.None, 0f);
+                        count = (int)((((Main.GlobalTimeWrappedHourly + 20) * 60) % 60) / 4);
+                        frame = TextureRegistry.InkDash.Frame(1, 15, 0, count, 0, 0);
+                        Main.spriteBatch.Draw(TextureRegistry.InkDash, player.Center - Main.screenLastPosition, frame, Color.White * 0.5f, rot, new Vector2(26), 2f, SpriteEffects.None, 0f);
+                    }
+                }
                 else
+                {
                     Main.PlayerRenderer.DrawPlayer(Main.Camera, player, player.position - (Main.screenPosition - Main.screenLastPosition), player.fullRotation, player.fullRotationOrigin, 0);
+                }
             }
         }
         public interface IDrawInInk

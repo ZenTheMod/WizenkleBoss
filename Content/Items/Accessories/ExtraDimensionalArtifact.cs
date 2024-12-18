@@ -14,6 +14,7 @@ using Microsoft.Xna.Framework;
 using WizenkleBoss.Content.Rarities;
 using WizenkleBoss.Assets.Helper;
 using WizenkleBoss.Content.Items.Dyes;
+using WizenkleBoss.Content.Buffs;
 
 namespace WizenkleBoss.Content.Items.Accessories
 {
@@ -29,6 +30,28 @@ namespace WizenkleBoss.Content.Items.Accessories
             Item.width = 30;
             Item.height = 24;
             Item.accessory = true;
+            Item.value = Item.sellPrice(gold: 60);
+        }
+        public override void UpdateAccessory(Player player, bool hideVisual)
+        {
+            player.GetModPlayer<InkPlayer>().InkyArtifact = true;
+            if (player.HasBuff<InkDrugStatBuff>() && player.GetModPlayer<InkPlayer>().InkyArtifact)
+            {
+                player.statDefense *= 3.5f;
+                player.moveSpeed *= 3.5f;
+                player.frogLegJumpBoost = true;
+                if (player.GetModPlayer<InkPlayer>().InkDashCooldown > 0)
+                {
+                    if (player.GetModPlayer<InkPlayer>().InTile)
+                        player.gravity = 0f;
+                    else
+                        player.gravity *= 0.5f;
+                    player.dash = 0;
+                    Player.jumpHeight = 0;
+                    player.dashType = 0;
+                    player.noKnockback = true;
+                }
+            }
         }
     }
 }

@@ -44,10 +44,7 @@ namespace WizenkleBoss.Content.Buffs
                 player.DelBuff(buffIndex);
                 return;
             }
-            player.CanSeeInvisibleBlocks = true;
-            player.statDefense *= 3.5f;
-            player.moveSpeed *= 3.5f;
-            player.frogLegJumpBoost = true;
+            
             player.controlUseItem = false;
             player.GetModPlayer<InkPlayer>().Intoxication = MathHelper.Clamp(player.GetModPlayer<InkPlayer>().Intoxication + 0.04f, 0f, 1f);
         }
