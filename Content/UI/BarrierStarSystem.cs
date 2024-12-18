@@ -52,6 +52,31 @@ namespace WizenkleBoss.Content.UI
         public int Texture;
         public SupernovaState State;
         public string Name;
+        public override bool Equals(object obj) => obj is BarrierStar star && Equals(star);
+            // Bad idea probably :3
+        public bool Equals(BarrierStar other)
+        {
+            return BaseRotation == other.BaseRotation &&
+                BaseSize == other.BaseSize &&
+                SupernovaSize == other.SupernovaSize &&
+                Position == other.Position &&
+                Color == other.Color &&
+                Texture == other.Texture &&
+                State == other.State &&
+                Name == other.Name;
+        }
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(BaseRotation, BaseSize, SupernovaSize, Position, Color, Texture, State, Name);
+        }
+        public static bool operator ==(BarrierStar lhs, BarrierStar rhs)
+        {
+            return lhs.Equals(rhs);
+        }
+        public static bool operator !=(BarrierStar lhs, BarrierStar rhs)
+        {
+            return !lhs.Equals(rhs);
+        }
     }
     public class BarrierStarSystem : ModSystem
     {
@@ -103,7 +128,7 @@ namespace WizenkleBoss.Content.UI
         public override void PostUpdateEverything()
         {
                 // null check :sob:
-            if (Stars == null || Stars.Length == 0 || TheOneImportantThingInTheSky.Equals(default(BarrierStar))) 
+            if (Stars == null || Stars.Length == 0 || TheOneImportantThingInTheSky == default) 
                 return;
 
             if (TheOneImportantThingInTheSky.State == SupernovaState.Expanding && BarrierTelescopeUISystem.telescopeTargetByRequest.IsReady)
