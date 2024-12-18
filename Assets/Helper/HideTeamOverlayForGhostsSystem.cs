@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.GameContent;
 using Terraria.GameContent.UI;
 using Terraria.Map;
 using Terraria.ModLoader;
@@ -34,13 +35,16 @@ namespace WizenkleBoss.Assets.Helper
                 // In this case we're looking for the line
                     // beq IL_0232
                 // This is the line that tells the cursor to goto the next loop, so increment i and restart the loop.
-            ILLabel target = null;
+            ILLabel target = c.DefineLabel();
 
                 // We need the output target from the beq command so we match for the following:
                     // IL_009b: ldloc.s 13
                     // IL_009d: ldloc.s 7
                     // IL_009f: beq IL_0232 -- what we're after.
-            c.GotoNext(MoveType.After, i => i.MatchLdloc(13), i => i.MatchLdloc(7), i => i.MatchBeq(out target));
+            c.GotoNext(MoveType.After, 
+                i => i.MatchLdloc(13),
+                i => i.MatchLdloc(7),
+                i => i.MatchBeq(out target));
 
                 // Then we need to insert our if statement after the lines:
                         // Player player3 = player[i]; -- What the IL instructions represent.
@@ -48,7 +52,10 @@ namespace WizenkleBoss.Assets.Helper
                     // IL_00a6: ldloc.s 13
                     // IL_00a8: ldelem.ref
                     // IL_00a9: stloc.s 14 // Store local "player3".
-            c.GotoNext(MoveType.After, i => i.MatchLdloc(13), i => i.MatchLdelemRef(), i => i.MatchStloc(14));
+            c.GotoNext(MoveType.After, 
+                i => i.MatchLdloc(13),
+                i => i.MatchLdelemRef(),
+                i => i.MatchStloc(14));
 
                 // Load player3 to the stack.
             c.EmitLdloc(14);
