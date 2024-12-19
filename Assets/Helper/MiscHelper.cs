@@ -267,5 +267,13 @@ namespace WizenkleBoss.Assets.Helper
 
             return new Point16(x - frameX, y - frameY);
         }
+        public static bool IsOnGroundPrecise(this Player player)
+        {
+            var tile1 = Main.tile[(int)(player.position.X / 16f), (int)((player.position.Y + (player.gravDir == 1 ? player.Size.Y + 1 : -1)) / 16f)];
+            var tile2 = Main.tile[(int)((player.position.X + player.Size.X) / 16f), (int)((player.position.Y + (player.gravDir == 1 ? player.Size.Y + 1 : -1)) / 16f)];
+
+            return (tile1.HasTile && (Main.tileSolid[tile1.TileType] || Main.tileSolidTop[tile1.TileType]) && player.velocity.Y == 0f) ||
+                (tile2.HasTile && (Main.tileSolid[tile2.TileType] || Main.tileSolidTop[tile2.TileType]) && player.velocity.Y == 0f);
+        }
     }
 }

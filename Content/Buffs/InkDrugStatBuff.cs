@@ -44,7 +44,12 @@ namespace WizenkleBoss.Content.Buffs
                 player.DelBuff(buffIndex);
                 return;
             }
-            
+
+            player.controlHook = false;
+            player.controlTorch = false;
+            player.controlSmart = false;
+            player.controlMount = false;
+            player.gravDir = 1f;
             player.controlUseItem = false;
             player.GetModPlayer<InkPlayer>().Intoxication = MathHelper.Clamp(player.GetModPlayer<InkPlayer>().Intoxication + 0.04f, 0f, 1f);
         }

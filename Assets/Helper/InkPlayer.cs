@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameInput;
 using Terraria.Graphics.Shaders;
@@ -24,17 +25,25 @@ namespace WizenkleBoss.Assets.Helper
         public bool InkyArtifact = false;
         public int InkDashCooldown = 0;
         public Vector2 DashVelocity;
-        public bool InTile => WorldGen.SolidTile3((int)(Player.Center.X / 16), (int)(Player.Center.Y / 16));
+        public Vector2[] dashOldPos = new Vector2[15];
+        public bool InTile = false;
+        public bool InGhostInk => Player.HasBuff<InkDrugStatBuff>() && InkyArtifact;
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
             InkDashCooldown = Math.Max(-15, InkDashCooldown - 1);
             if (InkKeybindSystem.InkDash.JustPressed && InkDashCooldown == -15)
             {
+                dashOldPos = new Vector2[15];
                 if (Main.LocalPlayer.mount.Active)
                 {
                     Main.LocalPlayer.mount.Dismount(Main.LocalPlayer);
                 }
                 InkDashCooldown = 50;
+                DashVelocity = Player.velocity;
+                if (Player.IsOnGroundPrecise())
+                {
+                    DashVelocity += Vector2.UnitY * 10f;
+                }
             }
         }
         public override void ResetEffects()
@@ -55,9 +64,9 @@ namespace WizenkleBoss.Assets.Helper
         }
         public override void PreUpdateMovement()
         {
-            if (WorldGen.SolidTile3((int)(Player.Center.X / 16), (int)(Player.Center.Y / 16)) && Player.HasBuff<InkDrugStatBuff>() && InkyArtifact && InkDashCooldown > 0)
+            if (InTile && InGhostInk && InkDashCooldown > 0)
                 InkDashCooldown = 30;
-            if (Player.HasBuff<InkDrugStatBuff>() && InkyArtifact && InkDashCooldown > 0)
+            if (InGhostInk && InkDashCooldown > 0)
             {
                 Vector2 normalized = Vector2.Zero;
 
@@ -74,9 +83,18 @@ namespace WizenkleBoss.Assets.Helper
 
                 DashVelocity += normalized * 1.2f;
 
-                DashVelocity *= 0.9f;
+                DashVelocity *= 0.92f;
 
+                DashVelocity = DashVelocity.SafeNormalize(Vector2.Zero) * MathHelper.Clamp(DashVelocity.Length(), 4f, 300f);
+
+
+                Player.velocity = DashVelocity;
                 Player.maxFallSpeed *= 20f;
+
+                if (!InTile)
+                {
+                    DashVelocity.Y += Player.gravity;
+                }
             }
         }
         public override void PostUpdate()
@@ -85,11 +103,49 @@ namespace WizenkleBoss.Assets.Helper
                 Intoxication = MathHelper.Clamp(Intoxication - 0.01f, 0f, 1f);
             if (Player.HasBuff<InkDrugStatBuff>() || Player.HasBuff<InkDrugBuff>())
                 Player.aggro = -900;
-            if (InTile && Main.rand.NextBool(3))
+            if (Player.whoAmI != Main.myPlayer)
+                return;
+
+            if (InGhostInk)
             {
+                for (int i = dashOldPos.Length - 2; i >= 0; i--)
+                {
+                    dashOldPos[i + 1] = dashOldPos[i];
+                }
+                dashOldPos[0] = Player.Center;
+
                 ArmorShaderData shader = GameShaders.Armor.GetShaderFromItemId(ModContent.ItemType<InkDye>());
-                Dust dust = Dust.NewDustPerfect(Player.Center, ModContent.DustType<InkDust>(), null, 0, Color.White, 2);
-                dust.shader = shader;
+                bool lastframecheck = InTile;
+                if (WorldGen.SolidTile3((int)(Player.Center.X / 16), (int)(Player.Center.Y / 16)))
+                    InTile = true;
+                else 
+                    InTile = false;
+                if (lastframecheck != InTile) 
+                {
+                    for (int i = 0; i < 15; i++)
+                    {
+                        Vector2 vel = InTile ? (-Vector2.Normalize(DashVelocity)).RotatedByRandom(MathHelper.PiOver2) : Vector2.Normalize(DashVelocity).RotatedByRandom(MathHelper.PiOver2);
+                        Dust dust = Dust.NewDustPerfect(Player.Center + new Vector2(Main.rand.NextFloat(-16f, 17f), Main.rand.NextFloat(-16f, 17f)), ModContent.DustType<InkDust>(), vel * 5f, 0, Color.White, 2.2f);
+                        dust.shader = shader;
+                    }
+                }
+
+                MusicKiller.MuffleFactor = 0.2f;
+                if (InTile && InkDashCooldown > 0)
+                {
+                    this.CameraShakeSimple(Player.position, Vector2.Zero, 2.4f, 11, 2, 0);
+                    Dust dust = Dust.NewDustPerfect(Player.Center + new Vector2(Main.rand.NextFloat(-16f, 17f), Main.rand.NextFloat(-16f, 17f)), ModContent.DustType<InkDust>(), null, 0, Color.White, 2.2f);
+                    dust.shader = shader;
+                }
+                if (!InTile && Main.rand.NextBool(5) && InkDashCooldown > 0)
+                {
+                    Dust dust = Dust.NewDustPerfect(Player.Center + new Vector2(Main.rand.NextFloat(-4f, 5f), Main.rand.NextFloat(-4f, 5f)), ModContent.DustType<InkDust>(), null, 0, Color.White, 1.5f);
+                    dust.shader = shader;
+                }
+            }
+            else
+            {
+                InTile = false;
             }
         }
         public void DrawGoo()

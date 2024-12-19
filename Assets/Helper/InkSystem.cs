@@ -179,9 +179,9 @@ namespace WizenkleBoss.Assets.Helper
             foreach (var player in Main.player.Where(p => p.active && (p.HasBuff<InkDrugBuff>() || p.HasBuff<InkDrugStatBuff>()) && p.dye.Length > 0))
             {
                 player.heldProj = -1;
-                if (player.HasBuff<InkDrugStatBuff>() && player.GetModPlayer<InkPlayer>().InkyArtifact && player.GetModPlayer<InkPlayer>().InkDashCooldown > 0)
+                if (player.GetModPlayer<InkPlayer>().InGhostInk && player.GetModPlayer<InkPlayer>().InkDashCooldown > 0)
                 {
-                    float rot = player.velocity.ToRotation() + MathHelper.PiOver2;
+                    float rot = player.GetModPlayer<InkPlayer>().DashVelocity.ToRotation() + MathHelper.PiOver2;
 
                     rot = MathF.Round(rot / MathHelper.PiOver4) * MathHelper.PiOver4;
 
@@ -193,6 +193,16 @@ namespace WizenkleBoss.Assets.Helper
                         count = (int)((((Main.GlobalTimeWrappedHourly + 20) * 60) % 60) / 4);
                         frame = TextureRegistry.InkDash.Frame(1, 15, 0, count, 0, 0);
                         Main.spriteBatch.Draw(TextureRegistry.InkDash, player.Center - Main.screenLastPosition, frame, Color.White * 0.5f, rot, new Vector2(26), 2f, SpriteEffects.None, 0f);
+                    }
+                    else
+                    {
+                        Main.spriteBatch.Draw(TextureRegistry.Star, player.Center - Main.screenLastPosition, null, Color.White with { A = 0 }, rot, TextureRegistry.Star.Size() / 2f, 0.8f * MathF.Sin(Main.GlobalTimeWrappedHourly * 10), SpriteEffects.None, 0f);
+                        Main.spriteBatch.Draw(TextureRegistry.Star, player.Center - Main.screenLastPosition, null, Color.White with { A = 0 }, rot + MathHelper.PiOver4, TextureRegistry.Star.Size() / 2f, 1.3f * MathF.Sin(Main.GlobalTimeWrappedHourly * 14), SpriteEffects.None, 0f);
+                    }
+                    for (int k = player.GetModPlayer<InkPlayer>().dashOldPos.Length - 1; k > 0; k--)
+                    {
+                        float interpolator = (player.GetModPlayer<InkPlayer>().dashOldPos.Length - k) / (float)player.GetModPlayer<InkPlayer>().dashOldPos.Length;
+                        Main.spriteBatch.Draw(TextureRegistry.Star, player.GetModPlayer<InkPlayer>().dashOldPos[k] - Main.screenLastPosition, null, (Color.White * interpolator) with { A = 0 }, rot + (MathHelper.PiOver4 * k), TextureRegistry.Star.Size() / 2f, 0.7f * MathF.Sin(Main.GlobalTimeWrappedHourly * interpolator * 5) * interpolator, SpriteEffects.None, 0f);
                     }
                 }
                 else
