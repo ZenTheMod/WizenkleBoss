@@ -21,17 +21,17 @@ Items: {
 
 	StarryCloudItem: {
 		DisplayName: Starry Cloud Block
-		Tooltip: "'50% off.'"
+		Tooltip: "'50% off…'"
 	}
 
 	StarryCloudWallItem: {
 		DisplayName: Starry Cloud Wall
-		Tooltip: "'150% off.'"
+		Tooltip: "'150% off…'"
 	}
 
 	AstronomyNotes: {
 		DisplayName: Astronomy Notes
-		Tooltip: ""
+		Tooltip: "…"
 	}
 
 	ObservatorySatelliteDishItem: {
@@ -56,8 +56,8 @@ Items: {
 	}
 
 	ExtraDimensionalArtifact: {
-		DisplayName: Extra Dimensional Artifact
-		Tooltip: ""
+		DisplayName: Extra-Dimensional Artifact
+		Tooltip: "'You shouldn't have this…'"
 	}
 }
 
@@ -70,11 +70,10 @@ UI: {
 
 Tiles: {
 	BarrierTelescopeTile.Hover: Look At
-	ObservatorySatelliteDish.Hover: Select Target
+	ObservatorySatelliteDish.Hover: Open Menu
 }
 
 Projectiles: {
-	TestProj.DisplayName: Test Proj
 	DeepSpaceTransmitter.DisplayName: Deep Space Transmitter
 	InkSplat.DisplayName: Ink Splat
 }
