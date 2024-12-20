@@ -15,6 +15,7 @@ using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
+using WizenkleBoss.Assets.Config;
 using WizenkleBoss.Assets.Textures;
 using WizenkleBoss.Content.Buffs;
 
@@ -118,7 +119,7 @@ namespace WizenkleBoss.Assets.Helper
         public static bool AnyActiveInk() => 
             Main.projectile.Where(p => p.active && (p.ModProjectile is IDrawInk || p.ModProjectile is IDrawInInk)).Any() || 
             Main.npc.Where(npc => npc.active && (npc.ModNPC is IDrawInk || npc.ModNPC is IDrawInInk)).Any() || 
-            Main.player.Where(p => p.active && (p.HasBuff<InkDrugStatBuff>() || p.HasBuff<InkDrugBuff>()) && p.dye.Length > 0).Any() || 
+            Main.player.Where(p => p.active && p.GetModPlayer<InkPlayer>().InkBuffActive && p.dye.Length > 0).Any() || 
             Main.LocalPlayer.GetModPlayer<InkPlayer>().Intoxication > 0f;
         public static void DrawInk()
         {
@@ -176,7 +177,7 @@ namespace WizenkleBoss.Assets.Helper
         }
         public static void DrawVanishedPlayers()
         {
-            foreach (var player in Main.player.Where(p => p.active && (p.HasBuff<InkDrugBuff>() || p.HasBuff<InkDrugStatBuff>()) && p.dye.Length > 0))
+            foreach (var player in Main.player.Where(p => p.active && p.GetModPlayer<InkPlayer>().InkBuffActive && p.dye.Length > 0))
             {
                 player.heldProj = -1;
                 if (player.GetModPlayer<InkPlayer>().InGhostInk && player.GetModPlayer<InkPlayer>().InkDashCooldown > 0)
@@ -255,6 +256,8 @@ namespace WizenkleBoss.Assets.Helper
                 Shader.Parameters["uTime"]?.SetValue(Main.GlobalTimeWrappedHourly);
 
                 Shader.Parameters["DrugStrength"]?.SetValue(player.Intoxication);
+
+                Shader.Parameters["contrast"]?.SetValue(ModContent.GetInstance<WizenkleBossConfig>().InkContrast);
             }
         }
         public override void Apply()

@@ -37,7 +37,7 @@ namespace WizenkleBoss.Content.Items.Consumables
             Item.useAnimation = 23;
             Item.useTime = 23;
             Item.useTurn = true;
-            Item.UseSound = SoundID.Item3;
+            Item.UseSound = AudioRegistry.InkEffectDrinkStart;
             Item.maxStack = Item.CommonMaxStack;
             Item.consumable = true;
 

@@ -15,6 +15,7 @@ using WizenkleBoss.Content.Rarities;
 using WizenkleBoss.Assets.Helper;
 using WizenkleBoss.Content.Items.Dyes;
 using WizenkleBoss.Content.Buffs;
+using Terraria.Localization;
 
 namespace WizenkleBoss.Content.Items.Accessories
 {
@@ -40,6 +41,7 @@ namespace WizenkleBoss.Content.Items.Accessories
                 player.statDefense *= 3.5f;
                 player.moveSpeed *= 3.5f;
                 player.frogLegJumpBoost = true;
+                player.noFallDmg = true;
                 if (player.GetModPlayer<InkPlayer>().InkDashCooldown > 0)
                 {
                     if (player.GetModPlayer<InkPlayer>().InTile)
@@ -50,6 +52,16 @@ namespace WizenkleBoss.Content.Items.Accessories
                     Player.jumpHeight = 0;
                     player.dashType = 0;
                     player.noKnockback = true;
+                }
+            }
+        }
+        public override void ModifyTooltips(List<TooltipLine> tooltips)
+        {
+            foreach (TooltipLine line in tooltips)
+            {
+                if (line.Mod == "Terraria" && line.Name == "Tooltip0")
+                {
+                    line.Text = Language.GetTextValue("Mods.WizenkleBoss.Items.ExtraDimensionalArtifact.Tooltip", InkKeybindSystem.InkDash.GetAssignedKeys().FirstOrDefault());
                 }
             }
         }

@@ -31,7 +31,7 @@ Items: {
 
 	AstronomyNotes: {
 		DisplayName: Astronomy Notes
-		Tooltip: "…"
+		Tooltip: …
 	}
 
 	ObservatorySatelliteDishItem: {
@@ -43,7 +43,7 @@ Items: {
 		DisplayName: Extra-Dimensional Soup
 		Tooltip:
 			'''
-			I'm not even going to try to explain what you just did.
+			'I'm not even going to try to explain what you just did.'
 			Hides you from non Extra-Dimensional entities, at the cost of no longer being able to use material items.
 			Provides defense and speed boosts.
 			You'll return back to normal reality if you take damage.
@@ -57,7 +57,12 @@ Items: {
 
 	ExtraDimensionalArtifact: {
 		DisplayName: Extra-Dimensional Artifact
-		Tooltip: "'You shouldn't have this…'"
+		Tooltip:
+			'''
+			Gives the bearer complete mastery over extra-dimensional spaces.
+			Press {0} to dash through the earth at will.
+			'It's your funeral.'
+			'''
 	}
 }
 
@@ -95,6 +100,16 @@ Configs: {
 			Effects: Effects
 			Sounds: Sounds
 			UI: UI
+		}
+
+		InkContrast: {
+			Label: "[i:WizenkleBoss/InterGalacticSludge] Shader Contrast"
+			Tooltip: 
+				'''
+				Some players may find have photosensitivity.
+				0 Makes the original world very clear, easy to look at.
+				1 Full contrast based, hard to look at.
+				'''
 		}
 
 		TooltipEffects: {
