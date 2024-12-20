@@ -14,6 +14,14 @@ namespace WizenkleBoss.Assets.Config
 
         [Header("Effects")]
 
+        [DefaultValue(0.75f)]
+        [Slider]
+        [Increment(0.05f)]
+        [DrawTicks]
+        [Range(0f, 1f)]
+        [SliderColor(254, 179, 255, 255)]
+        public float InkContrast;
+
         [DefaultValue(true)]
         public bool TooltipEffects;
 
