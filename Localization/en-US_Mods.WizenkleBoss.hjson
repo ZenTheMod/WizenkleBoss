@@ -1,9 +1,4 @@
 Items: {
-	Test: {
-		DisplayName: Test
-		Tooltip: ""
-	}
-
 	BarrierTelescopeItem: {
 		DisplayName: Ancient Telescope
 		Tooltip: "'An old golden telescope gifted to the Guild Astronomer.'"
@@ -63,7 +58,7 @@ Items: {
 			LINE THAT GETS REPLACED
 			'It's your funeral.'
 			'''
-		ReplacementTooltip: "Press {0} to dash through the earth at will."
+		ReplacementTooltip: Press {0} to dash through the earth at will.
 	}
 }
 
@@ -169,8 +164,8 @@ Buffs: {
 	}
 
 	InkDrugStatBuff: {
-		DisplayName: Legal Extra-Dimensionality Dosage
-		Description: Finally, you can escape the feds.
+		DisplayName: Amalgamate
+		Description: …
 	}
 }
 

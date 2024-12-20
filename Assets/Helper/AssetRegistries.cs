@@ -213,6 +213,7 @@ namespace WizenkleBoss.Assets.Textures
         public static SoundStyle InkEffectDrinkStart { get; internal set; }
         public static SoundStyle InkEffectEnd { get; internal set; }
         public static SoundStyle InkDash { get; internal set; }
+        public static SoundStyle InkDashEnd { get; internal set; }
         public static SoundStyle InkEnterTile { get; internal set; }
         public static SoundStyle InkExitTile { get; internal set; }
         public static SoundStyle InkBurrowing { get; internal set; }
@@ -224,6 +225,7 @@ namespace WizenkleBoss.Assets.Textures
             InkEffectDrinkStart = new SoundStyle("WizenkleBoss/Sounds/Ink/drink") with { Volume = 0.7f, MaxInstances = 3, SoundLimitBehavior = SoundLimitBehavior.ReplaceOldest, PlayOnlyIfFocused = true };
             InkEffectEnd = new SoundStyle("WizenkleBoss/Sounds/Ink/effectend") with { Volume = 0.6f, MaxInstances = 3, SoundLimitBehavior = SoundLimitBehavior.ReplaceOldest, PlayOnlyIfFocused = true };
             InkDash = new SoundStyle("WizenkleBoss/Sounds/Ink/dash") with { Volume = 0.5f, PitchVariance = 0.07f, MaxInstances = 5, SoundLimitBehavior = SoundLimitBehavior.ReplaceOldest, PlayOnlyIfFocused = true };
+            InkDashEnd = new SoundStyle("WizenkleBoss/Sounds/Ink/dashend") with { Volume = 0.4f, PitchVariance = 0.07f, MaxInstances = 5, SoundLimitBehavior = SoundLimitBehavior.ReplaceOldest, PlayOnlyIfFocused = true };
             InkBurrowing = new SoundStyle("WizenkleBoss/Sounds/Ink/dig") with { Volume = 0.4f, PitchVariance = 0.5f, MaxInstances = 9, SoundLimitBehavior = SoundLimitBehavior.ReplaceOldest, PlayOnlyIfFocused = true };
             InkEnterTile = new SoundStyle("WizenkleBoss/Sounds/Ink/burrow") with { Volume = 0.55f, PitchVariance = 0.13f, MaxInstances = 3, SoundLimitBehavior = SoundLimitBehavior.ReplaceOldest, PlayOnlyIfFocused = true };
             InkExitTile = new SoundStyle("WizenkleBoss/Sounds/Ink/unburrow") with { Volume = 0.55f, PitchVariance = 0.13f, MaxInstances = 3, SoundLimitBehavior = SoundLimitBehavior.ReplaceOldest, PlayOnlyIfFocused = true };

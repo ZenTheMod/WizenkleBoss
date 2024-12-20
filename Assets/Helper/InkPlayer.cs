@@ -6,7 +6,9 @@ using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.GameContent.Shaders;
 using Terraria.GameInput;
+using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.Localization;
@@ -67,8 +69,14 @@ namespace WizenkleBoss.Assets.Helper
         
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
-            InkDashCooldown = Math.Max(-15, InkDashCooldown - 1);
-            if (InkKeybindSystem.InkDash.JustPressed && InkDashCooldown == -15 && InGhostInk)
+            InkDashCooldown = Math.Max(-25, InkDashCooldown - 1);
+            if (InkKeybindSystem.InkDash.JustPressed && InkDashCooldown > 0 && InGhostInk && !InTile)
+            {
+                this.CameraShakeSimple(Player.position, Vector2.Zero, 6f, 11, 6, 0);
+                InkDashCooldown = 0;
+                return;
+            }
+            if (InkKeybindSystem.InkDash.JustPressed && InkDashCooldown == -25 && InGhostInk)
             {
                 if (Player.whoAmI == Main.myPlayer)
                     SoundEngine.PlaySound(AudioRegistry.InkDash, null);
@@ -91,11 +99,6 @@ namespace WizenkleBoss.Assets.Helper
                     Dust dust = Dust.NewDustPerfect(Player.Center + new Vector2(Main.rand.NextFloat(-16f, 17f), Main.rand.NextFloat(-16f, 17f)), ModContent.DustType<InkDust>(), vel * 5f, 0, Color.White, 3.2f);
                     dust.shader = shader;
                 }
-            }
-            if (InkKeybindSystem.InkDash.JustPressed && InkDashCooldown > 0 && InGhostInk && !InTile)
-            {
-                this.CameraShakeSimple(Player.position, Vector2.Zero, 6f, 11, 6, 0);
-                InkDashCooldown = 0;
             }
         }
         public override void ResetEffects()
@@ -151,6 +154,30 @@ namespace WizenkleBoss.Assets.Helper
         }
         public override void PostUpdate()
         {
+            if (Player.whoAmI == Main.myPlayer)
+            {
+                ArmorShaderData shader = GameShaders.Armor.GetShaderFromItemId(ModContent.ItemType<InkDye>());
+                if (InkDashCooldown == -1)
+                {
+                    SoundEngine.PlaySound(AudioRegistry.InkDashEnd, null);
+                    for (int i = 0; i < 15; i++)
+                    {
+                        Vector2 vel = Main.rand.NextVector2Circular(3f, 3f);
+                        Dust dust = Dust.NewDustPerfect(Player.Center + new Vector2(Main.rand.NextFloat(-16f, 17f), Main.rand.NextFloat(-16f, 17f)), ModContent.DustType<InkDust>(), vel * 5f, 0, Color.White, 2.2f);
+                        dust.shader = shader;
+                    }
+                }
+                if (InkDashCooldown == -24)
+                {
+                    for (int i = 0; i < 6; i++)
+                    {
+                        Vector2 vel = Main.rand.NextVector2Circular(2f, 2f);
+                        Dust dust = Dust.NewDustPerfect(Player.Center + new Vector2(Main.rand.NextFloat(-16f, 17f), Main.rand.NextFloat(-16f, 17f)), ModContent.DustType<InkDust>(), vel * 5f, 0, Color.White, 3.5f);
+                        dust.shader = shader;
+                    }
+                }
+            }
+
             InkBuffActive = Player.HasBuff<InkDrugStatBuff>() || Player.HasBuff<InkDrugBuff>();
             if (!InkBuffActive)
                 Intoxication = MathHelper.Clamp(Intoxication - 0.01f, 0f, 1f);
@@ -178,6 +205,7 @@ namespace WizenkleBoss.Assets.Helper
                     MusicKiller.MuffleFactor = 0.0f;
                     if (InTile && InkDashCooldown > 0)
                     {
+                        ProduceWaterRipples();
                         if (timer++ >= 20)
                         {
                             SoundEngine.PlaySound(AudioRegistry.InkBurrowing, null);
@@ -202,6 +230,15 @@ namespace WizenkleBoss.Assets.Helper
         public void DrawGoo()
         {
             Main.spriteBatch.Draw(TextureRegistry.Bloom, new Rectangle(Main.screenWidth / 2, Main.screenHeight / 2, (int)(Main.screenWidth * Intoxication * 4.3f), (int)(Main.screenHeight * Intoxication * 3.3f)), null, (Color.White * Intoxication), 0, TextureRegistry.Bloom.Size() / 2f, SpriteEffects.None, 0f);
+        }
+        private void ProduceWaterRipples()
+        {
+            WaterShaderData shaderData = (WaterShaderData)Filters.Scene["WaterDistortion"].GetShader();
+
+            float waveSine = 0.15f * (float)Math.Sin(Main.GlobalTimeWrappedHourly * 20f);
+
+            Color waveData = new Color(0.5f, 0.4f * Math.Sign(waveSine) + 0.5f, 0f, 1f) * Math.Abs(waveSine);
+            shaderData.QueueRipple(Player.position, waveData, Player.Size, RippleShape.Circle, DashVelocity.ToRotation());
         }
         public override void HideDrawLayers(PlayerDrawSet drawInfo)
         {

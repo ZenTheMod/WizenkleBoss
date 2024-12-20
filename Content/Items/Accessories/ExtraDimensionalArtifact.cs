@@ -43,6 +43,7 @@ namespace WizenkleBoss.Content.Items.Accessories
                 player.shimmerWet = false;
                 player.suffocating = false;
                 player.suffocateDelay = 0;
+                player.breath = player.breathMax;
 
                 player.statDefense *= 3.5f;
                 player.moveSpeed *= 3.5f;
