@@ -31,6 +31,8 @@ namespace WizenkleBoss.Content.Items.Tiles
             Item.DefaultToPlaceableTile(ModContent.TileType<StarryCloudTile>());
             Item.rare = ModContent.RarityType<StarboundRarity>();
             Item.value = 0;
+            Item.width = 16;
+            Item.height = 16;
         }
         public override void AddRecipes()
         {

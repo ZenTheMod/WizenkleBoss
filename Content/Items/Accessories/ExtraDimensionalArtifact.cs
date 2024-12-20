@@ -38,10 +38,17 @@ namespace WizenkleBoss.Content.Items.Accessories
             player.GetModPlayer<InkPlayer>().InkyArtifact = true;
             if (player.HasBuff<InkDrugStatBuff>() && player.GetModPlayer<InkPlayer>().InkyArtifact)
             {
+                player.lavaImmune = true;
+                player.shimmerImmune = true;
+                player.shimmerWet = false;
+                player.suffocating = false;
+                player.suffocateDelay = 0;
+
                 player.statDefense *= 3.5f;
                 player.moveSpeed *= 3.5f;
                 player.frogLegJumpBoost = true;
                 player.noFallDmg = true;
+
                 if (player.GetModPlayer<InkPlayer>().InkDashCooldown > 0)
                 {
                     if (player.GetModPlayer<InkPlayer>().InTile)
@@ -59,9 +66,9 @@ namespace WizenkleBoss.Content.Items.Accessories
         {
             foreach (TooltipLine line in tooltips)
             {
-                if (line.Mod == "Terraria" && line.Name == "Tooltip0")
+                if (line.Mod == "Terraria" && line.Name == "Tooltip1")
                 {
-                    line.Text = Language.GetTextValue("Mods.WizenkleBoss.Items.ExtraDimensionalArtifact.Tooltip", InkKeybindSystem.InkDash.GetAssignedKeys().FirstOrDefault());
+                    line.Text = Language.GetTextValue("Mods.WizenkleBoss.Items.ExtraDimensionalArtifact.ReplacementTooltip", InkKeybindSystem.InkDash.GetAssignedKeys().FirstOrDefault());
                 }
             }
         }

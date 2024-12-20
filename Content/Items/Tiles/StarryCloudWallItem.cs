@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WizenkleBoss.Content.Rarities;
@@ -31,6 +32,8 @@ namespace WizenkleBoss.Content.Items.Tiles
             Item.DefaultToPlaceableWall(ModContent.WallType<StarryCloudWall>());
             Item.rare = ModContent.RarityType<StarboundRarity>();
             Item.value = 0;
+            Item.width = 28;
+            Item.height = 28;
         }
         public override void AddRecipes()
         {

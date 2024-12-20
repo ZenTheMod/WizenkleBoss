@@ -60,9 +60,10 @@ Items: {
 		Tooltip:
 			'''
 			Gives the bearer complete mastery over extra-dimensional spaces.
-			Press {0} to dash through the earth at will.
+			LINE THAT GETS REPLACED
 			'It's your funeral.'
 			'''
+		ReplacementTooltip: "Press {0} to dash through the earth at will."
 	}
 }
 
@@ -104,7 +105,7 @@ Configs: {
 
 		InkContrast: {
 			Label: "[i:WizenkleBoss/InterGalacticSludge] Shader Contrast"
-			Tooltip: 
+			Tooltip:
 				'''
 				Some players may find have photosensitivity.
 				0 Makes the original world very clear, easy to look at.

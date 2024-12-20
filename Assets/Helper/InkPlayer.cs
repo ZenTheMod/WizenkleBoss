@@ -35,7 +35,7 @@ namespace WizenkleBoss.Assets.Helper
             get { return _InTile; }
             set
             {
-                if (value != _InTile)
+                if (value != _InTile && Player.whoAmI == Main.myPlayer)
                 {
                     this.CameraShakeSimple(Player.position, Vector2.Zero, 10f, 19, 11, 0);
                     SoundEngine.PlaySound(value ? AudioRegistry.InkEnterTile : AudioRegistry.InkExitTile, null);
@@ -56,7 +56,7 @@ namespace WizenkleBoss.Assets.Helper
             get { return _InkBuffActive; }
             set
             {
-                if (value != _InkBuffActive && value == false)
+                if (value != _InkBuffActive && value == false && Player.whoAmI == Main.myPlayer)
                 {
                     SoundEngine.PlaySound(AudioRegistry.InkEffectEnd, null);
                 }
@@ -70,7 +70,8 @@ namespace WizenkleBoss.Assets.Helper
             InkDashCooldown = Math.Max(-15, InkDashCooldown - 1);
             if (InkKeybindSystem.InkDash.JustPressed && InkDashCooldown == -15 && InGhostInk)
             {
-                SoundEngine.PlaySound(AudioRegistry.InkDash, null);
+                if (Player.whoAmI == Main.myPlayer)
+                    SoundEngine.PlaySound(AudioRegistry.InkDash, null);
                 dashOldPos = new Vector2[15];
                 if (Main.LocalPlayer.mount.Active)
                 {
@@ -82,6 +83,7 @@ namespace WizenkleBoss.Assets.Helper
                 {
                     DashVelocity += Vector2.UnitY * 10f;
                 }
+                this.CameraShakeSimple(Player.position, Vector2.Zero, 13f, 19, 15, 0);
                 ArmorShaderData shader = GameShaders.Armor.GetShaderFromItemId(ModContent.ItemType<InkDye>());
                 for (int i = 0; i < 15; i++)
                 {
@@ -89,6 +91,11 @@ namespace WizenkleBoss.Assets.Helper
                     Dust dust = Dust.NewDustPerfect(Player.Center + new Vector2(Main.rand.NextFloat(-16f, 17f), Main.rand.NextFloat(-16f, 17f)), ModContent.DustType<InkDust>(), vel * 5f, 0, Color.White, 3.2f);
                     dust.shader = shader;
                 }
+            }
+            if (InkKeybindSystem.InkDash.JustPressed && InkDashCooldown > 0 && InGhostInk && !InTile)
+            {
+                this.CameraShakeSimple(Player.position, Vector2.Zero, 6f, 11, 6, 0);
+                InkDashCooldown = 0;
             }
         }
         public override void ResetEffects()
@@ -149,8 +156,6 @@ namespace WizenkleBoss.Assets.Helper
                 Intoxication = MathHelper.Clamp(Intoxication - 0.01f, 0f, 1f);
             if (InkBuffActive)
                 Player.aggro = -900;
-            if (Player.whoAmI != Main.myPlayer)
-                return;
 
             if (InGhostInk)
             {
@@ -162,28 +167,31 @@ namespace WizenkleBoss.Assets.Helper
 
                 ArmorShaderData shader = GameShaders.Armor.GetShaderFromItemId(ModContent.ItemType<InkDye>());
 
-                if (Collision.SolidCollision(Player.position, (int)Player.Size.X, (int)Player.Size.Y) || 
-                    Collision.WetCollision(Player.position, (int)Player.Size.X, (int)Player.Size.Y))
+                if ((Collision.SolidCollision(Player.position, (int)Player.Size.X, (int)Player.Size.Y) || 
+                    Collision.WetCollision(Player.position, (int)Player.Size.X, (int)Player.Size.Y)) && InkDashCooldown > 0)
                     InTile = true;
                 else 
                     InTile = false;
 
-                MusicKiller.MuffleFactor = 0.2f;
-                if (InTile && InkDashCooldown > 0)
+                if (Player.whoAmI == Main.myPlayer)
                 {
-                    if (timer++ >= 20)
+                    MusicKiller.MuffleFactor = 0.0f;
+                    if (InTile && InkDashCooldown > 0)
                     {
-                        SoundEngine.PlaySound(AudioRegistry.InkBurrowing, null);
-                        timer = 0;
+                        if (timer++ >= 20)
+                        {
+                            SoundEngine.PlaySound(AudioRegistry.InkBurrowing, null);
+                            timer = 0;
+                        }
+                        this.CameraShakeSimple(Player.position, Vector2.Zero, 2.4f, 11, 2, 0);
+                        Dust dust = Dust.NewDustPerfect(Player.Center + new Vector2(Main.rand.NextFloat(-16f, 17f), Main.rand.NextFloat(-16f, 17f)), ModContent.DustType<InkDust>(), null, 0, Color.White, 2.2f);
+                        dust.shader = shader;
                     }
-                    this.CameraShakeSimple(Player.position, Vector2.Zero, 2.4f, 11, 2, 0);
-                    Dust dust = Dust.NewDustPerfect(Player.Center + new Vector2(Main.rand.NextFloat(-16f, 17f), Main.rand.NextFloat(-16f, 17f)), ModContent.DustType<InkDust>(), null, 0, Color.White, 2.2f);
-                    dust.shader = shader;
-                }
-                if (!InTile && Main.rand.NextBool(5) && InkDashCooldown > 0)
-                {
-                    Dust dust = Dust.NewDustPerfect(Player.Center + new Vector2(Main.rand.NextFloat(-4f, 5f), Main.rand.NextFloat(-4f, 5f)), ModContent.DustType<InkDust>(), null, 0, Color.White, 1.5f);
-                    dust.shader = shader;
+                    if (!InTile && Main.rand.NextBool(5) && InkDashCooldown > 0)
+                    {
+                        Dust dust = Dust.NewDustPerfect(Player.Center + new Vector2(Main.rand.NextFloat(-4f, 5f), Main.rand.NextFloat(-4f, 5f)), ModContent.DustType<InkDust>(), null, 0, Color.White, 1.5f);
+                        dust.shader = shader;
+                    }
                 }
             }
             else
