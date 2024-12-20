@@ -71,18 +71,21 @@ namespace WizenkleBoss.Content.UI
 
                 // ExponentialInOut easing to make the animation feel a little snappier.
             float interpolator = targetAnimation < 0.5f ? MathF.Pow(2f, 10 * targetAnimation * 2f - 10) : 2f - MathF.Pow(2f, 10 * targetAnimation * -2f + 10);
+            interpolator *= satelliteUIZoom;
 
             if (oldTargetedStarIndex == int.MaxValue)
             {
                 BarrierStar bigstar = BarrierStarSystem.TheOneImportantThingInTheSky;
 
-                Vector2 position = new Vector2(Center.X, Center.Y) + satelliteUIOffset + bigstar.Position;
+                Vector2 position = satelliteUIOffset + bigstar.Position;
+                position *= satelliteUIZoom;
+                position += Center;
 
-                Vector2 offsetPosition = new(position.X + MathHelper.Lerp(1, 5, interpolator), position.Y);
+                Vector2 offsetPosition = new(position.X + MathHelper.Lerp(1, 5 * satelliteUIZoom, interpolator), position.Y);
 
                 spriteBatch.Draw(TextureRegistry.Bracket, offsetPosition, null, offsetColor * interpolator, 0, TextureRegistry.Bracket.Size() / 2, 0.06f * interpolator, SpriteEffects.FlipHorizontally, 0f);
 
-                offsetPosition = new Vector2(position.X - MathHelper.Lerp(1, 5, interpolator), position.Y);
+                offsetPosition = new Vector2(position.X - MathHelper.Lerp(1, 5 * satelliteUIZoom, interpolator), position.Y);
 
                 spriteBatch.Draw(TextureRegistry.Bracket, offsetPosition, null, offsetColor * interpolator, 0, TextureRegistry.Bracket.Size() / 2, 0.06f * interpolator, SpriteEffects.None, 0f);
                 return;
@@ -91,13 +94,15 @@ namespace WizenkleBoss.Content.UI
             {
                 BarrierStar star = BarrierStarSystem.Stars[oldTargetedStarIndex];
 
-                Vector2 position = new Vector2(Center.X, Center.Y) + satelliteUIOffset + star.Position;
+                Vector2 position = satelliteUIOffset + star.Position;
+                position *= satelliteUIZoom;
+                position += Center;
 
-                Vector2 offsetPosition = new(position.X + MathHelper.Lerp(1, 5, interpolator), position.Y);
+                Vector2 offsetPosition = new(position.X + MathHelper.Lerp(1, 5 * satelliteUIZoom, interpolator), position.Y);
 
                 spriteBatch.Draw(TextureRegistry.Bracket, offsetPosition, null, offsetColor * interpolator, 0, TextureRegistry.Bracket.Size() / 2, 0.06f * interpolator, SpriteEffects.FlipHorizontally, 0f);
 
-                offsetPosition = new Vector2(position.X - MathHelper.Lerp(1, 5, interpolator), position.Y);
+                offsetPosition = new Vector2(position.X - MathHelper.Lerp(1, 5 * satelliteUIZoom, interpolator), position.Y);
 
                 spriteBatch.Draw(TextureRegistry.Bracket, offsetPosition, null, offsetColor * interpolator, 0, TextureRegistry.Bracket.Size() / 2, 0.06f * interpolator, SpriteEffects.None, 0f);
                 return;
@@ -112,9 +117,11 @@ namespace WizenkleBoss.Content.UI
             {
                 bool currentStar = BarrierStarSystem.Stars[(int)MathHelper.Clamp(targetedStarIndex, 0, BarrierStarSystem.Stars.Length - 1)] == star && !(targetedStarIndex == -1 || targetedStarIndex == int.MaxValue);
 
-                float starSize = MathF.Max(star.BaseSize * star.SupernovaSize, 0.35f) * 1.3f;
+                float starSize = MathF.Max(star.BaseSize * star.SupernovaSize, 0.35f) * 1.3f * satelliteUIZoom;
 
-                Vector2 starPosition = new Vector2(Center.X, Center.Y) + satelliteUIOffset + star.Position;
+                Vector2 starPosition = satelliteUIOffset + star.Position;
+                starPosition *= satelliteUIZoom;
+                starPosition += Center;
 
                 if (starPosition.Distance(Center) > 900 || star.Position.Length() > 830)
                     continue;
@@ -136,7 +143,7 @@ namespace WizenkleBoss.Content.UI
 
                 Vector2 textPosition = starPosition + (Vector2.UnitY * 4 * offset);
 
-                float textSize = Utils.Remap(starPosition.Distance(Center), 0, 300, 0.2f, 0.3f);
+                float textSize = Utils.Remap(starPosition.Distance(Center), 0, 300, 0.2f, 0.3f) * satelliteUIZoom;
 
                 Vector2 textOrigin = Helper.MeasureString(star.Name, font);
 
@@ -149,8 +156,10 @@ namespace WizenkleBoss.Content.UI
             BarrierStar bigstar = BarrierStarSystem.TheOneImportantThingInTheSky;
             if (bigstar.State <= SupernovaState.Shrinking)
             {
-                float size = bigstar.SupernovaSize;
-                Vector2 position = new Vector2(Center.X, Center.Y) + satelliteUIOffset + bigstar.Position;
+                float size = bigstar.SupernovaSize * satelliteUIZoom;
+                Vector2 position = satelliteUIOffset + bigstar.Position;
+                position *= satelliteUIZoom;
+                position += Center;
 
                 spriteBatch.Draw(TextureRegistry.Bloom, position, null, BloomColor * 3f, 0, TextureRegistry.Bloom.Size() / 2, 0.8f * size, SpriteEffects.None, 0f);
 
@@ -166,7 +175,7 @@ namespace WizenkleBoss.Content.UI
 
                     Vector2 textPosition = position + (Vector2.UnitY * 6 * offset);
 
-                    float textSize = Utils.Remap(position.Distance(Center), 0, 300, 0.3f, 0.4f);
+                    float textSize = Utils.Remap(position.Distance(Center), 0, 300, 0.3f, 0.4f) * satelliteUIZoom;
 
                     Vector2 textOrigin = Helper.MeasureString(bigstar.Name, font);
 

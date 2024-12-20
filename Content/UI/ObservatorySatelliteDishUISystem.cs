@@ -30,6 +30,7 @@ namespace WizenkleBoss.Content.UI
         public static Vector2 satelliteTilePosition;
 
         public static Vector2 satelliteUIOffset;
+        public static float satelliteUIZoom = 1f;
 
         public static Vector2 satelliteUIOffsetVelocity;
 
@@ -113,11 +114,15 @@ namespace WizenkleBoss.Content.UI
                 openAnimation = MathHelper.Clamp(openAnimation - 0.14f, 0f, 1f);
             if (inUI || openAnimation > 0)
             {
+                TriggersPack triggers = PlayerInput.Triggers;
+                if (triggers.Current.ViewZoomIn)
+                    satelliteUIZoom = MathHelper.Clamp(satelliteUIZoom + 0.04f, 1f, 2f);
+                if (triggers.Current.ViewZoomOut)
+                    satelliteUIZoom = MathHelper.Clamp(satelliteUIZoom - 0.04f, 1f, 2f);
+
                 Vector2 normalized = Vector2.Zero;
                 if (!UpdateSelection())
                 {
-                    TriggersPack triggers = PlayerInput.Triggers;
-
                     if ((triggers.Current.Up || triggers.Current.Left || triggers.Current.Right || triggers.Current.Down) && prompt && ModContent.GetInstance<WizenkleBossConfig>().TelescopeMovementKeyPrompt)
                         prompt = false;
 
@@ -171,13 +176,15 @@ namespace WizenkleBoss.Content.UI
                 for (int i = 0; i <= BarrierStarSystem.Stars.Length - 1; i++)
                 {
                     BarrierStar star = BarrierStarSystem.Stars[i];
-                    Vector2 StarPositon = (TargetSize / 2f) + satelliteUIOffset + star.Position;
+                    Vector2 starPosition = satelliteUIOffset + star.Position;
+                    starPosition *= satelliteUIZoom;
+                    starPosition += TargetSize / 2f;
 
-                    if (StarPositon.Distance(TargetSize / 2f) < 50)
+                    if (starPosition.Distance(TargetSize / 2f) < 50 * satelliteUIZoom)
                     {
-                        if (StarPositon.Distance(TargetSize / 2f) < ClosestPosition.Distance(TargetSize / 2f))
+                        if (starPosition.Distance(TargetSize / 2f) < ClosestPosition.Distance(TargetSize / 2f))
                         {
-                            ClosestPosition = StarPositon;
+                            ClosestPosition = starPosition;
                             ClosestIndex = i;
                         }
                     }
@@ -188,8 +195,11 @@ namespace WizenkleBoss.Content.UI
                     // Because my dumbass put the eldritch star seperatly to the rest of the array i have to suffer :D
                     // Basically just sets it to a value that it'd never reach normally.
 
-                Vector2 Position = (TargetSize / 2f) + satelliteUIOffset + bigstar.Position;
-                if (Position.Distance(TargetSize / 2f) < 50)
+                Vector2 position = (TargetSize / 2f) + satelliteUIOffset + bigstar.Position;
+                position *= satelliteUIZoom;
+                position += TargetSize / 2f;
+
+                if (position.Distance(TargetSize / 2f) < 50 * satelliteUIZoom)
                     ClosestIndex = int.MaxValue;
                 if (ClosestIndex > -1)
                 {
