@@ -74,8 +74,12 @@ namespace WizenkleBoss.Assets.Helper
             {
                 this.CameraShakeSimple(Player.position, Vector2.Zero, 6f, 11, 6, 0);
                 InkDashCooldown = 0;
-                var SendDash = new DashUpdate((byte)Player.whoAmI, (byte)InkDashCooldown);
-                SendDash.Send(ignoreClient: Player.whoAmI, runLocally: false);
+
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                {
+                    var SendDash = new DashUpdate(Player.whoAmI, InkDashCooldown);
+                    SendDash.Send(ignoreClient: Main.myPlayer, runLocally: false);
+                }
                 return;
             }
             if (InkKeybindSystem.InkDash.JustPressed && InkDashCooldown == -60 && InGhostInk)
@@ -83,9 +87,9 @@ namespace WizenkleBoss.Assets.Helper
                 if (Player.whoAmI == Main.myPlayer)
                     SoundEngine.PlaySound(AudioRegistry.InkDash, null);
                 dashOldPos = new Vector2[15];
-                if (Main.LocalPlayer.mount.Active)
+                if (Player.mount.Active)
                 {
-                    Main.LocalPlayer.mount.Dismount(Main.LocalPlayer);
+                    Player.mount.Dismount(Player);
                 }
                 InkDashCooldown = 160;
                 DashVelocity = Player.velocity;
@@ -101,8 +105,11 @@ namespace WizenkleBoss.Assets.Helper
                     Dust dust = Dust.NewDustPerfect(Player.Center + new Vector2(Main.rand.NextFloat(-16f, 17f), Main.rand.NextFloat(-16f, 17f)), ModContent.DustType<InkDust>(), vel * 5f, 0, Color.White, 3.2f);
                     dust.shader = shader;
                 }
-                var SendDash = new DashUpdate((byte)Player.whoAmI, (byte)InkDashCooldown);
-                SendDash.Send(ignoreClient: Player.whoAmI, runLocally: false);
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                {
+                    var SendDash = new DashUpdate(Player.whoAmI, InkDashCooldown);
+                    SendDash.Send(ignoreClient: Main.myPlayer, runLocally: false);
+                }
             }
         }
         public override void ResetEffects()
@@ -210,6 +217,11 @@ namespace WizenkleBoss.Assets.Helper
                     MusicKiller.MuffleFactor = 0.0f;
                     if (InTile && InkDashCooldown > 0)
                     {
+                        if (Main.netMode == NetmodeID.MultiplayerClient)
+                        {
+                            var SendDash = new DashVelUpdate(Player.whoAmI, DashVelocity);
+                            SendDash.Send(ignoreClient: Main.myPlayer, runLocally: false);
+                        }
                         ProduceWaterRipples();
                         if (timer++ >= 20)
                         {

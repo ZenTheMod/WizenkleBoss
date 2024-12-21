@@ -14,7 +14,6 @@ namespace WizenkleBoss.Common.Packets
         {
             this.fromWho = fromWho;
         }
-
         protected override void Receive()
         {
             if (Main.dedServ)
