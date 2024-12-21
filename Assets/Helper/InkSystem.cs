@@ -180,6 +180,7 @@ namespace WizenkleBoss.Assets.Helper
             foreach (var player in Main.player.Where(p => p.active && p.GetModPlayer<InkPlayer>().InkBuffActive && p.dye.Length > 0))
             {
                 player.heldProj = -1;
+                Main.NewText(player.GetModPlayer<InkPlayer>().InkDashCooldown);
                 if (player.GetModPlayer<InkPlayer>().InGhostInk && player.GetModPlayer<InkPlayer>().InkDashCooldown > 0)
                 {
                     float rot = player.GetModPlayer<InkPlayer>().DashVelocity.ToRotation() + MathHelper.PiOver2;

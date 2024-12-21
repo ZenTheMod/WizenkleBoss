@@ -14,7 +14,7 @@ namespace WizenkleBoss.Assets.Config
 
         [Header("Effects")]
 
-        [DefaultValue(0.75f)]
+        [DefaultValue(0.4f)]
         [Slider]
         [Increment(0.05f)]
         [DrawTicks]

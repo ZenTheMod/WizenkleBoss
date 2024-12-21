@@ -27,7 +27,7 @@ namespace WizenkleBoss.Assets.Helper
     {
         public float Intoxication = 0;
         public bool InkyArtifact = false;
-        public int InkDashCooldown = -45;
+        public int InkDashCooldown = -60;
         public Vector2 DashVelocity;
         public Vector2[] dashOldPos = new Vector2[15];
 
@@ -78,7 +78,7 @@ namespace WizenkleBoss.Assets.Helper
                 SendDash.Send(ignoreClient: Player.whoAmI, runLocally: false);
                 return;
             }
-            if (InkKeybindSystem.InkDash.JustPressed && InkDashCooldown == -45 && InGhostInk)
+            if (InkKeybindSystem.InkDash.JustPressed && InkDashCooldown == -60 && InGhostInk)
             {
                 if (Player.whoAmI == Main.myPlayer)
                     SoundEngine.PlaySound(AudioRegistry.InkDash, null);
@@ -158,7 +158,7 @@ namespace WizenkleBoss.Assets.Helper
         }
         public override void PostUpdate()
         {
-            InkDashCooldown = Math.Max(-45, InkDashCooldown - 1);
+            InkDashCooldown = Math.Max(-60, InkDashCooldown - 1);
             if (Player.whoAmI == Main.myPlayer)
             {
                 ArmorShaderData shader = GameShaders.Armor.GetShaderFromItemId(ModContent.ItemType<InkDye>());
@@ -172,7 +172,7 @@ namespace WizenkleBoss.Assets.Helper
                         dust.shader = shader;
                     }
                 }
-                if (InkDashCooldown == -44)
+                if (InkDashCooldown == -52)
                 {
                     for (int i = 0; i < 6; i++)
                     {

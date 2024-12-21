@@ -51,6 +51,7 @@ namespace WizenkleBoss.Content.Buffs
             player.controlMount = false;
             player.gravDir = 1f;
             player.controlUseItem = false;
+            player.controlUseTile = false;
             player.GetModPlayer<InkPlayer>().Intoxication = MathHelper.Clamp(player.GetModPlayer<InkPlayer>().Intoxication + 0.04f, 0f, 1f);
         }
     }
