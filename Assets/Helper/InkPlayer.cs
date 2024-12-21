@@ -16,6 +16,7 @@ using Terraria.ModLoader;
 using WizenkleBoss.Assets.Config;
 using WizenkleBoss.Assets.Helper;
 using WizenkleBoss.Assets.Textures;
+using WizenkleBoss.Common.Packets;
 using WizenkleBoss.Content.Buffs;
 using WizenkleBoss.Content.Dusts;
 using WizenkleBoss.Content.Items.Dyes;
@@ -69,11 +70,12 @@ namespace WizenkleBoss.Assets.Helper
         
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
-            InkDashCooldown = Math.Max(-45, InkDashCooldown - 1);
             if (InkKeybindSystem.InkDash.JustPressed && InkDashCooldown > 0 && InGhostInk && !InTile)
             {
                 this.CameraShakeSimple(Player.position, Vector2.Zero, 6f, 11, 6, 0);
                 InkDashCooldown = 0;
+                var SendDash = new DashUpdate((byte)Player.whoAmI, (byte)InkDashCooldown);
+                SendDash.Send(ignoreClient: Player.whoAmI, runLocally: false);
                 return;
             }
             if (InkKeybindSystem.InkDash.JustPressed && InkDashCooldown == -45 && InGhostInk)
@@ -99,6 +101,8 @@ namespace WizenkleBoss.Assets.Helper
                     Dust dust = Dust.NewDustPerfect(Player.Center + new Vector2(Main.rand.NextFloat(-16f, 17f), Main.rand.NextFloat(-16f, 17f)), ModContent.DustType<InkDust>(), vel * 5f, 0, Color.White, 3.2f);
                     dust.shader = shader;
                 }
+                var SendDash = new DashUpdate((byte)Player.whoAmI, (byte)InkDashCooldown);
+                SendDash.Send(ignoreClient: Player.whoAmI, runLocally: false);
             }
         }
         public override void ResetEffects()
@@ -154,6 +158,7 @@ namespace WizenkleBoss.Assets.Helper
         }
         public override void PostUpdate()
         {
+            InkDashCooldown = Math.Max(-45, InkDashCooldown - 1);
             if (Player.whoAmI == Main.myPlayer)
             {
                 ArmorShaderData shader = GameShaders.Armor.GetShaderFromItemId(ModContent.ItemType<InkDye>());
@@ -179,7 +184,7 @@ namespace WizenkleBoss.Assets.Helper
             }
 
             InkBuffActive = Player.HasBuff<InkDrugStatBuff>() || Player.HasBuff<InkDrugBuff>();
-            if (!InkBuffActive)
+            if (!InkBuffActive || (!InkBuffActive && Player.dead))
                 Intoxication = MathHelper.Clamp(Intoxication - 0.01f, 0f, 1f);
             if (InkBuffActive)
                 Player.aggro = -900;

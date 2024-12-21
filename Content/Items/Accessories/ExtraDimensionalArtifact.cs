@@ -21,6 +21,7 @@ namespace WizenkleBoss.Content.Items.Accessories
 {
     public class ExtraDimensionalArtifact : BaseInkItem
     {
+        private static bool HasRun = false;
         public override void SetDefaults()
         {
             if (!Main.dedServ)
@@ -35,8 +36,13 @@ namespace WizenkleBoss.Content.Items.Accessories
         }
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
+            if (InkKeybindSystem.InkDash.GetAssignedKeys().Count == 0 && !HasRun)
+            {
+                HasRun = true;
+                Main.NewText(Language.GetTextValue("Mods.WizenkleBoss.Items.ExtraDimensionalArtifact.ChatMessage", InkKeybindSystem.InkDash.DisplayName.ToString()));
+            }
             player.GetModPlayer<InkPlayer>().InkyArtifact = true;
-            if (player.HasBuff<InkDrugStatBuff>() && player.GetModPlayer<InkPlayer>().InkyArtifact)
+            if (player.GetModPlayer<InkPlayer>().InGhostInk)
             {
                 player.lavaImmune = true;
                 player.shimmerImmune = true;

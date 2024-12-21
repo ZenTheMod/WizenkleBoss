@@ -59,6 +59,7 @@ Items: {
 			'It's your funeral.'
 			'''
 		ReplacementTooltip: Press {0} to dash through the earth at will.
+		ChatMessage: Please Assign {0} to a key.
 	}
 }
 
