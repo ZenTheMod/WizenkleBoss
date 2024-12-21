@@ -29,4 +29,5 @@ namespace WizenkleBoss.Common.Packets
             if (Main.netMode == NetmodeID.Server)
                 Send(-1, Sender, false);
         }
+    }
 }
