@@ -39,6 +39,7 @@ namespace WizenkleBoss.Assets.Textures
         public static Texture2D InkDash { get; private set; }
         public static Texture2D TextBoxStars { get; private set; }
         public static Texture2D TelescopeMap { get; private set; }
+        public static Texture2D Cursor { get; private set; }
 
         public override void Load()
         {
@@ -93,6 +94,8 @@ namespace WizenkleBoss.Assets.Textures
             TextBoxStars = LoadTexture2D("Telescope/TextBoxStars");
 
             TelescopeMap = LoadTexture2D("Telescope/Map");
+
+            Cursor = LoadTexture2D("Cursor");
         }
         private static Texture2D LoadTexture2D(string TexturePath)
         {
@@ -125,6 +128,7 @@ namespace WizenkleBoss.Assets.Textures
             InkDash = null;
             TextBoxStars = null;
             TelescopeMap = null;
+            Cursor = null;
         }
     }
     public class FontRegistry : ModSystem

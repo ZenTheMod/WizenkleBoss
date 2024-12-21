@@ -14,6 +14,7 @@ using Terraria.ModLoader.Default;
 using Terraria.UI;
 using Terraria.Graphics;
 using Terraria.Graphics.Renderers;
+using WizenkleBoss.Assets.Textures;
 
 namespace WizenkleBoss.Assets.Helper
 {
@@ -53,24 +54,9 @@ namespace WizenkleBoss.Assets.Helper
                     StringCol = Color.White * 0.5f;
                 }
 
-                Vector2 origin = new(fontSize.X / 2f, fontSize.Y);
-                ChatManager.DrawColorCodedStringShadow(spriteBatch, font, text, pos, StringShadowCol, 0, origin, Vector2.One * scale);
+                Vector2 origin = new(fontSize.X / 2f, fontSize.Y);ChatManager.DrawColorCodedStringShadow(spriteBatch, font, text, pos, StringShadowCol, 0, origin, Vector2.One * scale);
                 ChatManager.DrawColorCodedString(spriteBatch, font, text, pos, StringCol, 0, origin, Vector2.One * scale);
             }
-        }
-        /// <summary>
-        /// Draws a simple ghost sprite, based on privated <see cref="LegacyPlayerRenderer.DrawGhost"/>.
-        /// </summary>
-        /// <param name="camera"></param>
-        /// <param name="drawPlayer"></param>
-        /// <param name="position"></param>
-        public static void DrawGhostSimple(Camera camera, Player drawPlayer, Vector2 position)
-        {
-            Texture2D texture = TextureAssets.Ghost.Value;
-            SpriteEffects effects = (drawPlayer.direction != 1) ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-            Rectangle value = new(0, texture.Height / 4 * drawPlayer.ghostFrame, texture.Width, texture.Height / 4);
-            Vector2 origin = new(value.Width / 2, value.Height / 2);
-            camera.SpriteBatch.Draw(texture, new Vector2(position.X - camera.UnscaledPosition.X + (value.Width / 2), position.Y - camera.UnscaledPosition.Y + (value.Height / 2)), value, Color.White, 0f, origin, 1f, effects, 0f);
         }
     }
 }

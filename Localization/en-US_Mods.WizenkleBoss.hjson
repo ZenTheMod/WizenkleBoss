@@ -64,8 +64,13 @@ Items: {
 
 UI: {
 	Telescope: {
-		MovementKeyPrompt: Use movement keys to pan
-		MovementKeyPromptUnder: You can disable this prompt from this mod's config options
+		MovementKeyPrompt: Use Movement Keys to pan.
+		MovementKeyPromptUnder: You can disable this prompt from this mod's config options.
+	}
+
+	SatelliteDish: {
+		ZoomKeyPrompt: Hold the Zoom Keys to zoom in and out.
+		SelectKeyPrompt: Press Attack or Jump to select stars.
 	}
 }
 
@@ -151,6 +156,11 @@ Configs: {
 		SatelliteMovementVelocity: {
 			Label: "[i:WizenkleBoss/ObservatorySatelliteDishItem] Satellite Dish Screen Pan Speed"
 			Tooltip: Controls satellite dish movement speed.
+		}
+
+		SatelliteUseMousePosition: {
+			Label: "[i:WizenkleBoss/ObservatorySatelliteDishItem] Satellite Dish Mouse Select"
+			Tooltip: Makes target selection based on mouse position rather than the small crosshair.
 		}
 	}
 }

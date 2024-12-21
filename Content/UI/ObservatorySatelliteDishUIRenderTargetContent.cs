@@ -7,10 +7,12 @@ using System.IO;
 using System.Linq;
 using Terraria;
 using Terraria.GameContent;
+using Terraria.GameInput;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI.Chat;
 using Terraria.Utilities;
+using WizenkleBoss.Assets.Config;
 using WizenkleBoss.Assets.Helper;
 using WizenkleBoss.Assets.Textures;
 
@@ -54,10 +56,44 @@ namespace WizenkleBoss.Content.UI
 
                 DrawSelection(spriteBatch, new(214, 196, 255), Center);
 
+                DrawTextPrompt(spriteBatch, Center + new Vector2(0, Center.Y / 2), BloomColor);
+
                 spriteBatch.End();
                 device.SetRenderTarget(null);
                 _wasPrepared = true;
             }
+        }
+        public static void DrawTextPrompt(SpriteBatch spriteBatch, Vector2 Center, Color BloomColor)
+        {
+            if (promptclose == 0)
+                return;
+            DynamicSpriteFont font = FontRegistry.SpaceMono;
+
+            string PromptText = prompt switch
+            {
+                ComplexPromptState.MovementKeys => Language.GetTextValue("Mods.WizenkleBoss.UI.Telescope.MovementKeyPrompt"),
+                ComplexPromptState.Zoom => Language.GetTextValue("Mods.WizenkleBoss.UI.SatelliteDish.ZoomKeyPrompt"),
+                ComplexPromptState.Select => Language.GetTextValue("Mods.WizenkleBoss.UI.SatelliteDish.SelectKeyPrompt"),
+                _ => " "
+            };
+
+            Vector2 fontSizePrompt = Helper.MeasureString(PromptText, font);
+
+            Vector2 fontSizeMovementUnder = Helper.MeasureString(Language.GetTextValue("Mods.WizenkleBoss.UI.Telescope.MovementKeyPromptUnder"), font);
+
+            float size = 0.4f * promptclose;
+
+            Rectangle backing = new(-(int)(Center.X * 2f), (int)((Center.Y - (fontSizePrompt.Y * size)) - (17 * promptclose)), (int)(Center.X * 6f), (int)((fontSizePrompt.Y * 1.2f * size) + (34 * promptclose)));
+            spriteBatch.Draw(TextureRegistry.Pixel, backing with { Y = (int)((Center.Y - (fontSizePrompt.Y * size)) - (19 * promptclose)), Height = (int)((fontSizePrompt.Y * 1.2f * size) + (38 * promptclose)) }, BloomColor * 10f);
+            spriteBatch.Draw(TextureRegistry.Pixel, backing, new Color(11, 8, 18));
+            spriteBatch.Draw(TextureRegistry.Bloom, backing, BloomColor * 4f);
+
+            if (prompt == ComplexPromptState.None)
+                return;
+
+            ChatManager.DrawColorCodedStringWithShadow(spriteBatch, font, PromptText, Center, Color.White, 0, new(fontSizePrompt.X / 2f, fontSizePrompt.Y), Vector2.One * size);
+
+            ChatManager.DrawColorCodedString(spriteBatch, font, Language.GetTextValue("Mods.WizenkleBoss.UI.Telescope.MovementKeyPromptUnder"), Center, Color.Gray with { A = 0 }, 0, new(fontSizeMovementUnder.X / 2f, 0), Vector2.One * size / 1.3f);
         }
         public static void DrawSelection(SpriteBatch spriteBatch, Color color, Vector2 Center)
         {
@@ -73,40 +109,19 @@ namespace WizenkleBoss.Content.UI
             float interpolator = targetAnimation < 0.5f ? MathF.Pow(2f, 10 * targetAnimation * 2f - 10) : 2f - MathF.Pow(2f, 10 * targetAnimation * -2f + 10);
             interpolator *= satelliteUIZoom;
 
-            if (oldTargetedStarIndex == int.MaxValue)
-            {
-                BarrierStar bigstar = BarrierStarSystem.TheOneImportantThingInTheSky;
+            BarrierStar bigstar = oldTargetedStarIndex == int.MaxValue ? BarrierStarSystem.TheOneImportantThingInTheSky : BarrierStarSystem.Stars[oldTargetedStarIndex];
 
-                Vector2 position = satelliteUIOffset + bigstar.Position;
-                position *= satelliteUIZoom;
-                position += Center;
+            Vector2 position = satelliteUIOffset + bigstar.Position;
+            position *= satelliteUIZoom;
+            position += Center;
 
-                Vector2 offsetPosition = new(position.X + MathHelper.Lerp(1, 5 * satelliteUIZoom, interpolator), position.Y);
+            Vector2 offsetPosition = new(position.X + MathHelper.Lerp(1, 5, interpolator), position.Y);
 
-                spriteBatch.Draw(TextureRegistry.Bracket, offsetPosition, null, offsetColor * interpolator, 0, TextureRegistry.Bracket.Size() / 2, 0.06f * interpolator, SpriteEffects.FlipHorizontally, 0f);
+            spriteBatch.Draw(TextureRegistry.Bracket, offsetPosition, null, offsetColor * interpolator, 0, TextureRegistry.Bracket.Size() / 2, 0.06f * interpolator, SpriteEffects.FlipHorizontally, 0f);
 
-                offsetPosition = new Vector2(position.X - MathHelper.Lerp(1, 5 * satelliteUIZoom, interpolator), position.Y);
+            offsetPosition = new Vector2(position.X - MathHelper.Lerp(1, 5, interpolator), position.Y);
 
-                spriteBatch.Draw(TextureRegistry.Bracket, offsetPosition, null, offsetColor * interpolator, 0, TextureRegistry.Bracket.Size() / 2, 0.06f * interpolator, SpriteEffects.None, 0f);
-                return;
-            }
-            else
-            {
-                BarrierStar star = BarrierStarSystem.Stars[oldTargetedStarIndex];
-
-                Vector2 position = satelliteUIOffset + star.Position;
-                position *= satelliteUIZoom;
-                position += Center;
-
-                Vector2 offsetPosition = new(position.X + MathHelper.Lerp(1, 5 * satelliteUIZoom, interpolator), position.Y);
-
-                spriteBatch.Draw(TextureRegistry.Bracket, offsetPosition, null, offsetColor * interpolator, 0, TextureRegistry.Bracket.Size() / 2, 0.06f * interpolator, SpriteEffects.FlipHorizontally, 0f);
-
-                offsetPosition = new Vector2(position.X - MathHelper.Lerp(1, 5 * satelliteUIZoom, interpolator), position.Y);
-
-                spriteBatch.Draw(TextureRegistry.Bracket, offsetPosition, null, offsetColor * interpolator, 0, TextureRegistry.Bracket.Size() / 2, 0.06f * interpolator, SpriteEffects.None, 0f);
-                return;
-            }
+            spriteBatch.Draw(TextureRegistry.Bracket, offsetPosition, null, offsetColor * interpolator, 0, TextureRegistry.Bracket.Size() / 2, 0.06f * interpolator, SpriteEffects.None, 0f);
         }
         public static void DrawStars(SpriteBatch spriteBatch, Vector2 Center, Color BloomColor, DynamicSpriteFont font)
         {
@@ -141,16 +156,16 @@ namespace WizenkleBoss.Content.UI
 
                 float offset = oldTargetedStarIndex == -1 || oldTargetedStarIndex == int.MaxValue? 1 : (BarrierStarSystem.Stars[(int)MathHelper.Clamp(oldTargetedStarIndex, 0, BarrierStarSystem.Stars.Length - 1)] == star ? MathHelper.Lerp(1, 1.75f, interpolator) : 1);
 
-                Vector2 textPosition = starPosition + (Vector2.UnitY * 4 * offset);
+                Vector2 textPosition = starPosition + (Vector2.UnitY * 4 * offset * satelliteUIZoom);
 
                 float textSize = Utils.Remap(starPosition.Distance(Center), 0, 300, 0.2f, 0.3f) * satelliteUIZoom;
 
                 Vector2 textOrigin = Helper.MeasureString(star.Name, font);
 
                 if (star.BaseSize > 0.85f || currentStar)
-                    ChatManager.DrawColorCodedStringShadow(spriteBatch, font, star.Name, textPosition, Color.Black, 0, new Vector2(textOrigin.X / 2f, 0), Vector2.One * textSize * MathF.Min(starSize * offset, 2));
+                    ChatManager.DrawColorCodedStringShadow(spriteBatch, font, star.Name, textPosition, Color.Black, 0, new Vector2(textOrigin.X / 2f, 0), Vector2.One * textSize * MathF.Min(starSize * offset / satelliteUIZoom, 2));
 
-                ChatManager.DrawColorCodedString(spriteBatch, font, star.Name, textPosition, color, 0, new Vector2(textOrigin.X / 2f, 0), Vector2.One * textSize * MathF.Min(starSize * offset, 2));
+                ChatManager.DrawColorCodedString(spriteBatch, font, star.Name, textPosition, color, 0, new Vector2(textOrigin.X / 2f, 0), Vector2.One * textSize * MathF.Min(starSize * offset / satelliteUIZoom, 2));
             }
 
             BarrierStar bigstar = BarrierStarSystem.TheOneImportantThingInTheSky;
@@ -173,7 +188,7 @@ namespace WizenkleBoss.Content.UI
                 {
                     float offset = oldTargetedStarIndex == int.MaxValue ? MathHelper.Lerp(0.8f, 1.2f, interpolator) : 0.8f;
 
-                    Vector2 textPosition = position + (Vector2.UnitY * 6 * offset);
+                    Vector2 textPosition = position + (Vector2.UnitY * 6 * offset * satelliteUIZoom);
 
                     float textSize = Utils.Remap(position.Distance(Center), 0, 300, 0.3f, 0.4f) * satelliteUIZoom;
 
@@ -185,7 +200,7 @@ namespace WizenkleBoss.Content.UI
 
                     if ((Main.GlobalTimeWrappedHourly * 60) % 50 < 25)
                     {
-                        Vector2 warningPosition = position + (-Vector2.UnitY * 25);
+                        Vector2 warningPosition = position + (-Vector2.UnitY * 25 * satelliteUIZoom);
 
                         Vector2 warningOrigin = Helper.MeasureString("!", font);
 
@@ -195,7 +210,8 @@ namespace WizenkleBoss.Content.UI
                     }
                 }
             }
-            spriteBatch.Draw(TextureRegistry.Circle, Center, null, Color.Gray with { A = 0 }, 0, TextureRegistry.Circle.Size() / 2, 0.05f, SpriteEffects.None, 0f);
+            bool cursormode = ModContent.GetInstance<WizenkleBossConfig>().SatelliteUseMousePosition;
+            spriteBatch.Draw(cursormode? TextureRegistry.Cursor : TextureRegistry.Circle, cursormode ? (Main.MouseScreen - new Vector2(Main.screenWidth / 2, Main.screenHeight / 2)) / 2 + Center : Center, null, cursormode ? Color.White : Color.Gray with { A = 0 }, 0, cursormode ? Vector2.Zero : TextureRegistry.Circle.Size() / 2, cursormode ? 1f : 0.05f, SpriteEffects.None, 0f);
         }
         public static SatelliteDishTargetContent satelliteDishTargetByRequest;
         public override void Load()

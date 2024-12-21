@@ -31,17 +31,17 @@ float4 PixelShaderFunction(float4 sampleColor : COLOR0, float2 coords : TEXCOORD
     float scanSpeed = frac(uTime);
     
         // As stated in the original shader by @devrique this fisheye distortion was made by @ddoodm, you can find their original shader here: https://www.shadertoy.com/view/ltSXRz
-    float2 eyefishuv = (coords - 0.5) * 3;
+    float2 eyefishuv = (coords - 0.5) * 4.2;
     float deform = (1 - eyefishuv.y * eyefishuv.y) * 0.02 * eyefishuv.x;
     
     float2 deformedCoords = float2(coords.x - deform * 0.95, coords.y);
     
     float3 col = scanlines(deformedCoords, scanSpeed) * 0.4;
         // Simple* Vignette
-    float bottomRight = pow(uv.x, uv.y * 70);
-    float bottomLeft = pow(1 - uv.x, uv.y * 70);
-    float topRight = pow(uv.x, (1 - uv.y) * 70);
-    float topLeft = pow(uv.y, uv.x * 70);
+    float bottomRight = pow(uv.x, uv.y * 120);
+    float bottomLeft = pow(1 - uv.x, uv.y * 120);
+    float topRight = pow(uv.x, (1 - uv.y) * 120);
+    float topLeft = pow(uv.y, uv.x * 120);
     
     float screenForm = 1 - (bottomRight + bottomLeft + topRight + topLeft);
     

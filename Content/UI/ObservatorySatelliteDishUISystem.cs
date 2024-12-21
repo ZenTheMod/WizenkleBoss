@@ -22,6 +22,13 @@ using System.Runtime.InteropServices;
 
 namespace WizenkleBoss.Content.UI
 {
+    public enum ComplexPromptState
+    {
+        MovementKeys,
+        Zoom,
+        Select,
+        None
+    }
     public partial class ObservatorySatelliteDishUISystem : ModSystem
     {
         public static ObservatorySatelliteDishUI observatorySatelliteDishUI = new();
@@ -42,7 +49,15 @@ namespace WizenkleBoss.Content.UI
 
         public static float openAnimation = 0;
 
-        private static bool prompt = true;
+        public static ComplexPromptState prompt = 0;
+        public static float promptclose = 1f;
+        public override void OnWorldLoad()
+        {
+            satelliteUIOffset = Vector2.Zero;
+            satelliteUIZoom = 1f;
+            targetedStarIndex = -1;
+            oldTargetedStarIndex = -1;
+        }
         private static void DrawMap()
         {
             satelliteDishTargetByRequest.Request();
@@ -91,7 +106,7 @@ namespace WizenkleBoss.Content.UI
 
                         float interpolator = MathF.Pow(2f, 10 * (openAnimation - 1));
 
-                        Main.spriteBatch.Draw(TextureRegistry.Pixel, new Rectangle(0, 0, (int)ScreenSize.X, (int)ScreenSize.Y), Color.Black * interpolator);
+                        Main.spriteBatch.Draw(TextureRegistry.Pixel, new Rectangle(0, 0, (int)ScreenSize.X + 30, (int)ScreenSize.Y + 30), Color.Black * interpolator);
 
                         DrawMap();
 
@@ -116,16 +131,14 @@ namespace WizenkleBoss.Content.UI
             {
                 TriggersPack triggers = PlayerInput.Triggers;
                 if (triggers.Current.ViewZoomIn)
-                    satelliteUIZoom = MathHelper.Clamp(satelliteUIZoom + 0.04f, 1f, 2f);
+                    satelliteUIZoom = MathHelper.Clamp(satelliteUIZoom + 0.02f, 1f, 2f);
                 if (triggers.Current.ViewZoomOut)
-                    satelliteUIZoom = MathHelper.Clamp(satelliteUIZoom - 0.04f, 1f, 2f);
+                    satelliteUIZoom = MathHelper.Clamp(satelliteUIZoom - 0.02f, 1f, 2f);
 
                 Vector2 normalized = Vector2.Zero;
+                UpdatePrompt();
                 if (!UpdateSelection())
                 {
-                    if ((triggers.Current.Up || triggers.Current.Left || triggers.Current.Right || triggers.Current.Down) && prompt && ModContent.GetInstance<WizenkleBossConfig>().TelescopeMovementKeyPrompt)
-                        prompt = false;
-
                     if (triggers.Current.Up)
                         normalized += new Vector2(0, 1);
                     if (triggers.Current.Left)
@@ -149,13 +162,57 @@ namespace WizenkleBoss.Content.UI
                 satelliteUIOffset = Vector2.Lerp(satelliteUIOffset, -star.Position, targetAnimation < 0.51f? 0.003f : 0.7f);
             }
         }
+        public static void UpdatePrompt()
+        {
+            if (observatorySatelliteDishUI.BackPanel == null)
+                return;
+            if (prompt == ComplexPromptState.None)
+            {
+                promptclose = MathHelper.Clamp(promptclose - 0.05f, 0f, 1f);
+                return;
+            }
+            if (!ModContent.GetInstance<WizenkleBossConfig>().TelescopeMovementKeyPrompt)
+            {
+                prompt = ComplexPromptState.None;
+                return;
+            }
+            TriggersPack triggers = PlayerInput.Triggers;
+            switch (prompt) 
+            {
+                case ComplexPromptState.MovementKeys:
+                {
+                    promptclose = 1f;
+                    if (triggers.Current.Up || triggers.Current.Left || triggers.Current.Right || triggers.Current.Down)
+                        prompt = ComplexPromptState.Zoom;
+                    break;
+                }
+                case ComplexPromptState.Zoom:
+                {
+                    if (triggers.Current.ViewZoomIn || triggers.Current.ViewZoomOut)
+                        prompt = ComplexPromptState.Select;
+                    break;
+                }
+                case ComplexPromptState.Select:
+                {
+                    if ((triggers.Current.Jump || triggers.Current.MouseLeft) && !observatorySatelliteDishUI.BackPanel.IsMouseHovering)
+                        prompt = ComplexPromptState.None;
+                    break;
+                }
+                default:
+                {
+                    break;
+                }
+            }
+        }
         public static bool UpdateSelection()
         {
+            if (observatorySatelliteDishUI.BackPanel == null || !inUI)
+                return targetedStarIndex > -1;
             TriggersPack triggers = PlayerInput.Triggers;
 
-            bool CurrentTriggerSelect = triggers.Current.Jump || triggers.Current.MouseLeft;
-            bool JustPressedTriggerSelect = triggers.JustPressed.Jump || triggers.JustPressed.MouseLeft;
-            bool JustReleasedTriggerSelect = triggers.JustReleased.Jump || triggers.JustReleased.MouseLeft;
+            bool CurrentTriggerSelect = (triggers.Current.Jump || triggers.Current.MouseLeft) && !observatorySatelliteDishUI.BackPanel.IsMouseHovering;
+            bool JustPressedTriggerSelect = (triggers.JustPressed.Jump || triggers.JustPressed.MouseLeft) && !observatorySatelliteDishUI.BackPanel.IsMouseHovering;
+            bool JustReleasedTriggerSelect = (triggers.JustReleased.Jump || triggers.JustReleased.MouseLeft) && !observatorySatelliteDishUI.BackPanel.IsMouseHovering;
 
             if (JustReleasedTriggerSelect && targetedStarIndex > -1)
             {
@@ -171,6 +228,9 @@ namespace WizenkleBoss.Content.UI
 
             if (JustPressedTriggerSelect)
             {
+                Vector2 centerpos = TargetSize / 2f;
+                if (ModContent.GetInstance<WizenkleBossConfig>().SatelliteUseMousePosition)
+                    centerpos += Vector2.Clamp((Main.MouseScreen - new Vector2(Main.screenWidth / 2, Main.screenHeight / 2)) / 2, -(TargetSize / 2f), TargetSize / 2f);
                 Vector2 ClosestPosition = Vector2.Zero;
                 int ClosestIndex = -1;
                 for (int i = 0; i <= BarrierStarSystem.Stars.Length - 1; i++)
@@ -180,9 +240,9 @@ namespace WizenkleBoss.Content.UI
                     starPosition *= satelliteUIZoom;
                     starPosition += TargetSize / 2f;
 
-                    if (starPosition.Distance(TargetSize / 2f) < 50 * satelliteUIZoom)
+                    if (starPosition.Distance(centerpos) < 50 * satelliteUIZoom && star.Position.Length() < 830)
                     {
-                        if (starPosition.Distance(TargetSize / 2f) < ClosestPosition.Distance(TargetSize / 2f))
+                        if (starPosition.Distance(centerpos) < ClosestPosition.Distance(centerpos))
                         {
                             ClosestPosition = starPosition;
                             ClosestIndex = i;
@@ -195,11 +255,11 @@ namespace WizenkleBoss.Content.UI
                     // Because my dumbass put the eldritch star seperatly to the rest of the array i have to suffer :D
                     // Basically just sets it to a value that it'd never reach normally.
 
-                Vector2 position = (TargetSize / 2f) + satelliteUIOffset + bigstar.Position;
+                Vector2 position = satelliteUIOffset + bigstar.Position;
                 position *= satelliteUIZoom;
                 position += TargetSize / 2f;
 
-                if (position.Distance(TargetSize / 2f) < 50 * satelliteUIZoom)
+                if (position.Distance(centerpos) < 50 * satelliteUIZoom)
                     ClosestIndex = int.MaxValue;
                 if (ClosestIndex > -1)
                 {
