@@ -26,7 +26,7 @@ namespace WizenkleBoss.Assets.Helper
     {
         public float Intoxication = 0;
         public bool InkyArtifact = false;
-        public int InkDashCooldown = 0;
+        public int InkDashCooldown = -45;
         public Vector2 DashVelocity;
         public Vector2[] dashOldPos = new Vector2[15];
 
@@ -69,14 +69,14 @@ namespace WizenkleBoss.Assets.Helper
         
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
-            InkDashCooldown = Math.Max(-25, InkDashCooldown - 1);
+            InkDashCooldown = Math.Max(-45, InkDashCooldown - 1);
             if (InkKeybindSystem.InkDash.JustPressed && InkDashCooldown > 0 && InGhostInk && !InTile)
             {
                 this.CameraShakeSimple(Player.position, Vector2.Zero, 6f, 11, 6, 0);
                 InkDashCooldown = 0;
                 return;
             }
-            if (InkKeybindSystem.InkDash.JustPressed && InkDashCooldown == -25 && InGhostInk)
+            if (InkKeybindSystem.InkDash.JustPressed && InkDashCooldown == -45 && InGhostInk)
             {
                 if (Player.whoAmI == Main.myPlayer)
                     SoundEngine.PlaySound(AudioRegistry.InkDash, null);
@@ -167,7 +167,7 @@ namespace WizenkleBoss.Assets.Helper
                         dust.shader = shader;
                     }
                 }
-                if (InkDashCooldown == -24)
+                if (InkDashCooldown == -44)
                 {
                     for (int i = 0; i < 6; i++)
                     {
