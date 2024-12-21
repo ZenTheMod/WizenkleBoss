@@ -77,7 +77,7 @@ namespace WizenkleBoss.Assets.Helper
 
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                 {
-                    var SendDash = new DashUpdate(Player.whoAmI, InkDashCooldown);
+                    var SendDash = new DashUpdate(Player.whoAmI, InkDashCooldown, DashVelocity);
                     SendDash.Send(ignoreClient: Main.myPlayer, runLocally: false);
                 }
                 return;
@@ -107,7 +107,7 @@ namespace WizenkleBoss.Assets.Helper
                 }
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                 {
-                    var SendDash = new DashUpdate(Player.whoAmI, InkDashCooldown);
+                    var SendDash = new DashUpdate(Player.whoAmI, InkDashCooldown, DashVelocity);
                     SendDash.Send(ignoreClient: Main.myPlayer, runLocally: false);
                 }
             }
@@ -211,31 +211,33 @@ namespace WizenkleBoss.Assets.Helper
                     InTile = true;
                 else 
                     InTile = false;
-
                 if (Player.whoAmI == Main.myPlayer)
                 {
                     MusicKiller.MuffleFactor = 0.0f;
-                    if (InTile && InkDashCooldown > 0)
+                    if (InkDashCooldown > 0)
                     {
                         if (Main.netMode == NetmodeID.MultiplayerClient)
                         {
-                            var SendDash = new DashVelUpdate(Player.whoAmI, DashVelocity);
+                            var SendDash = new DashUpdate(Player.whoAmI, InkDashCooldown, DashVelocity);
                             SendDash.Send(ignoreClient: Main.myPlayer, runLocally: false);
                         }
-                        ProduceWaterRipples();
-                        if (timer++ >= 20)
+                        if (InTile && InkDashCooldown > 0)
                         {
-                            SoundEngine.PlaySound(AudioRegistry.InkBurrowing, null);
-                            timer = 0;
+                            ProduceWaterRipples();
+                            if (timer++ >= 20)
+                            {
+                                SoundEngine.PlaySound(AudioRegistry.InkBurrowing, null);
+                                timer = 0;
+                            }
+                            this.CameraShakeSimple(Player.position, Vector2.Zero, 2.4f, 11, 2, 0);
+                            Dust dust = Dust.NewDustPerfect(Player.Center + new Vector2(Main.rand.NextFloat(-16f, 17f), Main.rand.NextFloat(-16f, 17f)), ModContent.DustType<InkDust>(), null, 0, Color.White, 2.2f);
+                            dust.shader = shader;
                         }
-                        this.CameraShakeSimple(Player.position, Vector2.Zero, 2.4f, 11, 2, 0);
-                        Dust dust = Dust.NewDustPerfect(Player.Center + new Vector2(Main.rand.NextFloat(-16f, 17f), Main.rand.NextFloat(-16f, 17f)), ModContent.DustType<InkDust>(), null, 0, Color.White, 2.2f);
-                        dust.shader = shader;
-                    }
-                    if (!InTile && Main.rand.NextBool(5) && InkDashCooldown > 0)
-                    {
-                        Dust dust = Dust.NewDustPerfect(Player.Center + new Vector2(Main.rand.NextFloat(-4f, 5f), Main.rand.NextFloat(-4f, 5f)), ModContent.DustType<InkDust>(), null, 0, Color.White, 1.5f);
-                        dust.shader = shader;
+                        if (!InTile && Main.rand.NextBool(5) && InkDashCooldown > 0)
+                        {
+                            Dust dust = Dust.NewDustPerfect(Player.Center + new Vector2(Main.rand.NextFloat(-4f, 5f), Main.rand.NextFloat(-4f, 5f)), ModContent.DustType<InkDust>(), null, 0, Color.White, 1.5f);
+                            dust.shader = shader;
+                        }
                     }
                 }
             }
