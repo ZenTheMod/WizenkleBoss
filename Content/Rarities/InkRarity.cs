@@ -60,13 +60,13 @@ namespace WizenkleBoss.Content.Rarities
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, barrierShader.Value, Main.UIScaleMatrix);
 
-            ChatManager.DrawColorCodedStringShadow(Main.spriteBatch, font, line.Text, pos, new Color(85, 25, 255, 255), rotation, origin, baseScale);
-            //ChatManager.DrawColorCodedString(Main.spriteBatch, font, line.Text, pos, new Color(85, 25, 255, 255), rotation, origin, baseScale * 1.3f);
+            ChatManager.DrawColorCodedStringShadow(Main.spriteBatch, font, line.Text, pos, new Color(85, 25, 255, 255) * 0.3f, rotation, origin, baseScale);
+            ChatManager.DrawColorCodedString(Main.spriteBatch, font, line.Text, pos, new Color(85, 25, 255, 255), rotation, origin, baseScale);
 
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(in snapshit);
 
-            ChatManager.DrawColorCodedString(Main.spriteBatch, font, line.Text, pos, Color.Black, rotation, origin, baseScale);
+            ChatManager.DrawColorCodedString(Main.spriteBatch, font, line.Text, pos, Color.White, rotation, origin, baseScale);
 
             return false;
         }

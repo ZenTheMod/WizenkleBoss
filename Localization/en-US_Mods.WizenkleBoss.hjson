@@ -124,9 +124,19 @@ Configs: {
 			Label: "[i:WizenkleBoss/InterGalacticSludge] Shader Contrast"
 			Tooltip:
 				'''
-				Some players may find have photosensitivity.
+				Some players may have photosensitivity or find certain visuals iritating.
 				0 Makes the original world very clear, easy to look at.
 				1 Full contrast based, hard to look at.
+				'''
+		}
+
+		EmbossStrength: {
+			Label: "[i:WizenkleBoss/InterGalacticSludge] Shader Strength"
+			Tooltip:
+				'''
+				Some players may have photosensitivity or find certain visuals iritating.
+				0.4 Makes harsh effects much easier to look at.
+				1 Full intended effect, harsher to look at.
 				'''
 		}
 
@@ -457,6 +467,7 @@ StarNames: {
 	Name234: VOID
 	ImportantStarName: UNKNOWN
 }
+
 StarMapLogs: {
 	GetPower:
 		'''
@@ -465,12 +476,11 @@ StarMapLogs: {
 		[{0}:0.34562] [Main/Info] Transmitting zoogle doop…
 
 		[{0}:0.45678] [Main/Info] Geting power status…
-		
+
 		…
 
 		[{0}:0.52354] [Main/Info] Power status recieved…
 		'''
-
 	SuccessfulLowPower:
 		'''
 		[{0}:0.52355] [Main/Info] Main engine in operation and has sufficiant power!
@@ -486,7 +496,6 @@ StarMapLogs: {
 
 		[{0}:2.15434] [Main/Info] 1
 		'''
-
 	ErrorInsufficiantPower:
 		'''
 		[{0}:0.52355] [Main/Info] Main engine in-

@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 using Terraria.GameContent;
+using Terraria.Graphics.Capture;
 using Terraria.Graphics.Effects;
 using Terraria.Graphics.Renderers;
 using Terraria.Graphics.Shaders;
@@ -258,6 +259,8 @@ namespace WizenkleBoss.Assets.Helper
                 Shader.Parameters["DrugStrength"]?.SetValue(player.Intoxication);
 
                 Shader.Parameters["contrast"]?.SetValue(ModContent.GetInstance<WizenkleBossConfig>().InkContrast);
+
+                Shader.Parameters["embossStrength"]?.SetValue(ModContent.GetInstance<WizenkleBossConfig>().EmbossStrength);
             }
         }
         public override void Apply()

@@ -17,6 +17,8 @@ float MaskThreshold;
 
 float contrast;
 
+float embossStrength;
+
 float4 PixelShaderFunction(float4 sampleColor : COLOR0, float2 coords : TEXCOORD0) : COLOR0
 {
         // Col is the normal screen in this case
@@ -63,7 +65,9 @@ float4 PixelShaderFunction(float4 sampleColor : COLOR0, float2 coords : TEXCOORD
     dirAvg.y = cos(uTime) * dirAvg.y;
     
         // Add the emboss layer to the base screen
-    return float4((col.rgb - (mask * contrast)) + (((dirAvg.x * embossColor.rgb) + (dirAvg.y * embossColor.rgb)) * mask), 1);
+    float4 masked = tex2D(maskedTexture, coords) * mask * (1 - embossStrength);
+    col.rgb = lerp(col.rgb, masked.rgb, masked.a);
+    return float4((col.rgb - (mask * contrast)) + (((dirAvg.x * embossColor.rgb) + (dirAvg.y * embossColor.rgb)) * mask * embossStrength), 1);
 }
 
 technique Technique1
