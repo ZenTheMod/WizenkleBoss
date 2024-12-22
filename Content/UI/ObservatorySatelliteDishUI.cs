@@ -18,6 +18,9 @@ namespace WizenkleBoss.Content.UI
             SoundEngine.PlaySound(AudioRegistry.HumStart with { Volume = 0.2f });
             InitializeUI();
 
+            if (ObservatorySatelliteDishUISystem.targetedStarIndex > -1)
+                ObservatorySatelliteDishUISystem.prompt = ComplexPromptState.Fire;
+
             if (PlayerInput.UsingGamepadUI)
                 UILinkPointNavigator.ChangePoint(3002);
         }

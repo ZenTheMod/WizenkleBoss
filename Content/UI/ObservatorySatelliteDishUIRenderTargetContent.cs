@@ -37,6 +37,7 @@ namespace WizenkleBoss.Content.UI
                 float overallcolormultiplier = 2 - MathF.Pow(2f, 10 * (openAnimation - 1));
 
                 spriteBatch.Draw(TextureRegistry.Pixel, new Rectangle(0, 0, (int)TargetSize.X, (int)TargetSize.Y), new Color(11, 8, 18) * Utils.Remap(overallcolormultiplier, 1, 2, 1, 10));
+
                     // Stars.
 
                     // debug code:
@@ -56,24 +57,27 @@ namespace WizenkleBoss.Content.UI
 
                 DrawSelection(spriteBatch, new(214, 196, 255), Center);
 
-                DrawTextPrompt(spriteBatch, Center + new Vector2(0, Center.Y / 2), BloomColor);
+                DrawTextPrompt(spriteBatch, Center + new Vector2(0, Center.Y / 2), BloomColor, font);
+
+                bool cursormode = ModContent.GetInstance<WizenkleBossConfig>().SatelliteUseMousePosition;
+                spriteBatch.Draw(cursormode ? TextureRegistry.Cursor : TextureRegistry.Circle, cursormode ? (Main.MouseScreen - new Vector2(Main.screenWidth / 2, Main.screenHeight / 2)) / 2 + Center : Center, null, cursormode ? Color.White : Color.Gray with { A = 0 }, 0, cursormode ? Vector2.Zero : TextureRegistry.Circle.Size() / 2, cursormode ? 1f : 0.05f, SpriteEffects.None, 0f);
 
                 spriteBatch.End();
                 device.SetRenderTarget(null);
                 _wasPrepared = true;
             }
         }
-        public static void DrawTextPrompt(SpriteBatch spriteBatch, Vector2 Center, Color BloomColor)
+        public static void DrawTextPrompt(SpriteBatch spriteBatch, Vector2 Center, Color BloomColor, DynamicSpriteFont font)
         {
             if (promptclose == 0)
                 return;
-            DynamicSpriteFont font = FontRegistry.SpaceMono;
 
             string PromptText = prompt switch
             {
                 ComplexPromptState.MovementKeys => Language.GetTextValue("Mods.WizenkleBoss.UI.Telescope.MovementKeyPrompt"),
                 ComplexPromptState.Zoom => Language.GetTextValue("Mods.WizenkleBoss.UI.SatelliteDish.ZoomKeyPrompt"),
                 ComplexPromptState.Select => Language.GetTextValue("Mods.WizenkleBoss.UI.SatelliteDish.SelectKeyPrompt"),
+                ComplexPromptState.Fire => Language.GetTextValue("Mods.WizenkleBoss.UI.SatelliteDish.ContactPrompt"),
                 _ => " "
             };
 
@@ -83,17 +87,19 @@ namespace WizenkleBoss.Content.UI
 
             float size = 0.4f * promptclose;
 
-            Rectangle backing = new(-(int)(Center.X * 2f), (int)((Center.Y - (fontSizePrompt.Y * size)) - (17 * promptclose)), (int)(Center.X * 6f), (int)((fontSizePrompt.Y * 1.2f * size) + (34 * promptclose)));
-            spriteBatch.Draw(TextureRegistry.Pixel, backing with { Y = (int)((Center.Y - (fontSizePrompt.Y * size)) - (19 * promptclose)), Height = (int)((fontSizePrompt.Y * 1.2f * size) + (38 * promptclose)) }, BloomColor * 10f);
+            float heightmultiplier = prompt == ComplexPromptState.Fire ? 1f : 1.2f;
+            Rectangle backing = new(-(int)(Center.X * 2f), (int)((Center.Y - (fontSizePrompt.Y * size)) - (17 * promptclose)), (int)(Center.X * 6f), (int)((fontSizePrompt.Y * heightmultiplier * size) + (34 * promptclose)));
+            spriteBatch.Draw(TextureRegistry.Pixel, backing with { Y = (int)((Center.Y - (fontSizePrompt.Y * size)) - (19 * promptclose)), Height = (int)((fontSizePrompt.Y * heightmultiplier * size) + (38 * promptclose)) }, BloomColor * 10f);
             spriteBatch.Draw(TextureRegistry.Pixel, backing, new Color(11, 8, 18));
             spriteBatch.Draw(TextureRegistry.Bloom, backing, BloomColor * 4f);
 
             if (prompt == ComplexPromptState.None)
                 return;
 
-            ChatManager.DrawColorCodedStringWithShadow(spriteBatch, font, PromptText, Center, Color.White, 0, new(fontSizePrompt.X / 2f, fontSizePrompt.Y), Vector2.One * size);
+            ChatManager.DrawColorCodedStringWithShadow(spriteBatch, font, PromptText, Center, Color.White, 0, new(fontSizePrompt.X / 2f, prompt == ComplexPromptState.Fire ? fontSizePrompt.Y * 0.75f : fontSizePrompt.Y), Vector2.One * size);
 
-            ChatManager.DrawColorCodedString(spriteBatch, font, Language.GetTextValue("Mods.WizenkleBoss.UI.Telescope.MovementKeyPromptUnder"), Center, Color.Gray with { A = 0 }, 0, new(fontSizeMovementUnder.X / 2f, 0), Vector2.One * size / 1.3f);
+            if (prompt != ComplexPromptState.Fire)
+                ChatManager.DrawColorCodedString(spriteBatch, font, Language.GetTextValue("Mods.WizenkleBoss.UI.Telescope.MovementKeyPromptUnder"), Center, Color.Gray with { A = 0 }, 0, new(fontSizeMovementUnder.X / 2f, 0), Vector2.One * size / 1.3f);
         }
         public static void DrawSelection(SpriteBatch spriteBatch, Color color, Vector2 Center)
         {
@@ -210,8 +216,6 @@ namespace WizenkleBoss.Content.UI
                     }
                 }
             }
-            bool cursormode = ModContent.GetInstance<WizenkleBossConfig>().SatelliteUseMousePosition;
-            spriteBatch.Draw(cursormode? TextureRegistry.Cursor : TextureRegistry.Circle, cursormode ? (Main.MouseScreen - new Vector2(Main.screenWidth / 2, Main.screenHeight / 2)) / 2 + Center : Center, null, cursormode ? Color.White : Color.Gray with { A = 0 }, 0, cursormode ? Vector2.Zero : TextureRegistry.Circle.Size() / 2, cursormode ? 1f : 0.05f, SpriteEffects.None, 0f);
         }
         public static SatelliteDishTargetContent satelliteDishTargetByRequest;
         public override void Load()

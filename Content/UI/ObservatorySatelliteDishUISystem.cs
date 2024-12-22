@@ -27,7 +27,15 @@ namespace WizenkleBoss.Content.UI
         MovementKeys,
         Zoom,
         Select,
+        Fire,
         None
+    }
+    public enum ContactingState
+    {
+        None,
+        Contacting,
+        ErrorNoPower,
+        ErrorOther
     }
     public partial class ObservatorySatelliteDishUISystem : ModSystem
     {
@@ -50,7 +58,10 @@ namespace WizenkleBoss.Content.UI
         public static float openAnimation = 0;
 
         public static ComplexPromptState prompt = 0;
+
         public static float promptclose = 1f;
+
+        public static ContactingState ErrorState;
         public override void OnWorldLoad()
         {
             satelliteUIOffset = Vector2.Zero;
@@ -123,10 +134,17 @@ namespace WizenkleBoss.Content.UI
         }
         public override void UpdateUI(GameTime gameTime)
         {
+            ErrorState = ContactingState.None;
+            if (ErrorState != ContactingState.None)
+            {
+                return;
+            }
+
             if (inUI)
                 openAnimation = MathHelper.Clamp(openAnimation + 0.04f, 0f, 1f);
             if (!inUI && openAnimation > 0)
                 openAnimation = MathHelper.Clamp(openAnimation - 0.14f, 0f, 1f);
+
             if (inUI || openAnimation > 0)
             {
                 TriggersPack triggers = PlayerInput.Triggers;
@@ -156,10 +174,11 @@ namespace WizenkleBoss.Content.UI
             satelliteUIOffsetVelocity *= 0.50f;
             satelliteUIOffset += satelliteUIOffsetVelocity;
             satelliteUIOffset = satelliteUIOffset.SafeNormalize(Vector2.Zero) * Utils.Clamp(satelliteUIOffset.Length(), 0, 550);
+
             if (targetedStarIndex > -1)
             {
                 BarrierStar star = targetedStarIndex == int.MaxValue ? BarrierStarSystem.TheOneImportantThingInTheSky : BarrierStarSystem.Stars[(int)MathHelper.Clamp(oldTargetedStarIndex, 0, BarrierStarSystem.Stars.Length - 1)];
-                satelliteUIOffset = Vector2.Lerp(satelliteUIOffset, -star.Position, targetAnimation < 0.51f? 0.003f : 0.7f);
+                satelliteUIOffset = Vector2.Lerp(satelliteUIOffset, -star.Position, targetAnimation < 0.51f ? 0.003f : 0.7f);
             }
         }
         public static void UpdatePrompt()
@@ -171,7 +190,11 @@ namespace WizenkleBoss.Content.UI
                 promptclose = MathHelper.Clamp(promptclose - 0.05f, 0f, 1f);
                 return;
             }
-            if (!ModContent.GetInstance<WizenkleBossConfig>().TelescopeMovementKeyPrompt)
+            if (prompt != ComplexPromptState.None)
+            {
+                promptclose = MathHelper.Clamp(promptclose + 0.05f, 0f, 1f);
+            }
+            if (!ModContent.GetInstance<WizenkleBossConfig>().TelescopeMovementKeyPrompt && prompt != ComplexPromptState.Fire)
             {
                 prompt = ComplexPromptState.None;
                 return;
@@ -198,6 +221,15 @@ namespace WizenkleBoss.Content.UI
                         prompt = ComplexPromptState.None;
                     break;
                 }
+                case ComplexPromptState.Fire:
+                {
+                    if (triggers.JustPressed.MouseRight && !observatorySatelliteDishUI.BackPanel.IsMouseHovering && openAnimation >= 0.8f)
+                    {
+                        prompt = ComplexPromptState.None;
+                        ErrorState = ContactingState.Contacting;
+                    }
+                    break;
+                }
                 default:
                 {
                     break;
@@ -208,21 +240,27 @@ namespace WizenkleBoss.Content.UI
         {
             if (observatorySatelliteDishUI.BackPanel == null || !inUI)
                 return targetedStarIndex > -1;
+
             TriggersPack triggers = PlayerInput.Triggers;
 
             bool CurrentTriggerSelect = (triggers.Current.Jump || triggers.Current.MouseLeft) && !observatorySatelliteDishUI.BackPanel.IsMouseHovering;
             bool JustPressedTriggerSelect = (triggers.JustPressed.Jump || triggers.JustPressed.MouseLeft) && !observatorySatelliteDishUI.BackPanel.IsMouseHovering;
             bool JustReleasedTriggerSelect = (triggers.JustReleased.Jump || triggers.JustReleased.MouseLeft) && !observatorySatelliteDishUI.BackPanel.IsMouseHovering;
 
+            if (prompt < ComplexPromptState.Fire || ErrorState != ContactingState.None)
+                return false;
+
             if (JustReleasedTriggerSelect && targetedStarIndex > -1)
             {
                 SoundEngine.PlaySound(AudioRegistry.Select);
+                prompt = ComplexPromptState.Fire;
             }
 
             if ((triggers.JustPressed.Up || triggers.JustPressed.Left || triggers.JustPressed.Right || triggers.JustPressed.Down || JustPressedTriggerSelect) && targetedStarIndex > -1)
             {
                 SoundEngine.PlaySound(AudioRegistry.Deselect);
                 targetedStarIndex = -1;
+                prompt = ComplexPromptState.None;
                 return true;
             }
 

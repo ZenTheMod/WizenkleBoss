@@ -26,6 +26,7 @@ namespace WizenkleBoss.Assets.Textures
         public static Texture2D Star { get; private set; }
         public static Texture2D[] Stars { get; private set; }
         public static Texture2D Bloom { get; private set; }
+        public static Texture2D Ball { get; private set; }
         public static Texture2D Circle { get; private set; }
         public static Texture2D Bracket { get; private set; }
         public static Texture2D Smoke { get; private set; }
@@ -73,6 +74,7 @@ namespace WizenkleBoss.Assets.Textures
             Stars[4] = LoadTexture2D("Stars/Star_4");
 
             Bloom = LoadTexture2D("Bloom");
+            Ball = LoadTexture2D("Ball");
 
             Circle = LoadTexture2D("Circle");
             Bracket = LoadTexture2D("Bracket");
@@ -115,6 +117,7 @@ namespace WizenkleBoss.Assets.Textures
             Star = null;
             Stars = null;
             Bloom = null;
+            Ball = null;
             Circle = null;
             Bracket = null;
             Smoke = null;
