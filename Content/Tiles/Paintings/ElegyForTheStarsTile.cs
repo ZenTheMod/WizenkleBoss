@@ -7,13 +7,13 @@ using Terraria.ObjectData;
 using WizenkleBoss.Content.Items.Placeable;
 using Terraria.Localization;
 
-namespace WizenkleBoss.Content.Tiles
+namespace WizenkleBoss.Content.Tiles.Paintings
 {
-    public class ObservatoryChartTile : ModTile
+    public class ElegyForTheStarsTile : ModTile
     {
         public override void SetStaticDefaults()
         {
-            RegisterItemDrop(ModContent.ItemType<ObservatoryChartItem>());
+            RegisterItemDrop(ModContent.ItemType<ElegyForTheStarsItem>());
 
             Main.tileFrameImportant[Type] = true;
             Main.tileLavaDeath[Type] = true;
@@ -21,9 +21,9 @@ namespace WizenkleBoss.Content.Tiles
             Main.tileWaterDeath[Type] = false;
 
             TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3Wall);
-            TileObjectData.newTile.Width = 6;
+            TileObjectData.newTile.Width = 3;
             TileObjectData.newTile.Height = 6;
-            TileObjectData.newTile.Origin = new Point16(3, 3);
+            TileObjectData.newTile.Origin = new Point16(1, 3);
             TileObjectData.newTile.CoordinateHeights = [16, 16, 16, 16, 16, 16];
             TileObjectData.newTile.LavaDeath = true;
             TileObjectData.addTile(Type);

@@ -1,11 +1,11 @@
-﻿using Terraria;
-using Terraria.ModLoader;
-using WizenkleBoss.Content.Tiles;
+﻿using Terraria.ModLoader;
+using Terraria;
 using WizenkleBoss.Content.Rarities;
+using WizenkleBoss.Content.Tiles.Paintings;
 
 namespace WizenkleBoss.Content.Items.Placeable
 {
-    public class ObservatoryChartItem : ModItem
+    public class ElegyForTheRingsItem : ModItem
     {
         public override void SetStaticDefaults()
         {
@@ -13,7 +13,7 @@ namespace WizenkleBoss.Content.Items.Placeable
         }
         public override void SetDefaults()
         {
-            Item.DefaultToPlaceableTile(ModContent.TileType<ObservatoryChartTile>());
+            Item.DefaultToPlaceableTile(ModContent.TileType<ElegyForTheRingsTile>());
             Item.rare = ModContent.RarityType<StarboundRarity>();
             Item.value = 0;
         }

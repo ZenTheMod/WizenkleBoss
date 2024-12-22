@@ -61,6 +61,21 @@ Items: {
 		ReplacementTooltip: Press {0} to dash through the earth at will.
 		ChatMessage: Please assign {0} to an input.
 	}
+
+	ElegyForTheRingsItem: {
+		DisplayName: Elegy For The Rings
+		Tooltip: "'Distant Ventures'"
+	}
+
+	ElegyForTheStarsItem: {
+		DisplayName: Elegy For The Stars
+		Tooltip: "'Distant Ventures'"
+	}
+
+	LightsItem: {
+		DisplayName: Lights
+		Tooltip: "'Distant Ventures'"
+	}
 }
 
 UI: {
