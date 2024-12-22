@@ -77,7 +77,7 @@ namespace WizenkleBoss.Assets.Config
         [SliderColor(254, 179, 255, 255)]
         public float SatelliteMovementVelocity;
 
-        [DefaultValue(false)]
+        [DefaultValue(true)]
         public bool SatelliteUseMousePosition;
     }
 }
