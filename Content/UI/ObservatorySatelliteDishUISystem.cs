@@ -64,6 +64,7 @@ namespace WizenkleBoss.Content.UI
         public static float boot = 0f;
 
         public static ComplexPromptState prompt = 0;
+        public static float confirmationTimer = 0f;
 
         public static float promptclose = 1f;
 
@@ -96,7 +97,7 @@ namespace WizenkleBoss.Content.UI
 
                 float interpolator = MathF.Pow(2f, 10 * (openAnimation - 1));
 
-                Rectangle frame = new((int)((Main.screenWidth * Main.UIScale) / 2), (int)((Main.screenHeight * Main.UIScale) / 2), (int)(1080 * interpolator), (int)(1080 * interpolator));
+                Rectangle frame = new((int)((Main.screenWidth * Main.UIScale) / 2), (int)((Main.screenHeight * Main.UIScale) / 2), (int)(Main.screenHeight * interpolator * Main.UIScale), (int)(Main.screenHeight * interpolator * Main.UIScale));
 
                 Main.spriteBatch.Draw(satelliteDishTargetByRequest.GetTarget(), frame, null, Color.White * interpolator, 0, TargetSize / 2, SpriteEffects.None, 0f);
 
@@ -188,9 +189,9 @@ namespace WizenkleBoss.Content.UI
 
                 TriggersPack triggers = PlayerInput.Triggers;
                 if (triggers.Current.ViewZoomIn)
-                    satelliteUIZoom = MathHelper.Clamp(satelliteUIZoom + 0.02f, 1f, 2f);
+                    satelliteUIZoom = MathHelper.Clamp(satelliteUIZoom + 0.02f, 1f, 1.6f);
                 if (triggers.Current.ViewZoomOut)
-                    satelliteUIZoom = MathHelper.Clamp(satelliteUIZoom - 0.02f, 1f, 2f);
+                    satelliteUIZoom = MathHelper.Clamp(satelliteUIZoom - 0.02f, 1f, 1.6f);
 
                 Vector2 normalized = Vector2.Zero;
                 UpdatePrompt();
@@ -262,8 +263,9 @@ namespace WizenkleBoss.Content.UI
                     }
                 case ComplexPromptState.Fire:
                     {
-                        if (triggers.JustPressed.MouseRight && !observatorySatelliteDishUI.BackPanel.IsMouseHovering && openAnimation >= 0.8f)
+                        if (triggers.JustReleased.MouseRight && !observatorySatelliteDishUI.BackPanel.IsMouseHovering && confirmationTimer == 1f)
                         {
+                            confirmationTimer = 0f;
                             prompt = ComplexPromptState.None;
                             if (targetedStarIndex != int.MaxValue && targetedStarIndex > -1)
                             {
@@ -281,6 +283,14 @@ namespace WizenkleBoss.Content.UI
                             ErrorState = ContactingState.ContactingHighPower;
                                 //if (lackOFpOWER)
                                 //    ErrorState = ContactingState.ErrorStarNotFound;
+                        }
+                        if (triggers.Current.MouseRight && !observatorySatelliteDishUI.BackPanel.IsMouseHovering && openAnimation >= 0.8f)
+                        {
+                            confirmationTimer = MathHelper.Clamp(confirmationTimer + 0.02f, 0f, 1f);
+                        }
+                        else
+                        {
+                            confirmationTimer = MathHelper.Clamp(confirmationTimer - 0.1f, 0f, 1f);
                         }
                         break;
                     }
@@ -308,6 +318,7 @@ namespace WizenkleBoss.Content.UI
             {
                 SoundEngine.PlaySound(AudioRegistry.Select);
                 prompt = ComplexPromptState.Fire;
+                confirmationTimer = 0f;
             }
 
             if ((triggers.JustPressed.Up || triggers.JustPressed.Left || triggers.JustPressed.Right || triggers.JustPressed.Down || JustPressedTriggerSelect) && targetedStarIndex > -1)
@@ -322,7 +333,7 @@ namespace WizenkleBoss.Content.UI
             {
                 Vector2 centerpos = TargetSize / 2f;
                 if (ModContent.GetInstance<WizenkleBossConfig>().SatelliteUseMousePosition)
-                    centerpos += Vector2.Clamp((Main.MouseScreen - new Vector2(Main.screenWidth / 2, Main.screenHeight / 2)) / 2, -(TargetSize / 2f), TargetSize / 2f);
+                    centerpos += Vector2.Clamp(((Main.MouseScreen * Main.UIScale) - new Vector2(Main.screenWidth / 2 * Main.UIScale, Main.screenHeight / 2 * Main.UIScale)) / 2, -(TargetSize / 2f), TargetSize / 2f);
                 Vector2 ClosestPosition = Vector2.Zero;
                 int ClosestIndex = -1;
                 for (int i = 0; i <= BarrierStarSystem.Stars.Length - 1; i++)

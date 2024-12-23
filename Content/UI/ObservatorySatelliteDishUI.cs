@@ -22,6 +22,7 @@ namespace WizenkleBoss.Content.UI
                 ObservatorySatelliteDishUISystem.prompt = ComplexPromptState.Fire;
 
             ObservatorySatelliteDishUISystem.boot = 0;
+            ObservatorySatelliteDishUISystem.ErrorState = ContactingState.None;
 
             if (PlayerInput.UsingGamepadUI)
                 UILinkPointNavigator.ChangePoint(3002);

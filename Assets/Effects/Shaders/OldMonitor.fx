@@ -31,7 +31,7 @@ float4 PixelShaderFunction(float4 sampleColor : COLOR0, float2 coords : TEXCOORD
     float scanSpeed = frac(uTime);
     
         // As stated in the original shader by @devrique this fisheye distortion was made by @ddoodm, you can find their original shader here: https://www.shadertoy.com/view/ltSXRz
-    float2 eyefishuv = (coords - 0.5) * 4.2;
+    float2 eyefishuv = (coords - 0.5) * 3.3;
     float deform = (1 - eyefishuv.y * eyefishuv.y) * 0.02 * eyefishuv.x;
     
     float2 deformedCoords = float2(coords.x - deform * 0.95, coords.y);

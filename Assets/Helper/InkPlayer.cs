@@ -254,7 +254,7 @@ namespace WizenkleBoss.Assets.Helper
         {
             WaterShaderData shaderData = (WaterShaderData)Filters.Scene["WaterDistortion"].GetShader();
 
-            float waveSine = 0.15f * (float)Math.Sin(Main.GlobalTimeWrappedHourly * 20f);
+            float waveSine = 0.45f * (float)Math.Sin(Main.GlobalTimeWrappedHourly * 20f);
 
             Color waveData = new Color(0.5f, 0.4f * Math.Sign(waveSine) + 0.5f, 0f, 1f) * Math.Abs(waveSine);
             shaderData.QueueRipple(Player.position, waveData, Player.Size, RippleShape.Circle, DashVelocity.ToRotation());

@@ -64,7 +64,12 @@ namespace WizenkleBoss.Content.UI
 
                 frostyLensShader.Value.CurrentTechnique.Passes[0].Apply();
 
-                Main.spriteBatch.Draw(telescopeTargetByRequest.GetTarget(), new Rectangle((int)((Main.screenWidth * Main.UIScale) / 2) - 540, (int)((Main.screenHeight * Main.UIScale) / 2) - 540, 1080, 1080), Color.White);
+                    // Main.spriteBatch.Draw(telescopeTargetByRequest.GetTarget(), new Rectangle((int)((Main.screenWidth * Main.UIScale) / 2) - 540, (int)((Main.screenHeight * Main.UIScale) / 2) - 540, 1080, 1080), Color.White);
+
+                float size = Main.screenHeight * Main.UIScale / 1080;
+                Rectangle frame = new((int)((Main.screenWidth * Main.UIScale) / 2), (int)((Main.screenHeight * Main.UIScale) / 2), (int)(1080 * size), (int)(1080 * size));
+
+                Main.spriteBatch.Draw(telescopeTargetByRequest.GetTarget(), frame, null, Color.White, 0, TargetSize / 2, SpriteEffects.None, 0f);
 
                 Main.spriteBatch.End();
                 Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
@@ -92,15 +97,17 @@ namespace WizenkleBoss.Content.UI
                         {
                             DrawTelescope();
 
+                            float size = Main.screenHeight * Main.UIScale / 1080;
+
                             Texture2D blinkOuter = TextureRegistry.BlinkOuter;
                             Vector2 blinkOuterOrigin = new(blinkOuter.Width * 0.5f, blinkOuter.Height * 0.5f);
 
-                            Main.spriteBatch.Draw(blinkOuter, ScreenSize / 2f, null, Color.Black, 0, blinkOuterOrigin, 1.498f, SpriteEffects.None, 0f);
+                            Main.spriteBatch.Draw(blinkOuter, ScreenSize / 2f, null, Color.Black, 0, blinkOuterOrigin, 1.498f * size, SpriteEffects.None, 0f);
 
                             Texture2D blink = TextureRegistry.Blink;
                             Vector2 blinkOrigin = new(blink.Width * 0.5f, blink.Width * 0.5f);
 
-                            Main.spriteBatch.Draw(blink, ScreenSize / 2f, blink.Frame(1, 4, 0, blinkFrame), Color.Black, 0, blinkOrigin, 1.5f, SpriteEffects.None, 0f);
+                            Main.spriteBatch.Draw(blink, ScreenSize / 2f, blink.Frame(1, 4, 0, blinkFrame), Color.Black, 0, blinkOrigin, 1.5f * size, SpriteEffects.None, 0f);
 
                             Texture2D map = TextureRegistry.TelescopeMap;
                             Vector2 mapOrigin = new(map.Height * 0.5f, map.Height * 0.5f);

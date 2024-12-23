@@ -161,11 +161,21 @@ namespace WizenkleBoss.Content.UI
             position *= satelliteUIZoom;
             position += Center;
 
-            Vector2 offsetPosition = new(position.X + MathHelper.Lerp(1, 5, interpolator), position.Y);
+            Vector2 origin = TextureRegistry.Circle.Size() / 2;
+
+            spriteBatch.Draw(TextureRegistry.Circle, position, null, color * confirmationTimer, 0, origin, 0.28f * interpolator, SpriteEffects.None, 0f);
+            spriteBatch.Draw(TextureRegistry.Circle, position, null, new Color(11, 8, 18) * MathHelper.Clamp(confirmationTimer * 4, 0, 1), 0, origin, 0.26f * interpolator, SpriteEffects.None, 0f);
+
+            spriteBatch.Draw(TextureRegistry.Circle, position, null, color * confirmationTimer * 2, 0, origin, 0.26f * interpolator * confirmationTimer, SpriteEffects.None, 0f);
+
+                // Rectangle frame = new((int)(origin.X - (origin.X * confirmationTimer)), 0, (int)(origin.X * confirmationTimer * 2), TextureRegistry.Circle.Height);
+                // spriteBatch.Draw(TextureRegistry.Circle, position, frame, color * confirmationTimer * 1.3f, 0, new Vector2(origin.X * confirmationTimer, origin.Y), 0.28f * interpolator, SpriteEffects.None, 0f);
+
+            Vector2 offsetPosition = new(position.X + MathHelper.Lerp(1, 5, interpolator + (MathHelper.Clamp(confirmationTimer * 4, 0, 1) * 2.1f * (interpolator - 1))), position.Y);
 
             spriteBatch.Draw(TextureRegistry.Bracket, offsetPosition, null, offsetColor * interpolator, 0, TextureRegistry.Bracket.Size() / 2, 0.06f * interpolator, SpriteEffects.FlipHorizontally, 0f);
 
-            offsetPosition = new Vector2(position.X - MathHelper.Lerp(1, 5, interpolator), position.Y);
+            offsetPosition = new Vector2(position.X - MathHelper.Lerp(1, 5, interpolator + (MathHelper.Clamp(confirmationTimer * 4, 0, 1) * 2.1f * (interpolator - 1))), position.Y);
 
             if (boot > 0.45f)
                 spriteBatch.Draw(TextureRegistry.Bracket, offsetPosition, null, offsetColor * interpolator, 0, TextureRegistry.Bracket.Size() / 2, 0.06f * interpolator, SpriteEffects.None, 0f);
@@ -206,7 +216,9 @@ namespace WizenkleBoss.Content.UI
 
                 float offset = oldTargetedStarIndex == -1 || oldTargetedStarIndex == int.MaxValue? 1 : (BarrierStarSystem.Stars[(int)MathHelper.Clamp(oldTargetedStarIndex, 0, BarrierStarSystem.Stars.Length - 1)] == star ? MathHelper.Lerp(1, 1.75f, interpolator) : 1);
 
-                Vector2 textPosition = starPosition + (Vector2.UnitY * 4 * offset * satelliteUIZoom);
+                float extraoffset = oldTargetedStarIndex == -1 || oldTargetedStarIndex == int.MaxValue ? 1 : (BarrierStarSystem.Stars[(int)MathHelper.Clamp(oldTargetedStarIndex, 0, BarrierStarSystem.Stars.Length - 1)] == star ? (1 + (MathHelper.Clamp(confirmationTimer * 3, 0, 1) * 0.6f)) : 1);
+
+                Vector2 textPosition = starPosition + (Vector2.UnitY * 4 * offset * satelliteUIZoom * extraoffset);
 
                 float textSize = Utils.Remap(starPosition.Distance(Center), 0, 300, 0.2f, 0.3f) * satelliteUIZoom;
 
@@ -240,7 +252,9 @@ namespace WizenkleBoss.Content.UI
                 {
                     float offset = oldTargetedStarIndex == int.MaxValue ? MathHelper.Lerp(0.8f, 1.2f, interpolator) : 0.8f;
 
-                    Vector2 textPosition = position + (Vector2.UnitY * 6 * offset * satelliteUIZoom);
+                    float extraoffset = oldTargetedStarIndex != int.MaxValue ? 1 : (1 + (MathHelper.Clamp(confirmationTimer * 3, 0, 1) * 0.6f));
+
+                    Vector2 textPosition = position + (Vector2.UnitY * 6 * offset * satelliteUIZoom * extraoffset);
 
                     float textSize = Utils.Remap(position.Distance(Center), 0, 300, 0.3f, 0.4f) * satelliteUIZoom;
 
@@ -252,7 +266,7 @@ namespace WizenkleBoss.Content.UI
 
                     if ((Main.GlobalTimeWrappedHourly * 60) % 50 < 25)
                     {
-                        Vector2 warningPosition = position + (-Vector2.UnitY * 25 * satelliteUIZoom);
+                        Vector2 warningPosition = position + (-Vector2.UnitY * 25 * satelliteUIZoom * extraoffset);
 
                         Vector2 warningOrigin = Helper.MeasureString("!", font);
 

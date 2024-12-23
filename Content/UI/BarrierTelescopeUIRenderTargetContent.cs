@@ -17,11 +17,12 @@ namespace WizenkleBoss.Content.UI
 {
     public partial class BarrierTelescopeUISystem : ModSystem
     {
+        public static Vector2 TargetSize = new(540);
         public class TelescopeTargetContent : ARenderTargetContentByRequest
         {
             protected override void HandleUseReqest(GraphicsDevice device, SpriteBatch spriteBatch)
             {
-                PrepareARenderTarget_AndListenToEvents(ref _target, device, 540, 540, (RenderTargetUsage)1);
+                PrepareARenderTarget_AndListenToEvents(ref _target, device, (int)TargetSize.X, (int)TargetSize.Y, (RenderTargetUsage)1);
 
                 device.SetRenderTarget(_target);
                 device.Clear(Color.Transparent);

@@ -87,7 +87,7 @@ UI: {
 	SatelliteDish: {
 		ZoomKeyPrompt: Hold the Zoom Keys to zoom in and out.
 		SelectKeyPrompt: Press Attack or Jump to select stars.
-		ContactPrompt: Press Interact to contact star system.
+		ContactPrompt: Hold Interact to contact star system.
 		ErrorPrompt: An error has occurred.
 
 		StarMapLogs: {
@@ -181,6 +181,18 @@ UI: {
 				   at Main.Screen.Draw.Prompt.Do_Draw(DrawingHandler abc)
 				   at Main.Screen.Draw.Prompt.DrawMenu();
 				   at Main.Update_()
+
+				>>>>>>>>>>>>>> ENCOUNTERED A CRITICAL ERROR <<<<<<<<<<<<<<
+
+				CRITICAL SYSTEM FAILIURE
+
+
+
+				LesbianSystem.Reboot
+				Display: \\.\DISPLAY1
+				* Size of 44.800000000000004 kB
+
+				REBOOTING...
 				'''
 		}
 	}

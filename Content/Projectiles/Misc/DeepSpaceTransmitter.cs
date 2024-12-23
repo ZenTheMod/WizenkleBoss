@@ -47,7 +47,7 @@ namespace WizenkleBoss.Content.Projectiles.Misc
 
                 device.SetRenderTarget(_target);
                 device.Clear(Color.Transparent);
-                spriteBatch.Begin((SpriteSortMode)1, BlendState.AlphaBlend);
+                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
                 spriteBatch.Draw(ObservatorySatelliteDishTile.GlowTexture.Value, (Center - new Vector2(8) - Main.screenPosition) / 2f, null, (Color.Lerp(new Color(255, 196, 255), new Color(255, 197, 147), charge) * charge * 0.2f) with { A = 0 }, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0f);
 
@@ -132,7 +132,7 @@ namespace WizenkleBoss.Content.Projectiles.Misc
         public void Laser(SpriteBatch spriteBatch, GraphicsDevice device)
         {
             if (charge > 0)
-                spriteBatch.Draw(TextureRegistry.Pixel, new Rectangle((int)(Projectile.Center.X - Main.screenPosition.X) / 2, (int)(Projectile.Center.Y - Main.screenPosition.Y) / 2, 1500, (int)(380 * charge) + 4), null, Color.White, (-Vector2.One).ToRotation(), new Vector2(TextureRegistry.Pixel.Width * 0.01f, TextureRegistry.Pixel.Height / 2f), SpriteEffects.None, 0f);
+                spriteBatch.Draw(TextureRegistry.Pixel, new Rectangle((int)(Projectile.Center.X - Main.screenPosition.X) / 2, (int)(Projectile.Center.Y - Main.screenPosition.Y) / 2, 1500, (int)(420 * charge) + 4), null, Color.White, (-Vector2.One).ToRotation(), new Vector2(TextureRegistry.Pixel.Width * 0.01f, TextureRegistry.Pixel.Height / 2f), SpriteEffects.None, 0f);
         }
         public override string Texture => "WizenkleBoss/Assets/Textures/MagicPixel";
         public override void SetDefaults()
@@ -201,7 +201,7 @@ namespace WizenkleBoss.Content.Projectiles.Misc
                 SoundPlayed = true;
             }
             MusicKiller.MuffleFactor = 1f - ((float)counter / 200f);
-            if (counter >= 200)
+            if (counter >= 185)
             {
                 if (darkness >= 0.3f)
                     this.CameraShakeSimple(Projectile.Center, Vector2.Zero, 18, 7, 2, 0);
@@ -225,7 +225,7 @@ namespace WizenkleBoss.Content.Projectiles.Misc
         {
             MusicKiller.MuffleFactor = 0f;
             this.CameraShakeSimple(Projectile.Center, Vector2.Zero, 40, 40, 2, 0);
-            if (++counter > 465)
+            if (++counter > 435)
             {
                 laserState = LaserState.FadeOut;
                 counter = 0;
