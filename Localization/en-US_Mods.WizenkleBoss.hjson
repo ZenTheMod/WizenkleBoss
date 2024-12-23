@@ -152,7 +152,7 @@ UI: {
 				   at DMD<Main.Screen::DoAnything>(Screen this, ref LaunchCodes codes)
 				   at Main.Update_()
 
-				>>>>>>>>>>>>>>> ENCOUNTERED A CRITICAL ERROR <<<<<<<<<<<<<<<
+				>>>>>>>>>>>>>> ENCOUNTERED A CRITICAL ERROR <<<<<<<<<<<<<<
 
 				CRITICAL SYSTEM FAILIURE
 
