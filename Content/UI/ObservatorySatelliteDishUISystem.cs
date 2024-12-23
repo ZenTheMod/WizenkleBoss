@@ -19,6 +19,8 @@ using ReLogic.Graphics;
 using Terraria.Localization;
 using System.Net.WebSockets;
 using System.Runtime.InteropServices;
+using Terraria.DataStructures;
+using WizenkleBoss.Content.Projectiles.Misc;
 
 namespace WizenkleBoss.Content.UI
 {
@@ -28,14 +30,16 @@ namespace WizenkleBoss.Content.UI
         Zoom,
         Select,
         Fire,
+        Error,
         None
     }
     public enum ContactingState
     {
         None,
-        Contacting,
+        ContactingLowPower,
+        ContactingHighPower,
         ErrorNoPower,
-        ErrorOther
+        ErrorStarNotFound
     }
     public partial class ObservatorySatelliteDishUISystem : ModSystem
     {
@@ -57,11 +61,14 @@ namespace WizenkleBoss.Content.UI
 
         public static float openAnimation = 0;
 
+        public static float boot = 0f;
+
         public static ComplexPromptState prompt = 0;
 
         public static float promptclose = 1f;
 
         public static ContactingState ErrorState;
+        public static float logtimer = 0f;
         public override void OnWorldLoad()
         {
             satelliteUIOffset = Vector2.Zero;
@@ -134,19 +141,51 @@ namespace WizenkleBoss.Content.UI
         }
         public override void UpdateUI(GameTime gameTime)
         {
-            ErrorState = ContactingState.None;
-            if (ErrorState != ContactingState.None)
-            {
-                return;
-            }
-
             if (inUI)
+            {
                 openAnimation = MathHelper.Clamp(openAnimation + 0.04f, 0f, 1f);
+                boot = MathHelper.Clamp(boot + 0.006f, 0f, 1f);
+            }
             if (!inUI && openAnimation > 0)
                 openAnimation = MathHelper.Clamp(openAnimation - 0.14f, 0f, 1f);
-
             if (inUI || openAnimation > 0)
             {
+                if (ErrorState != ContactingState.None)
+                {
+                    if (ErrorState == ContactingState.ContactingLowPower || ErrorState == ContactingState.ContactingHighPower)
+                    {
+                        if (logtimer <= 15)
+                            logtimer += Main.rand.NextFloat(0.01f, 0.12f);
+                        else
+                            logtimer += 0.032f;
+
+                        if (logtimer > 21.5f)
+                        {
+                            ErrorState = ContactingState.None;
+                            Main.menuMode = 0;
+                            logtimer = 0;
+                            IngameFancyUI.Close();
+                            Projectile.NewProjectile(new EntitySource_TileInteraction(Main.LocalPlayer, (int)satelliteTilePosition.X / 16, (int)satelliteTilePosition.Y / 16), satelliteTilePosition, Vector2.Zero, ModContent.ProjectileType<DeepSpaceTransmitter>(), 0, 0, Main.myPlayer);
+                        }
+                    }
+                    if (ErrorState == ContactingState.ErrorNoPower || ErrorState == ContactingState.ErrorStarNotFound)
+                    {
+                        if (logtimer > 65)
+                        {
+                            prompt = ComplexPromptState.Error;
+                            ErrorState = ContactingState.None;
+                            logtimer = 0;
+                            boot = 0.4f;
+                            return;
+                        }
+                        if (logtimer <= 11)
+                            logtimer += Main.rand.NextFloat(0.01f, 0.12f);
+                        else
+                            logtimer += 0.4f;
+                    }
+                    return;
+                }
+
                 TriggersPack triggers = PlayerInput.Triggers;
                 if (triggers.Current.ViewZoomIn)
                     satelliteUIZoom = MathHelper.Clamp(satelliteUIZoom + 0.02f, 1f, 2f);
@@ -194,7 +233,7 @@ namespace WizenkleBoss.Content.UI
             {
                 promptclose = MathHelper.Clamp(promptclose + 0.05f, 0f, 1f);
             }
-            if (!ModContent.GetInstance<WizenkleBossConfig>().TelescopeMovementKeyPrompt && prompt != ComplexPromptState.Fire)
+            if (!ModContent.GetInstance<WizenkleBossConfig>().TelescopeMovementKeyPrompt && prompt < ComplexPromptState.Fire)
             {
                 prompt = ComplexPromptState.None;
                 return;
@@ -203,33 +242,48 @@ namespace WizenkleBoss.Content.UI
             switch (prompt) 
             {
                 case ComplexPromptState.MovementKeys:
-                {
-                    promptclose = 1f;
-                    if (triggers.Current.Up || triggers.Current.Left || triggers.Current.Right || triggers.Current.Down)
-                        prompt = ComplexPromptState.Zoom;
-                    break;
-                }
-                case ComplexPromptState.Zoom:
-                {
-                    if (triggers.Current.ViewZoomIn || triggers.Current.ViewZoomOut)
-                        prompt = ComplexPromptState.Select;
-                    break;
-                }
-                case ComplexPromptState.Select:
-                {
-                    if ((triggers.Current.Jump || triggers.Current.MouseLeft) && !observatorySatelliteDishUI.BackPanel.IsMouseHovering)
-                        prompt = ComplexPromptState.None;
-                    break;
-                }
-                case ComplexPromptState.Fire:
-                {
-                    if (triggers.JustPressed.MouseRight && !observatorySatelliteDishUI.BackPanel.IsMouseHovering && openAnimation >= 0.8f)
                     {
-                        prompt = ComplexPromptState.None;
-                        ErrorState = ContactingState.Contacting;
+                        promptclose = 1f;
+                        if (triggers.Current.Up || triggers.Current.Left || triggers.Current.Right || triggers.Current.Down)
+                            prompt = ComplexPromptState.Zoom;
+                        break;
                     }
-                    break;
-                }
+                case ComplexPromptState.Zoom:
+                    {
+                        if (triggers.Current.ViewZoomIn || triggers.Current.ViewZoomOut)
+                            prompt = ComplexPromptState.Select;
+                        break;
+                    }
+                case ComplexPromptState.Select:
+                    {
+                        if ((triggers.Current.Jump || triggers.Current.MouseLeft) && !observatorySatelliteDishUI.BackPanel.IsMouseHovering)
+                            prompt = ComplexPromptState.None;
+                        break;
+                    }
+                case ComplexPromptState.Fire:
+                    {
+                        if (triggers.JustPressed.MouseRight && !observatorySatelliteDishUI.BackPanel.IsMouseHovering && openAnimation >= 0.8f)
+                        {
+                            prompt = ComplexPromptState.None;
+                            if (targetedStarIndex != int.MaxValue && targetedStarIndex > -1)
+                            {
+                                if (BarrierStarSystem.Stars[targetedStarIndex].State >= SupernovaState.Expanding)
+                                {
+                                    ErrorState = ContactingState.ErrorStarNotFound;
+                                    break;
+                                }
+                            }
+                            if (BarrierStarSystem.TheOneImportantThingInTheSky.State >= SupernovaState.Expanding && targetedStarIndex == int.MaxValue)
+                            {
+                                ErrorState = ContactingState.ErrorStarNotFound;
+                                break;
+                            }
+                            ErrorState = ContactingState.ContactingHighPower;
+                                //if (lackOFpOWER)
+                                //    ErrorState = ContactingState.ErrorStarNotFound;
+                        }
+                        break;
+                    }
                 default:
                 {
                     break;

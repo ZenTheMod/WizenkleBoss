@@ -55,7 +55,7 @@ namespace WizenkleBoss.Content.Tiles
         public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
         public override bool RightClick(int i, int j)
         {
-            if (Helper.AnyProjectiles(ModContent.ProjectileType<DeepSpaceTransmitter>()) || (BarrierStarSystem.Stars.Where(s => s.State > 0 && s.State < SupernovaState.Complete).Any() || (BarrierStarSystem.TheOneImportantThingInTheSky.State > 0 && BarrierStarSystem.TheOneImportantThingInTheSky.State < SupernovaState.Complete)))
+            if (Helper.AnyProjectiles(ModContent.ProjectileType<DeepSpaceTransmitter>()))
                 return false;
 
             if (Main.player.Where(p => p.active && p.Center.Distance(new Point(i, j).ToWorldCoordinates()) >= 400).Any())
@@ -86,8 +86,10 @@ namespace WizenkleBoss.Content.Tiles
 
             ObservatorySatelliteDishUISystem.satelliteTilePosition = pos16.ToWorldCoordinates();
 
+            ObservatorySatelliteDishUISystem.logtimer = 0f;
+            ObservatorySatelliteDishUISystem.ErrorState = ContactingState.None;
+
             Main.InGameUI.SetState(ObservatorySatelliteDishUISystem.observatorySatelliteDishUI);
-                //Projectile.NewProjectile(new EntitySource_TileInteraction(player, i, j), pos16.ToWorldCoordinates(), Vector2.Zero, ModContent.ProjectileType<DeepSpaceTransmitter>(), 0, 0, player.whoAmI);
 
             return true;
         }

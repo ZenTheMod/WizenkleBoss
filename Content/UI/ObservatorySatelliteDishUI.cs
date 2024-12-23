@@ -21,6 +21,8 @@ namespace WizenkleBoss.Content.UI
             if (ObservatorySatelliteDishUISystem.targetedStarIndex > -1)
                 ObservatorySatelliteDishUISystem.prompt = ComplexPromptState.Fire;
 
+            ObservatorySatelliteDishUISystem.boot = 0;
+
             if (PlayerInput.UsingGamepadUI)
                 UILinkPointNavigator.ChangePoint(3002);
         }

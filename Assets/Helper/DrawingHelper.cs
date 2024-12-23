@@ -41,9 +41,9 @@ namespace WizenkleBoss.Assets.Helper
         {
             if (panel != null)
             {
-                Vector2 pos = new(ScreenSize.X / 2f, (ScreenSize.Y * panel.VAlign) + (panel.Top.Pixels * Main.UIScale));
+                Vector2 position = new(ScreenSize.X / 2f, (ScreenSize.Y * panel.VAlign) + (panel.Top.Pixels * Main.UIScale));
 
-                Vector2 fontSize = MeasureString(text, font);
+                Vector2 textSize = MeasureString(text, font);
 
                 Color StringShadowCol = panel.IsMouseHovering && Main.mouseLeft ? Color.White : Color.Black;
                 Color StringCol = panel.IsMouseHovering && Main.mouseLeft ? Color.Black : (panel.IsMouseHovering ? Color.White : Color.Gray);
@@ -54,9 +54,10 @@ namespace WizenkleBoss.Assets.Helper
                     StringCol = Color.White * 0.5f;
                 }
 
-                Vector2 origin = new(fontSize.X / 2f, fontSize.Y);ChatManager.DrawColorCodedStringShadow(spriteBatch, font, text, pos, StringShadowCol, 0, origin, Vector2.One * scale);
-                spriteBatch.Draw(TextureRegistry.Ball, pos - new Vector2(0, (fontSize.Y / 2f) - 10), null, Color.Black * 0.5f, 0f, TextureRegistry.Ball.Size() / 2f, (fontSize / TextureRegistry.Ball.Size()) * 1.2f, SpriteEffects.None, 0f);
-                ChatManager.DrawColorCodedString(spriteBatch, font, text, pos, StringCol, 0, origin, Vector2.One * scale);
+                Vector2 origin = new(textSize.X / 2f, textSize.Y);
+                spriteBatch.Draw(TextureRegistry.Ball, position - new Vector2(0, (textSize.Y / 2f) - 10), null, Color.Black * 0.5f, 0f, TextureRegistry.Ball.Size() / 2f, (textSize / TextureRegistry.Ball.Size()) * 1.2f, SpriteEffects.None, 0f);
+                ChatManager.DrawColorCodedStringShadow(spriteBatch, font, text, position, StringShadowCol, 0, origin, Vector2.One * scale);
+                ChatManager.DrawColorCodedString(spriteBatch, font, text, position, StringCol, 0, origin, Vector2.One * scale);
             }
         }
     }

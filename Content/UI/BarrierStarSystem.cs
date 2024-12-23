@@ -138,28 +138,29 @@ namespace WizenkleBoss.Content.UI
                     OldMeteoritePosition[i + 1] = OldMeteoritePosition[i];
                 }
                 Vector2 size = BarrierTelescopeUISystem.telescopeTargetByRequest.GetTarget().Size();
-                OldMeteoritePosition[0] = Vector2.Lerp(new Vector2((size.X / 2f) - 100, (size.Y / 2f) - 100) + TheOneImportantThingInTheSky.Position, new Vector2(size.X / 2, size.Y + 100), MathHelper.Clamp((TheOneImportantThingInTheSky.SupernovaSize * 4.7f) - 0.2f, 0, 2));
+                OldMeteoritePosition[0] = Vector2.Lerp((size / 2f) + TheOneImportantThingInTheSky.Position, new Vector2(size.X / 2, size.Y * 3f), MathHelper.Clamp((TheOneImportantThingInTheSky.SupernovaSize * 4.7f) - 0.2f, 0, 2));
             }
-            if (!Stars.Where(s => s.State > SupernovaState.None && s.State != SupernovaState.Complete).Any() && !(TheOneImportantThingInTheSky.State > SupernovaState.None && TheOneImportantThingInTheSky.State != SupernovaState.Complete))
+            bool ImportantStarSupernova = TheOneImportantThingInTheSky.State > SupernovaState.None && TheOneImportantThingInTheSky.State != SupernovaState.Complete;
+            if (!Stars.Where(s => s.State > SupernovaState.None && s.State != SupernovaState.Complete).Any() && !ImportantStarSupernova)
                 return;
             for (int i = 0; i <= Stars.Length - 1; i++)
             {
                 BarrierStar star = Stars[i];
-                if (star.State == SupernovaState.None || star.State == SupernovaState.Complete)
-                    return;
-                if (star.State == SupernovaState.Expanding && star.SupernovaSize <= 1)
-                    star.SupernovaSize += 0.001f;
-                else if (star.State == SupernovaState.Expanding && star.SupernovaSize > 1)
-                    star.State = SupernovaState.Complete;
-                if (star.State == SupernovaState.Shrinking)
+                if (Stars[i].State == SupernovaState.None || Stars[i].State == SupernovaState.Complete)
+                    continue;
+                if (Stars[i].State == SupernovaState.Expanding && Stars[i].SupernovaSize <= 1)
+                    Stars[i].SupernovaSize += 0.001f;
+                else if (Stars[i].State == SupernovaState.Expanding && Stars[i].SupernovaSize > 1)
+                    Stars[i].State = SupernovaState.Complete;
+                if (Stars[i].State == SupernovaState.Shrinking)
                 {
-                    if (star.SupernovaSize >= 0.005)
-                        star.SupernovaSize -= 0.005f;
+                    if (Stars[i].SupernovaSize >= 0.005)
+                        Stars[i].SupernovaSize -= 0.005f;
                     else
-                        star.State = SupernovaState.Expanding;
+                        Stars[i].State = SupernovaState.Expanding;
                 }
             }
-            if (TheOneImportantThingInTheSky.State > SupernovaState.None && TheOneImportantThingInTheSky.State != SupernovaState.Complete)
+            if (ImportantStarSupernova)
             {
                 if (TheOneImportantThingInTheSky.State == SupernovaState.Expanding && TheOneImportantThingInTheSky.SupernovaSize <= 1)
                     TheOneImportantThingInTheSky.SupernovaSize += 0.0006f;

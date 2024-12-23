@@ -37,7 +37,7 @@ namespace WizenkleBoss.Content.Projectiles.Misc
     {
         public static float charge;
         public static float darkness;
-        private static Vector2[] Points = new Vector2[35];
+        private static Vector2[] Points = new Vector2[40];
         private static Vector2 Center;
         public class DeepSpaceTransmitterTargetContent : ARenderTargetContentByRequest
         {
@@ -54,7 +54,7 @@ namespace WizenkleBoss.Content.Projectiles.Misc
                 spriteBatch.Draw(TextureRegistry.Bloom, (Center - Main.screenPosition) / 2f, null, (Color.Lerp(new Color(255, 196, 255), new Color(255, 197, 147), charge) * darkness * 0.5f) with { A = 0 }, 0f, TextureRegistry.Bloom.Size() / 2, 0.6f * darkness + 0.01f, SpriteEffects.None, 0f);
 
                 for (int i = 0; i < Points.Length - 1; i++)
-                    spriteBatch.Draw(TextureRegistry.Bloom, (Points[i] - Main.screenPosition) / 2, null, (Color.Lerp(new Color(255, 196, 255), new Color(255, 197, 147), charge)) with { A = 0 }, 0, TextureRegistry.Bloom.Size() / 2, .02f, SpriteEffects.None, 0f);
+                    spriteBatch.Draw(TextureRegistry.Bloom, (Points[i] - Main.screenPosition) / 2, null, (Color.Lerp(new Color(255, 196, 255), new Color(255, 197, 147), charge)) with { A = 0 }, 0, TextureRegistry.Bloom.Size() / 2, .03f, SpriteEffects.None, 0f);
                 
                 var Laser = Helper.TransmitShader;
 
@@ -193,13 +193,18 @@ namespace WizenkleBoss.Content.Projectiles.Misc
                     Points[n] = Projectile.Center + Main.rand.NextVector2CircularEdge(224, 224);
                 }
             }
+            if (!SoundPlayed)
+            {
+                    // dont defean the elderly
+                if (ModContent.GetInstance<WizenkleBossConfig>().LaserLoop)
+                    SoundEngine.PlaySound(AudioRegistry.SateliteDeathray);
+                SoundPlayed = true;
+            }
             MusicKiller.MuffleFactor = 1f - ((float)counter / 200f);
             if (counter >= 200)
             {
-                if (SoundPlayed)
-                {
+                if (darkness >= 0.3f)
                     this.CameraShakeSimple(Projectile.Center, Vector2.Zero, 18, 7, 2, 0);
-                }
                 if (charge >= 0.1f && darkness >= 1f)
                 {
                     laserState = LaserState.Open;
@@ -207,20 +212,9 @@ namespace WizenkleBoss.Content.Projectiles.Misc
                     return;
                 }
                 if (SoundPlayed && charge < 0.1f)
-                {
                     charge += 0.001f;
-                }
                 if (darkness < 1f)
-                {
                     darkness += 0.03f;
-                    if (!SoundPlayed && darkness >= 0.3f)
-                    {   
-                            // dont defean the elderly
-                        if (ModContent.GetInstance<WizenkleBossConfig>().LaserLoop)
-                            SoundEngine.PlaySound(AudioRegistry.SateliteDeathray);
-                        SoundPlayed = true;
-                    }
-                }
             }
             else
             {
@@ -248,8 +242,14 @@ namespace WizenkleBoss.Content.Projectiles.Misc
             if (darkness <= 0f)
             {
                 counter = 0;
-                    //if (BarrierTelescopeUISystem.superNovaState != SuperNovaState.Complete)
-                    //    BarrierTelescopeUISystem.superNovaState = SuperNovaState.Shrinking;
+
+                if (BarrierStarSystem.TheOneImportantThingInTheSky.State == SupernovaState.None && ObservatorySatelliteDishUISystem.targetedStarIndex == int.MaxValue)
+                    BarrierStarSystem.TheOneImportantThingInTheSky.State = SupernovaState.Shrinking;
+                if (ObservatorySatelliteDishUISystem.targetedStarIndex != int.MaxValue && ObservatorySatelliteDishUISystem.targetedStarIndex > -1)
+                {
+                    if (BarrierStarSystem.Stars[ObservatorySatelliteDishUISystem.targetedStarIndex].State == SupernovaState.None)
+                        BarrierStarSystem.Stars[ObservatorySatelliteDishUISystem.targetedStarIndex].State = SupernovaState.Shrinking;
+                }
                 Projectile.Kill();
             }
             else

@@ -88,6 +88,101 @@ UI: {
 		ZoomKeyPrompt: Hold the Zoom Keys to zoom in and out.
 		SelectKeyPrompt: Press Attack or Jump to select stars.
 		ContactPrompt: Press Interact to contact star system.
+		ErrorPrompt: An error has occurred.
+
+		StarMapLogs: {
+			GetPower:
+				'''
+				[{0}:0.17789] [Main/INFO] Staring engine...
+				[{0}:0.23453] [Main/INFO] Primitiving the Main.Instance.GraphicsDevice.DrawUserIndexedPrimitives...
+				[{0}:0.34562] [Main/INFO] Transmitting zoogle doop, to the bleep blorp...
+				[{0}:0.34573] [Main/WARN] Lack of fligglewompus in atmosphere.
+				[{0}:0.35138] [Main/DEBUG] Adding typos...
+
+				[{0}:0.45678] [Main/INFO] Geting power status...
+				...
+				[{0}:0.52354] [Main/INFO] Power status recieved…
+				'''
+			SuccessfulLowPower:
+				'''
+				[{0}:0.52355] [Main/INFO] Main engine in operation and has sufficiant power!
+				[{0}:0.74356] [Main/Warn] Engine in low power mode.
+
+				[{0}:0.80000] [Main/INFO] Logging Target...
+
+				[{0}:0.80001] Fireing in...
+
+				[{0}:0.94344] 3
+
+				[{0}:1.13322] 2
+
+				[{0}:2.15434] 1
+				'''
+			SuccessfulHighPower:
+				'''
+				[{0}:0.52355] [Main/INFO] Main engine in operation and has sufficiant power!
+				[{0}:0.74356] [Main/WARN] Engine has extreme power.
+
+				[{0}:0.80000] [Main/INFO] Logging Target...
+
+				[{0}:0.80001] Fireing in...
+
+				[{0}:0.94344] 3
+
+				[{0}:1.13322] 2
+
+				[{0}:2.15434] 1
+				'''
+			ErrorInsufficiantPower:
+				'''
+				[{0}:0.52355] [Main/INFO] Main engine in-
+
+				{0}
+				Main.Engine.InsufficiantPowerException: Main engine lacks power required to contact star system.
+				Type: 'Power'.
+				   at Main.Engine.System.Battery.CheckPower(Object power, BlahBlahBlah bleh)
+				   at NoOne.Will.Read.This.FuckYou(PossitivelyBITCHMODINGRN obj)
+				   at Main.Engine.System.Battery.GetPower()
+				   at Main.Engine.System.Battery.SomethingAboutPower()
+				   at Main.Engine.System.Battery.IfYouReadThisYouLikeGirls()
+				   at Main.Engine.System.Battery.GayAss()
+				   at Main.Engine.System.Battery.TellGpuToDrawMyBullshitColonThree()
+				   at Main.Screen.Draw.Prompt.Do_Draw(DrawingHandler abc)
+				   at Main.Screen.Draw.Prompt.DrawMenu();
+				   at DMD<Main.Screen::DoAnything>(Screen this, ref LaunchCodes codes)
+				   at Main.Update_()
+
+				>>>>>>>>>>>>>>> ENCOUNTERED A CRITICAL ERROR <<<<<<<<<<<<<<<
+
+				CRITICAL SYSTEM FAILIURE
+
+
+
+				LesbianSystem.Reboot
+				Display: \\.\DISPLAY1
+				* Size of 44.800000000000004 kB
+
+				REBOOTING...
+				'''
+			ErrorStarDestroyed:
+				'''
+				[{0}:0.52355] [Main/INFO] Main engine in operation and has sufficiant power!
+
+				{0}
+				Main.Engine.NullReferenceException: Object reference not set to an instance of an object.
+				Type: 'StarSystem'.
+				   at Main.Engine.System.LocateStar(int ID)
+				   at NoOne.Will.Read.This.FuckYou(PossitivelyBITCHMODINGRN obj)
+				   at Main.Engine.System.TransmitData()
+				   at Main.Engine.System.SomethingAboutNotBeingAbleToFindAStar()
+				   at Main.Engine.System.IfYouReadThisYouLikeGirls()
+				   at Main.Engine.System.GayAss()
+				   at Main.Engine.System.TellGpuToDrawMyBullshitColonThree()
+				   at Main.Screen.Draw.Prompt.Do_Draw(DrawingHandler abc)
+				   at Main.Screen.Draw.Prompt.DrawMenu();
+				   at Main.Update_()
+				'''
+		}
 	}
 }
 
@@ -466,75 +561,4 @@ StarNames: {
 	Name233: VIRUAL
 	Name234: VOID
 	ImportantStarName: UNKNOWN
-}
-
-StarMapLogs: {
-	GetPower:
-		'''
-		[{0}:0.17789] [Main/Info] Staring engine…
-		[{0}:0.23453] [Main/Info] Priming the gleep glorp…
-		[{0}:0.34562] [Main/Info] Transmitting zoogle doop…
-
-		[{0}:0.45678] [Main/Info] Geting power status…
-
-		…
-
-		[{0}:0.52354] [Main/Info] Power status recieved…
-		'''
-	SuccessfulLowPower:
-		'''
-		[{0}:0.52355] [Main/Info] Main engine in operation and has sufficiant power!
-		[{0}:0.74356] [Main/Warn] Engine in low power mode.
-
-		[{0}:0.80000] [Main/Info] Logging Target…
-
-		[{0}:0.80001] [Main/Info] Fireing in…
-
-		[{0}:0.94344] [Main/Info] 3
-
-		[{0}:1.13322] [Main/Info] 2
-
-		[{0}:2.15434] [Main/Info] 1
-		'''
-	ErrorInsufficiantPower:
-		'''
-		[{0}:0.52355] [Main/Info] Main engine in-
-
-		{0}
-		Main.Engine.InsufficiantPowerException: Main engine lacks power required to contact star system.
-		Type: 'Power'.
-		   at Main.Engine.System.Battery.CheckPower(Object power, BlahBlahBlah bleh)
-		   at NoOne.Will.Read.This.FuckYou(PossitivelyBITCHMODINGRN obj)
-		   at Main.Engine.System.Battery.GetPower()
-		   at Main.Engine.System.Battery.SomethingAboutPower()
-		   at Main.Engine.System.Battery.IfYouReadThisYouLikeGirls()
-		   at Main.Engine.System.Battery.GayAss()
-		   at Main.Engine.System.Battery.TellGpuToDrawMyBullshitColonThree()
-		   at Main.Screen.Draw.Prompt.Do_Draw(DrawingHandler abc)
-		   at Main.Screen.Draw.Prompt.DrawMenu();
-		   at DMD<Main.Screen::DoAnything>(Screen this, ref LaunchCodes codes)
-		   at Main.Update_()
-		'''
-	ErrorStarDestroyed:
-		'''
-		[{0}:0.52355] [Main/Info] Main engine in operation and has sufficiant power!
-
-		[{0}:0.80000] [Main/Info] Logging Target…
-
-		[{0}:0.80450] [Main/Error] Failed to find star system: star system does not exist.
-
-		{0}
-		Main.Engine.NullReferenceException: Object reference not set to an instance of an object.
-		Type: 'StarSystem'.
-		   at Main.Engine.System.LocateStar(int ID)
-		   at NoOne.Will.Read.This.FuckYou(PossitivelyBITCHMODINGRN obj)
-		   at Main.Engine.System.TransmitData()
-		   at Main.Engine.System.SomethingAboutNotBeingAbleToFindAStar()
-		   at Main.Engine.System.IfYouReadThisYouLikeGirls()
-		   at Main.Engine.System.GayAss()
-		   at Main.Engine.System.TellGpuToDrawMyBullshitColonThree()
-		   at Main.Screen.Draw.Prompt.Do_Draw(DrawingHandler abc)
-		   at Main.Screen.Draw.Prompt.DrawMenu();
-		   at Main.Update_()
-		'''
 }
