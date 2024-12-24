@@ -29,7 +29,6 @@ namespace WizenkleBoss.Assets.Textures
         public static Texture2D Ball { get; private set; }
         public static Texture2D Circle { get; private set; }
         public static Texture2D Bracket { get; private set; }
-        public static Texture2D Smoke { get; private set; }
         public static Texture2D Tech { get; private set; }
         public static Texture2D WavyNoise { get; private set; }
         public static Texture2D Lichen { get; private set; }
@@ -41,7 +40,8 @@ namespace WizenkleBoss.Assets.Textures
         public static Texture2D TextBoxStars { get; private set; }
         public static Texture2D TelescopeMap { get; private set; }
         public static Texture2D Cursor { get; private set; }
-
+        public static Texture2D BatteryIcon { get; private set; }
+        public static Texture2D ConfigIcon { get; private set; }
         public override void Load()
         {
             if (Main.dedServ)
@@ -79,8 +79,6 @@ namespace WizenkleBoss.Assets.Textures
             Circle = LoadTexture2D("Circle");
             Bracket = LoadTexture2D("Bracket");
 
-            Smoke = LoadTexture2D("Telescope/Smoke");
-
             Tech = LoadTexture2D("Noise/Tech");
             WavyNoise = LoadTexture2D("Noise/WavyNoise");
             Lichen = LoadTexture2D("Noise/Lichen");
@@ -98,6 +96,8 @@ namespace WizenkleBoss.Assets.Textures
             TelescopeMap = LoadTexture2D("Telescope/Map");
 
             Cursor = LoadTexture2D("Cursor");
+            BatteryIcon = LoadTexture2D("Icons/BatterySwap");
+            ConfigIcon = LoadTexture2D("Icons/Settings");
         }
         private static Texture2D LoadTexture2D(string TexturePath)
         {
@@ -120,7 +120,6 @@ namespace WizenkleBoss.Assets.Textures
             Ball = null;
             Circle = null;
             Bracket = null;
-            Smoke = null;
             Tech = null;
             WavyNoise = null;
             Lichen = null;
@@ -132,6 +131,8 @@ namespace WizenkleBoss.Assets.Textures
             TextBoxStars = null;
             TelescopeMap = null;
             Cursor = null;
+            BatteryIcon = null;
+            ConfigIcon = null;
         }
     }
     public class FontRegistry : ModSystem

@@ -33,20 +33,19 @@ namespace WizenkleBoss.Content.UI
             uIElement.HAlign = 0.5f;
             Append(uIElement);
 
-            float scale = 2 - Main.UIScale;
             BackPanel = new();
-            BackPanel.Width.Set(140f * scale, 0f);
-            BackPanel.Height.Set(50f * scale, 0f);
+            BackPanel.Width.Set(140f / Main.UIScale, 0f);
+            BackPanel.Height.Set(50f / Main.UIScale, 0f);
             BackPanel.VAlign = 1f;
             BackPanel.HAlign = 0.5f;
-            BackPanel.Top.Set(-45f * scale, 0f);
+            BackPanel.Top.Set(-45f / Main.UIScale, 0f);
 
             BackPanel.OnMouseOver += FadedMouseOver;
             BackPanel.OnLeftClick += GoBackClick;
 
             uIElement.Append(BackPanel);
         }
-        private void FadedMouseOver(UIMouseEvent evt, UIElement listeningElement)
+        internal void FadedMouseOver(UIMouseEvent evt, UIElement listeningElement)
         {
             SoundEngine.PlaySound(SoundID.MenuTick);
         }
@@ -66,7 +65,7 @@ namespace WizenkleBoss.Content.UI
 
             Main.playerInventory = false;
         }
-        private void GoBackClick(UIMouseEvent evt, UIElement listeningElement)
+        internal void GoBackClick(UIMouseEvent evt, UIElement listeningElement)
         {
             Main.menuMode = 0;
             IngameFancyUI.Close();

@@ -161,7 +161,7 @@ namespace WizenkleBoss.Content.Projectiles.Misc
             }
             if (charge > 0.02)
             {
-                if (BarrierTelescopeUISystem.inUI)
+                if (BarrierTelescopeUISystem.inUI || ObservatorySatelliteDishUISystem.inUI)
                 {
                     Main.menuMode = 0;
                     IngameFancyUI.Close();
@@ -201,7 +201,7 @@ namespace WizenkleBoss.Content.Projectiles.Misc
                 SoundPlayed = true;
             }
             MusicKiller.MuffleFactor = 1f - ((float)counter / 200f);
-            if (counter >= 185)
+            if (counter >= 200)
             {
                 if (darkness >= 0.3f)
                     this.CameraShakeSimple(Projectile.Center, Vector2.Zero, 18, 7, 2, 0);

@@ -51,7 +51,7 @@ namespace WizenkleBoss.Content.UI
                 Color BloomColor = new Color(214, 196, 255) * 0.04f * overallcolormultiplier;
                 BloomColor.A = 0;
 
-                if (ErrorState == ContactingState.None)
+                if (ConsoleState == ContactingState.None)
                 {
                     if (boot > 0.3f)
                         DrawStars(spriteBatch, Center, BloomColor, font);
@@ -71,7 +71,7 @@ namespace WizenkleBoss.Content.UI
 
                 bool cursormode = ModContent.GetInstance<WizenkleBossConfig>().SatelliteUseMousePosition;
 
-                if (boot > 0.95f)
+                if (boot > 0.95f && CanTargetStar(false))
                     spriteBatch.Draw(cursormode ? TextureRegistry.Cursor : TextureRegistry.Circle, cursormode ? (Main.MouseScreen - new Vector2(Main.screenWidth / 2, Main.screenHeight / 2)) / 2 + Center : Center, null, cursormode ? Color.White : Color.Gray with { A = 0 }, 0, cursormode ? Vector2.Zero : TextureRegistry.Circle.Size() / 2, cursormode ? 1f : 0.05f, SpriteEffects.None, 0f);
 
                 spriteBatch.End();
@@ -82,7 +82,7 @@ namespace WizenkleBoss.Content.UI
         public static void DrawLog(SpriteBatch spriteBatch, Color BloomColor, DynamicSpriteFont font)
         {
             string LogPower = Language.GetTextValue("Mods.WizenkleBoss.UI.SatelliteDish.StarMapLogs.GetPower", DateTime.Today.Year);
-            string LogText = ErrorState switch
+            string LogText = ConsoleState switch
             {
                 ContactingState.ContactingLowPower => Language.GetTextValue("Mods.WizenkleBoss.UI.SatelliteDish.StarMapLogs.SuccessfulLowPower", DateTime.Today.Year),
                 ContactingState.ContactingHighPower => Language.GetTextValue("Mods.WizenkleBoss.UI.SatelliteDish.StarMapLogs.SuccessfulHighPower", DateTime.Today.Year),
@@ -90,16 +90,16 @@ namespace WizenkleBoss.Content.UI
                 ContactingState.ErrorStarNotFound => Language.GetTextValue("Mods.WizenkleBoss.UI.SatelliteDish.StarMapLogs.ErrorStarDestroyed", DateTime.Today.Year),
                 _ => " "
             };
-            string currentlog = (int)logtimer <= 9 ? LogPower : LogText;
+            string currentlog = (int)logline <= 9 ? LogPower : LogText;
             string[] lines = currentlog.Split(new string[] { "\n", "\r\n" }, StringSplitOptions.None);
-            int line = (int)logtimer <= 9 ? (int)logtimer : (int)logtimer - 9;
+            int line = (int)logline <= 9 ? (int)logline : (int)logline - 9;
             for (int i = 0; i <= lines.Length - 1; i++)
             {
                 if (i > line)
                     return;
                 Vector2 textSize = Helper.MeasureString(lines[i], font);
                 Vector2 position = new(30, 30 + (textSize.Y * i * 0.25f));
-                bool error = ErrorState > ContactingState.ContactingHighPower && (int)logtimer > 9 && i > 1;
+                bool error = ConsoleState > ContactingState.ContactingHighPower && (int)logline > 9 && i > 1;
 
                 spriteBatch.Draw(TextureRegistry.Bloom, position + (textSize / 2f * 0.25f), null, error ? (Color.Red * 0.1f) with { A = 0 } : (BloomColor * 2f), 0f, TextureRegistry.Bloom.Size() / 2f, (textSize / TextureRegistry.Ball.Size()) * 1.4f, SpriteEffects.None, 0f);
 
@@ -266,7 +266,7 @@ namespace WizenkleBoss.Content.UI
 
                     if ((Main.GlobalTimeWrappedHourly * 60) % 50 < 25)
                     {
-                        Vector2 warningPosition = position + (-Vector2.UnitY * 25 * satelliteUIZoom * extraoffset);
+                        Vector2 warningPosition = position + (-Vector2.UnitY * 25 * satelliteUIZoom);
 
                         Vector2 warningOrigin = Helper.MeasureString("!", font);
 

@@ -21,6 +21,7 @@ using System.Net.WebSockets;
 using System.Runtime.InteropServices;
 using Terraria.DataStructures;
 using WizenkleBoss.Content.Projectiles.Misc;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace WizenkleBoss.Content.UI
 {
@@ -68,8 +69,25 @@ namespace WizenkleBoss.Content.UI
 
         public static float promptclose = 1f;
 
-        public static ContactingState ErrorState;
+        public static ContactingState ConsoleState;
+        public static int logline = 0;
         public static float logtimer = 0f;
+
+        public static bool CanTargetStar(bool Scaled = true)
+        {
+            if (observatorySatelliteDishUI.BackPanel == null || observatorySatelliteDishUI.BatterySwapper == null || observatorySatelliteDishUI.ModConfigButton == null)
+                return false;
+
+            float Multiplier = Scaled ? Main.UIScale : 1;
+            Vector2 CursorPos = ((Main.MouseScreen * Multiplier) - (new Vector2(Main.screenWidth / 2, Main.screenHeight / 2) * Multiplier)) / 2;
+
+            return CursorPos.X > -TargetSize.X / 2 && CursorPos.X < TargetSize.X / 2 &&
+                CursorPos.Y > -TargetSize.Y / 2 && CursorPos.Y < TargetSize.Y / 2 &&
+                inUI && ModContent.GetInstance<WizenkleBossConfig>().SatelliteUseMousePosition &&
+                !observatorySatelliteDishUI.BackPanel.IsMouseHovering &&
+                !observatorySatelliteDishUI.BatterySwapper.IsMouseHovering &&
+                !observatorySatelliteDishUI.ModConfigButton.IsMouseHovering;
+        }
         public override void OnWorldLoad()
         {
             satelliteUIOffset = Vector2.Zero;
@@ -105,6 +123,38 @@ namespace WizenkleBoss.Content.UI
                 Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
             }
         }
+        private static void DrawBatteryButton()
+        {
+            UIElement batteryicon = observatorySatelliteDishUI.BatterySwapper;
+            if (batteryicon != null)
+            {
+                Vector2 ScreenSize = new Vector2(Main.screenWidth, Main.screenHeight) * Main.UIScale;
+
+                Vector2 position = new(ScreenSize.X / 2f + (batteryicon.Left.Pixels * Main.UIScale), (ScreenSize.Y * batteryicon.VAlign) + (batteryicon.Top.Pixels * Main.UIScale));
+
+                Color color = batteryicon.IsMouseHovering ? Color.White : Color.Gray;
+                color *= openAnimation;
+
+                Vector2 origin = new(TextureRegistry.BatteryIcon.Width / 2f, TextureRegistry.BatteryIcon.Height);
+                Main.spriteBatch.Draw(TextureRegistry.BatteryIcon, position, null, color, 0f, origin, Vector2.One, SpriteEffects.None, 0f);
+            }
+        }
+        private static void DrawConfigButton()
+        {
+            UIElement config = observatorySatelliteDishUI.ModConfigButton;
+            if (config != null)
+            {
+                Vector2 ScreenSize = new Vector2(Main.screenWidth, Main.screenHeight) * Main.UIScale;
+
+                Vector2 position = new(ScreenSize.X / 2f + (config.Left.Pixels * Main.UIScale), (ScreenSize.Y * config.VAlign) + (config.Top.Pixels * Main.UIScale));
+
+                Color color = config.IsMouseHovering ? Color.White : Color.Gray;
+                color *= openAnimation;
+
+                Vector2 origin = new(TextureRegistry.ConfigIcon.Width / 2f, TextureRegistry.ConfigIcon.Height);
+                Main.spriteBatch.Draw(TextureRegistry.ConfigIcon, position, null, color, 0f, origin, Vector2.One, SpriteEffects.None, 0f);
+            }
+        }
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
             if (!inUI && openAnimation == 0)
@@ -129,7 +179,10 @@ namespace WizenkleBoss.Content.UI
 
                         DrawMap();
 
-                        Main.spriteBatch.DrawGenericBackButton(FontAssets.DeathText.Value, observatorySatelliteDishUI.BackPanel, ScreenSize, Language.GetTextValue("UI.Back"));
+                        Main.spriteBatch.DrawGenericBackButton(FontAssets.DeathText.Value, observatorySatelliteDishUI.BackPanel, ScreenSize, Language.GetTextValue("UI.Back"), 0.8f);
+
+                        DrawBatteryButton();
+                        DrawConfigButton();
 
                         Main.spriteBatch.End();
                         Main.spriteBatch.Begin(in snapshit);
@@ -151,35 +204,41 @@ namespace WizenkleBoss.Content.UI
                 openAnimation = MathHelper.Clamp(openAnimation - 0.14f, 0f, 1f);
             if (inUI || openAnimation > 0)
             {
-                if (ErrorState != ContactingState.None)
+                if (ConsoleState != ContactingState.None)
                 {
-                    if (ErrorState == ContactingState.ContactingLowPower || ErrorState == ContactingState.ContactingHighPower)
+                    if (logtimer >= 1)
                     {
-                        if (logtimer <= 15)
+                            // ADD SFX HERE DUMBASS
+                        logline++;
+                        logtimer = 0;
+                    }
+                    if (ConsoleState == ContactingState.ContactingLowPower || ConsoleState == ContactingState.ContactingHighPower)
+                    {
+                        if (logline <= 15)
                             logtimer += Main.rand.NextFloat(0.01f, 0.12f);
                         else
                             logtimer += 0.032f;
 
-                        if (logtimer > 21.5f)
+                        if (logline > 22)
                         {
-                            ErrorState = ContactingState.None;
+                            ConsoleState = ContactingState.None;
                             Main.menuMode = 0;
-                            logtimer = 0;
+                            logline = 0;
                             IngameFancyUI.Close();
                             Projectile.NewProjectile(new EntitySource_TileInteraction(Main.LocalPlayer, (int)satelliteTilePosition.X / 16, (int)satelliteTilePosition.Y / 16), satelliteTilePosition, Vector2.Zero, ModContent.ProjectileType<DeepSpaceTransmitter>(), 0, 0, Main.myPlayer);
                         }
                     }
-                    if (ErrorState == ContactingState.ErrorNoPower || ErrorState == ContactingState.ErrorStarNotFound)
+                    if (ConsoleState == ContactingState.ErrorNoPower || ConsoleState == ContactingState.ErrorStarNotFound)
                     {
-                        if (logtimer > 65)
+                        if (logline > 65)
                         {
                             prompt = ComplexPromptState.Error;
-                            ErrorState = ContactingState.None;
-                            logtimer = 0;
+                            ConsoleState = ContactingState.None;
+                            logline = 0;
                             boot = 0.4f;
                             return;
                         }
-                        if (logtimer <= 11)
+                        if (logline <= 11)
                             logtimer += Main.rand.NextFloat(0.01f, 0.12f);
                         else
                             logtimer += 0.4f;
@@ -209,7 +268,7 @@ namespace WizenkleBoss.Content.UI
                     normalized = normalized.SafeNormalize(Vector2.Zero);
                 }
 
-                satelliteUIOffsetVelocity += normalized * 0.7f * Utils.Remap(ModContent.GetInstance<WizenkleBossConfig>().SatelliteMovementVelocity, 0f, 1f, 1.9f, 2.4f);
+                satelliteUIOffsetVelocity += normalized * 0.7f * Utils.Remap(ModContent.GetInstance<WizenkleBossConfig>().SatelliteMovementVelocity, 0f, 1f, 1.9f, 3.1f);
             }
             satelliteUIOffsetVelocity *= 0.50f;
             satelliteUIOffset += satelliteUIOffsetVelocity;
@@ -223,8 +282,6 @@ namespace WizenkleBoss.Content.UI
         }
         public static void UpdatePrompt()
         {
-            if (observatorySatelliteDishUI.BackPanel == null)
-                return;
             if (prompt == ComplexPromptState.None)
             {
                 promptclose = MathHelper.Clamp(promptclose - 0.05f, 0f, 1f);
@@ -239,6 +296,7 @@ namespace WizenkleBoss.Content.UI
                 prompt = ComplexPromptState.None;
                 return;
             }
+            bool hovering = CanTargetStar();
             TriggersPack triggers = PlayerInput.Triggers;
             switch (prompt) 
             {
@@ -257,34 +315,35 @@ namespace WizenkleBoss.Content.UI
                     }
                 case ComplexPromptState.Select:
                     {
-                        if ((triggers.Current.Jump || triggers.Current.MouseLeft) && !observatorySatelliteDishUI.BackPanel.IsMouseHovering)
+                        if ((triggers.Current.Jump || triggers.Current.MouseLeft) && hovering)
                             prompt = ComplexPromptState.None;
                         break;
                     }
                 case ComplexPromptState.Fire:
                     {
-                        if (triggers.JustReleased.MouseRight && !observatorySatelliteDishUI.BackPanel.IsMouseHovering && confirmationTimer == 1f)
+                        if (triggers.JustReleased.MouseRight && hovering && confirmationTimer == 1f)
                         {
                             confirmationTimer = 0f;
                             prompt = ComplexPromptState.None;
+                            logline = 0;
                             if (targetedStarIndex != int.MaxValue && targetedStarIndex > -1)
                             {
                                 if (BarrierStarSystem.Stars[targetedStarIndex].State >= SupernovaState.Expanding)
                                 {
-                                    ErrorState = ContactingState.ErrorStarNotFound;
+                                    ConsoleState = ContactingState.ErrorStarNotFound;
                                     break;
                                 }
                             }
                             if (BarrierStarSystem.TheOneImportantThingInTheSky.State >= SupernovaState.Expanding && targetedStarIndex == int.MaxValue)
                             {
-                                ErrorState = ContactingState.ErrorStarNotFound;
+                                ConsoleState = ContactingState.ErrorStarNotFound;
                                 break;
                             }
-                            ErrorState = ContactingState.ContactingHighPower;
+                            ConsoleState = ContactingState.ContactingHighPower;
                                 //if (lackOFpOWER)
-                                //    ErrorState = ContactingState.ErrorStarNotFound;
+                                //    ConsoleState = ContactingState.ErrorStarNotFound;
                         }
-                        if (triggers.Current.MouseRight && !observatorySatelliteDishUI.BackPanel.IsMouseHovering && openAnimation >= 0.8f)
+                        if (triggers.Current.MouseRight && hovering && openAnimation >= 0.8f)
                         {
                             confirmationTimer = MathHelper.Clamp(confirmationTimer + 0.02f, 0f, 1f);
                         }
@@ -302,16 +361,18 @@ namespace WizenkleBoss.Content.UI
         }
         public static bool UpdateSelection()
         {
-            if (observatorySatelliteDishUI.BackPanel == null || !inUI)
+            if (!inUI)
                 return targetedStarIndex > -1;
+
+            bool hovering = CanTargetStar();
 
             TriggersPack triggers = PlayerInput.Triggers;
 
-            bool CurrentTriggerSelect = (triggers.Current.Jump || triggers.Current.MouseLeft) && !observatorySatelliteDishUI.BackPanel.IsMouseHovering;
-            bool JustPressedTriggerSelect = (triggers.JustPressed.Jump || triggers.JustPressed.MouseLeft) && !observatorySatelliteDishUI.BackPanel.IsMouseHovering;
-            bool JustReleasedTriggerSelect = (triggers.JustReleased.Jump || triggers.JustReleased.MouseLeft) && !observatorySatelliteDishUI.BackPanel.IsMouseHovering;
+            bool CurrentTriggerSelect = (triggers.Current.Jump || triggers.Current.MouseLeft) && hovering;
+            bool JustPressedTriggerSelect = (triggers.JustPressed.Jump || triggers.JustPressed.MouseLeft) && hovering;
+            bool JustReleasedTriggerSelect = (triggers.JustReleased.Jump || triggers.JustReleased.MouseLeft) && hovering;
 
-            if (prompt < ComplexPromptState.Fire || ErrorState != ContactingState.None)
+            if (prompt < ComplexPromptState.Fire || ConsoleState != ContactingState.None)
                 return false;
 
             if (JustReleasedTriggerSelect && targetedStarIndex > -1)
@@ -333,7 +394,7 @@ namespace WizenkleBoss.Content.UI
             {
                 Vector2 centerpos = TargetSize / 2f;
                 if (ModContent.GetInstance<WizenkleBossConfig>().SatelliteUseMousePosition)
-                    centerpos += Vector2.Clamp(((Main.MouseScreen * Main.UIScale) - new Vector2(Main.screenWidth / 2 * Main.UIScale, Main.screenHeight / 2 * Main.UIScale)) / 2, -(TargetSize / 2f), TargetSize / 2f);
+                    centerpos += Vector2.Clamp(((Main.MouseScreen * Main.UIScale) - (new Vector2(Main.screenWidth / 2, Main.screenHeight / 2) * Main.UIScale)) / 2, -(TargetSize / 2f), TargetSize / 2f);
                 Vector2 ClosestPosition = Vector2.Zero;
                 int ClosestIndex = -1;
                 for (int i = 0; i <= BarrierStarSystem.Stars.Length - 1; i++)

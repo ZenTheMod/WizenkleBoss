@@ -13,9 +13,6 @@
 	  <EffectFiles Include="**/*.fx" />
 	</ItemGroup>
 	<ItemGroup>
-	  <None Remove="Assets\Textures\Ball.png" />
-	</ItemGroup>
-	<ItemGroup>
 	  <Reference Include="NetEasy">
 	    <HintPath>lib\NetEasy_v0.1.8.dll</HintPath>
 	  </Reference>

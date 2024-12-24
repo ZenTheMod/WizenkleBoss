@@ -165,37 +165,37 @@ namespace WizenkleBoss.Content.UI
             if (!BarrierStarSystem.Stars.Where(s => s.State == SupernovaState.Expanding).Any() && BarrierStarSystem.TheOneImportantThingInTheSky.State != SupernovaState.Expanding)
                 return;
 
-            var planetShader = Helper.PlanetShader;
-            var gd = Main.instance.GraphicsDevice;
+                // var planetShader = Helper.PlanetShader;
+                // var gd = Main.instance.GraphicsDevice;
 
-            planetShader.Value.Parameters["uAngle"]?.SetValue(Main.GlobalTimeWrappedHourly / -69f);
+                // planetShader.Value.Parameters["uAngle"]?.SetValue(Main.GlobalTimeWrappedHourly / -69f);
 
-            gd.Textures[1] = TextureRegistry.Smoke;
-            gd.SamplerStates[1] = SamplerState.LinearWrap;
+                // gd.Textures[1] = TextureRegistry.Smoke;
+                // gd.SamplerStates[1] = SamplerState.LinearWrap;
 
-            planetShader.Value.CurrentTechnique.Passes[0].Apply();
+                // planetShader.Value.CurrentTechnique.Passes[0].Apply();
 
-            spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Deferred, default, default, default, default, planetShader.Value, default);
+                // spriteBatch.End();
+                // spriteBatch.Begin(SpriteSortMode.Deferred, default, default, default, default, planetShader.Value, default);
 
-            foreach (var supernovae in BarrierStarSystem.Stars.Where(s => s.State == SupernovaState.Expanding))
-            {
-                Vector2 position = size + telescopeUIOffset + supernovae.Position;
+                // foreach (var supernovae in BarrierStarSystem.Stars.Where(s => s.State == SupernovaState.Expanding))
+                // {
+                //     Vector2 position = size + telescopeUIOffset + supernovae.Position;
 
-                spriteBatch.Draw(TextureRegistry.Star, position, null, (Color.SkyBlue * (0.65f - supernovae.SupernovaSize)) with { A = 0 }, Main.GlobalTimeWrappedHourly / 23f, TextureRegistry.Star.Size() / 2, supernovae.SupernovaSize * 0.35f, SpriteEffects.None, 0f);
+                //     spriteBatch.Draw(TextureRegistry.Star, position, null, (Color.SkyBlue * (0.65f - supernovae.SupernovaSize)) with { A = 0 }, Main.GlobalTimeWrappedHourly / 23f, TextureRegistry.Star.Size() / 2, supernovae.SupernovaSize * 0.35f, SpriteEffects.None, 0f);
+                 
+                //     spriteBatch.Draw(TextureRegistry.Star, position, null, (Color.LightCyan * (0.88f - supernovae.SupernovaSize)) with { A = 0 }, Main.GlobalTimeWrappedHourly / -33f, TextureRegistry.Star.Size() / 2, supernovae.SupernovaSize * 0.24f, SpriteEffects.None, 0f);
+                // }
 
-                spriteBatch.Draw(TextureRegistry.Star, position, null, (Color.LightCyan * (0.88f - supernovae.SupernovaSize)) with { A = 0 }, Main.GlobalTimeWrappedHourly / -33f, TextureRegistry.Star.Size() / 2, supernovae.SupernovaSize * 0.24f, SpriteEffects.None, 0f);
-            }
+                // if (BarrierStarSystem.TheOneImportantThingInTheSky.State == SupernovaState.Expanding)
+                // {
+                //     BarrierStar bigstar = BarrierStarSystem.TheOneImportantThingInTheSky;
+                //     Vector2 position = size + telescopeUIOffset + bigstar.Position;
 
-            if (BarrierStarSystem.TheOneImportantThingInTheSky.State == SupernovaState.Expanding)
-            {
-                BarrierStar bigstar = BarrierStarSystem.TheOneImportantThingInTheSky;
-                Vector2 position = size + telescopeUIOffset + bigstar.Position;
+                //     spriteBatch.Draw(TextureRegistry.Star, position, null, (Color.SkyBlue * (0.65f - bigstar.SupernovaSize)) with { A = 0 }, Main.GlobalTimeWrappedHourly / 23f, TextureRegistry.Star.Size() / 2, bigstar.SupernovaSize * 0.65f, SpriteEffects.None, 0f);
 
-                spriteBatch.Draw(TextureRegistry.Star, position, null, (Color.SkyBlue * (0.65f - bigstar.SupernovaSize)) with { A = 0 }, Main.GlobalTimeWrappedHourly / 23f, TextureRegistry.Star.Size() / 2, bigstar.SupernovaSize * 0.65f, SpriteEffects.None, 0f);
-
-                spriteBatch.Draw(TextureRegistry.Star, position, null, (Color.LightCyan * (0.88f - bigstar.SupernovaSize)) with { A = 0 }, Main.GlobalTimeWrappedHourly / -33f, TextureRegistry.Star.Size() / 2, bigstar.SupernovaSize * 0.5f, SpriteEffects.None, 0f);
-            }
+                //     spriteBatch.Draw(TextureRegistry.Star, position, null, (Color.LightCyan * (0.88f - bigstar.SupernovaSize)) with { A = 0 }, Main.GlobalTimeWrappedHourly / -33f, TextureRegistry.Star.Size() / 2, bigstar.SupernovaSize * 0.5f, SpriteEffects.None, 0f);
+                // }
 
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
@@ -206,9 +206,9 @@ namespace WizenkleBoss.Content.UI
 
                 spriteBatch.Draw(TextureRegistry.Shockwave, new Rectangle((int)position.X, (int)position.Y, (int)(60 * supernovae.SupernovaSize), (int)(100 * supernovae.SupernovaSize)), null, Color.White * (1f - supernovae.SupernovaSize), supernovae.BaseRotation, TextureRegistry.Shockwave.Size() / 2, SpriteEffects.None, 0f);
 
-                spriteBatch.Draw(TextureRegistry.Bloom, position, null, Color.MediumBlue * (0.87f - supernovae.SupernovaSize), 0, TextureRegistry.Bloom.Size() / 2, supernovae.SupernovaSize * 0.4f, SpriteEffects.None, 0f);
-                spriteBatch.Draw(TextureRegistry.Bloom, position, null, Color.Cyan * (0.9f - supernovae.SupernovaSize), 0, TextureRegistry.Bloom.Size() / 2, supernovae.SupernovaSize * 0.23f, SpriteEffects.None, 0f);
-                spriteBatch.Draw(TextureRegistry.Bloom, position, null, Color.White * (1f - supernovae.SupernovaSize), 0, TextureRegistry.Bloom.Size() / 2, supernovae.SupernovaSize * 0.13f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(TextureRegistry.Bloom, position, null, Color.MediumBlue * (0.87f - supernovae.SupernovaSize), 0, TextureRegistry.Bloom.Size() / 2, supernovae.SupernovaSize * 0.45f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(TextureRegistry.Bloom, position, null, Color.Cyan * (0.9f - supernovae.SupernovaSize), 0, TextureRegistry.Bloom.Size() / 2, supernovae.SupernovaSize * 0.27f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(TextureRegistry.Bloom, position, null, Color.White * (1f - supernovae.SupernovaSize), 0, TextureRegistry.Bloom.Size() / 2, supernovae.SupernovaSize * 0.14f, SpriteEffects.None, 0f);
             }
 
             if (BarrierStarSystem.TheOneImportantThingInTheSky.State == SupernovaState.Expanding)
@@ -218,9 +218,9 @@ namespace WizenkleBoss.Content.UI
 
                 spriteBatch.Draw(TextureRegistry.Shockwave, new Rectangle((int)position.X, (int)position.Y, (int)(110 * bigstar.SupernovaSize), (int)(175 * bigstar.SupernovaSize)), null, Color.White * (1f - bigstar.SupernovaSize), bigstar.BaseRotation, TextureRegistry.Shockwave.Size() / 2, SpriteEffects.None, 0f);
 
-                spriteBatch.Draw(TextureRegistry.Bloom, position, null, Color.MediumBlue * (0.87f - bigstar.SupernovaSize), 0, TextureRegistry.Bloom.Size() / 2, bigstar.SupernovaSize * 0.6f, SpriteEffects.None, 0f);
-                spriteBatch.Draw(TextureRegistry.Bloom, position, null, Color.Cyan * (0.9f - bigstar.SupernovaSize), 0, TextureRegistry.Bloom.Size() / 2, bigstar.SupernovaSize * 0.43f, SpriteEffects.None, 0f);
-                spriteBatch.Draw(TextureRegistry.Bloom, position, null, Color.White * (1f - bigstar.SupernovaSize), 0, TextureRegistry.Bloom.Size() / 2, bigstar.SupernovaSize * 0.23f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(TextureRegistry.Bloom, position, null, Color.MediumBlue * (0.87f - bigstar.SupernovaSize), 0, TextureRegistry.Bloom.Size() / 2, bigstar.SupernovaSize * 0.62f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(TextureRegistry.Bloom, position, null, Color.Cyan * (0.9f - bigstar.SupernovaSize), 0, TextureRegistry.Bloom.Size() / 2, bigstar.SupernovaSize * 0.46f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(TextureRegistry.Bloom, position, null, Color.White * (1f - bigstar.SupernovaSize), 0, TextureRegistry.Bloom.Size() / 2, bigstar.SupernovaSize * 0.25f, SpriteEffects.None, 0f);
             }
 
             spriteBatch.End();

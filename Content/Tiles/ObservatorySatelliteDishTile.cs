@@ -76,6 +76,9 @@ namespace WizenkleBoss.Content.Tiles
 
             IngameFancyUI.CoverNextFrame();
             Main.ClosePlayerChat();
+
+            Main.mouseRightRelease = false;
+
                 // I HATE FANCY UI
             Main.ingameOptionsWindow = false;
             Main.playerInventory = false;
@@ -87,7 +90,7 @@ namespace WizenkleBoss.Content.Tiles
             ObservatorySatelliteDishUISystem.satelliteTilePosition = pos16.ToWorldCoordinates();
 
             ObservatorySatelliteDishUISystem.logtimer = 0f;
-            ObservatorySatelliteDishUISystem.ErrorState = ContactingState.None;
+            ObservatorySatelliteDishUISystem.ConsoleState = ContactingState.None;
 
             Main.InGameUI.SetState(ObservatorySatelliteDishUISystem.observatorySatelliteDishUI);
 

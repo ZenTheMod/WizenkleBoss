@@ -31,24 +31,25 @@ namespace WizenkleBoss.Assets.Helper
 
         private Vector2 HideTHICKCursor(On_Main.orig_DrawThickCursor orig, bool smart)
         {
-            if (ObservatorySatelliteDishUISystem.observatorySatelliteDishUI.BackPanel == null)
+            if (!ObservatorySatelliteDishUISystem.inUI)
                 return orig(smart);
-            Vector2 CursorPos = ((Main.MouseScreen * Main.UIScale) - new Vector2(Main.screenWidth / 2, Main.screenHeight / 2)) / 2;
-            if (CursorPos.X > -ObservatorySatelliteDishUISystem.TargetSize.X / 2 && CursorPos.X < ObservatorySatelliteDishUISystem.TargetSize.X / 2 &&
-                CursorPos.Y > -ObservatorySatelliteDishUISystem.TargetSize.Y / 2 && CursorPos.Y < ObservatorySatelliteDishUISystem.TargetSize.Y / 2 &&
-                ObservatorySatelliteDishUISystem.inUI && ModContent.GetInstance<WizenkleBossConfig>().SatelliteUseMousePosition && !ObservatorySatelliteDishUISystem.observatorySatelliteDishUI.BackPanel.IsMouseHovering)
+
+            bool hovering = ObservatorySatelliteDishUISystem.CanTargetStar();
+
+            if (hovering)
                 return Vector2.Zero;
+
             return orig(smart);
         }
 
         private void HideCursor(On_Main.orig_DrawCursor orig, Microsoft.Xna.Framework.Vector2 bonus, bool smart)
         {
-            if (ObservatorySatelliteDishUISystem.observatorySatelliteDishUI.BackPanel == null)
+            if (!ObservatorySatelliteDishUISystem.inUI)
                 orig(bonus, smart);
-            Vector2 CursorPos = ((Main.MouseScreen * Main.UIScale) - new Vector2(Main.screenWidth / 2, Main.screenHeight / 2)) / 2;
-            if (CursorPos.X > -ObservatorySatelliteDishUISystem.TargetSize.X / 2 && CursorPos.X < ObservatorySatelliteDishUISystem.TargetSize.X / 2 &&
-                CursorPos.Y > -ObservatorySatelliteDishUISystem.TargetSize.Y / 2 && CursorPos.Y < ObservatorySatelliteDishUISystem.TargetSize.Y / 2 && 
-                ObservatorySatelliteDishUISystem.inUI && ModContent.GetInstance<WizenkleBossConfig>().SatelliteUseMousePosition && !ObservatorySatelliteDishUISystem.observatorySatelliteDishUI.BackPanel.IsMouseHovering)
+
+            bool hovering = ObservatorySatelliteDishUISystem.CanTargetStar();
+
+            if (hovering)
                 return;
             orig(bonus, smart);
         }
