@@ -75,7 +75,7 @@ namespace WizenkleBoss.Content.UI
 
         public static bool CanTargetStar(bool Scaled = true)
         {
-            if (observatorySatelliteDishUI.BackPanel == null || observatorySatelliteDishUI.BatterySwapper == null || observatorySatelliteDishUI.ModConfigButton == null)
+            if (observatorySatelliteDishUI.BackPanel == null  || observatorySatelliteDishUI.ModConfigButton == null)
                 return false;
 
             float Multiplier = Scaled ? Main.UIScale : 1;
@@ -85,7 +85,6 @@ namespace WizenkleBoss.Content.UI
                 CursorPos.Y > -TargetSize.Y / 2 && CursorPos.Y < TargetSize.Y / 2 &&
                 inUI && ModContent.GetInstance<WizenkleBossConfig>().SatelliteUseMousePosition &&
                 !observatorySatelliteDishUI.BackPanel.IsMouseHovering &&
-                !observatorySatelliteDishUI.BatterySwapper.IsMouseHovering &&
                 !observatorySatelliteDishUI.ModConfigButton.IsMouseHovering;
         }
         public override void OnWorldLoad()
@@ -121,22 +120,6 @@ namespace WizenkleBoss.Content.UI
 
                 Main.spriteBatch.End();
                 Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
-            }
-        }
-        private static void DrawBatteryButton()
-        {
-            UIElement batteryicon = observatorySatelliteDishUI.BatterySwapper;
-            if (batteryicon != null)
-            {
-                Vector2 ScreenSize = new Vector2(Main.screenWidth, Main.screenHeight) * Main.UIScale;
-
-                Vector2 position = new(ScreenSize.X / 2f + (batteryicon.Left.Pixels * Main.UIScale), (ScreenSize.Y * batteryicon.VAlign) + (batteryicon.Top.Pixels * Main.UIScale));
-
-                Color color = batteryicon.IsMouseHovering ? Color.White : Color.Gray;
-                color *= openAnimation;
-
-                Vector2 origin = new(TextureRegistry.BatteryIcon.Width / 2f, TextureRegistry.BatteryIcon.Height);
-                Main.spriteBatch.Draw(TextureRegistry.BatteryIcon, position, null, color, 0f, origin, Vector2.One, SpriteEffects.None, 0f);
             }
         }
         private static void DrawConfigButton()
@@ -181,7 +164,6 @@ namespace WizenkleBoss.Content.UI
 
                         Main.spriteBatch.DrawGenericBackButton(FontAssets.DeathText.Value, observatorySatelliteDishUI.BackPanel, ScreenSize, Language.GetTextValue("UI.Back"), 0.8f);
 
-                        DrawBatteryButton();
                         DrawConfigButton();
 
                         Main.spriteBatch.End();

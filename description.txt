@@ -55,7 +55,7 @@ Shaders (Other):
 ★ Photonic0 (Main inspo for the planet shader, I don't think I used most of their code tbh)
 	☆ https://www.shadertoy.com/view/MfcfWX (my slightly stupider proper planet shader :3)
 
-★ RecursiveCollapse (The laser shader probably)
+★ RecursiveCollapse (The laser shader probably) - Basically jesus christ
 
 Sounds:
 ★ Freesound.org (fuck you, fuck you, fuck you, fuck you...)

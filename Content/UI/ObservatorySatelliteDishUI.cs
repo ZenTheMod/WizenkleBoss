@@ -14,7 +14,6 @@ namespace WizenkleBoss.Content.UI
 {
     public class ObservatorySatelliteDishUI : BaseFancyUI
     {
-        public UIElement BatterySwapper;
         public UIElement ModConfigButton;
         public override void InitializeUI()
         {
@@ -40,19 +39,6 @@ namespace WizenkleBoss.Content.UI
             BackPanel.OnLeftClick += GoBackClick;
 
             uIElement.Append(BackPanel);
-
-            BatterySwapper = new();
-            BatterySwapper.Width.Set(80f / Main.UIScale, 0f);
-            BatterySwapper.Height.Set(90f / Main.UIScale, 0f);
-            BatterySwapper.VAlign = 1f;
-            BatterySwapper.HAlign = 0.5f;
-            BatterySwapper.Top.Set(-25f / Main.UIScale, 0f);
-            BatterySwapper.Left.Set(Main.screenHeight / 2 / Main.UIScale, 0f);
-
-            BatterySwapper.OnMouseOver += FadedMouseOver;
-            BatterySwapper.OnLeftClick += GoBackClick;
-
-            uIElement.Append(BatterySwapper);
 
             ModConfigButton = new();
             ModConfigButton.Width.Set(85f / Main.UIScale, 0f);

@@ -40,7 +40,7 @@ namespace WizenkleBoss.Assets.Textures
         public static Texture2D TextBoxStars { get; private set; }
         public static Texture2D TelescopeMap { get; private set; }
         public static Texture2D Cursor { get; private set; }
-        public static Texture2D BatteryIcon { get; private set; }
+            // public static Texture2D BatteryIcon { get; private set; }
         public static Texture2D ConfigIcon { get; private set; }
         public override void Load()
         {
@@ -96,13 +96,13 @@ namespace WizenkleBoss.Assets.Textures
             TelescopeMap = LoadTexture2D("Telescope/Map");
 
             Cursor = LoadTexture2D("Cursor");
-            BatteryIcon = LoadTexture2D("Icons/BatterySwap");
+                // BatteryIcon = LoadTexture2D("Icons/BatterySwap");
             ConfigIcon = LoadTexture2D("Icons/Settings");
         }
         private static Texture2D LoadTexture2D(string TexturePath)
         {
-                //if (Main.netMode == NetmodeID.Server)
-                //    return default;
+                // if (Main.netMode == NetmodeID.Server)
+                //     return default;
             return ModContent.Request<Texture2D>("WizenkleBoss/Assets/Textures/" + TexturePath, AssetRequestMode.ImmediateLoad).Value;
         }
         public override void Unload()
@@ -131,7 +131,7 @@ namespace WizenkleBoss.Assets.Textures
             TextBoxStars = null;
             TelescopeMap = null;
             Cursor = null;
-            BatteryIcon = null;
+                // BatteryIcon = null;
             ConfigIcon = null;
         }
     }
