@@ -33,7 +33,7 @@ namespace WizenkleBoss.Assets.Helper
         {
             if (ObservatorySatelliteDishUISystem.observatorySatelliteDishUI.BackPanel == null)
                 return orig(smart);
-            Vector2 CursorPos = (Main.MouseScreen - new Vector2(Main.screenWidth / 2, Main.screenHeight / 2)) / 2;
+            Vector2 CursorPos = ((Main.MouseScreen * Main.UIScale) - new Vector2(Main.screenWidth / 2, Main.screenHeight / 2)) / 2;
             if (CursorPos.X > -ObservatorySatelliteDishUISystem.TargetSize.X / 2 && CursorPos.X < ObservatorySatelliteDishUISystem.TargetSize.X / 2 &&
                 CursorPos.Y > -ObservatorySatelliteDishUISystem.TargetSize.Y / 2 && CursorPos.Y < ObservatorySatelliteDishUISystem.TargetSize.Y / 2 &&
                 ObservatorySatelliteDishUISystem.inUI && ModContent.GetInstance<WizenkleBossConfig>().SatelliteUseMousePosition && !ObservatorySatelliteDishUISystem.observatorySatelliteDishUI.BackPanel.IsMouseHovering)
@@ -45,7 +45,7 @@ namespace WizenkleBoss.Assets.Helper
         {
             if (ObservatorySatelliteDishUISystem.observatorySatelliteDishUI.BackPanel == null)
                 orig(bonus, smart);
-            Vector2 CursorPos = (Main.MouseScreen - new Vector2(Main.screenWidth / 2, Main.screenHeight / 2)) / 2;
+            Vector2 CursorPos = ((Main.MouseScreen * Main.UIScale) - new Vector2(Main.screenWidth / 2, Main.screenHeight / 2)) / 2;
             if (CursorPos.X > -ObservatorySatelliteDishUISystem.TargetSize.X / 2 && CursorPos.X < ObservatorySatelliteDishUISystem.TargetSize.X / 2 &&
                 CursorPos.Y > -ObservatorySatelliteDishUISystem.TargetSize.Y / 2 && CursorPos.Y < ObservatorySatelliteDishUISystem.TargetSize.Y / 2 && 
                 ObservatorySatelliteDishUISystem.inUI && ModContent.GetInstance<WizenkleBossConfig>().SatelliteUseMousePosition && !ObservatorySatelliteDishUISystem.observatorySatelliteDishUI.BackPanel.IsMouseHovering)

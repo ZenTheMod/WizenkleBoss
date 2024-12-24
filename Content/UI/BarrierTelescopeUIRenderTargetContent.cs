@@ -36,53 +36,56 @@ namespace WizenkleBoss.Content.UI
                 Color GradientA;
                 Color GradientB;
 
-                float starAlpha;
+                float starAlpha = 0f;
 
-                // This is how vanilla's time hair dye works************, and i cant be fucked to do litterally anything else :3
-                if (Main.worldSurface * 0.35f < telescopeTilePosition.Y / 16)
+                    // This is how vanilla's time hair dye works************, and i cant be fucked to do litterally anything else :3
+                if (Main.dayTime)
                 {
-                    if (Main.dayTime)
+                    if (Main.time < 6700f)
                     {
-                        if (Main.time < 32000f)
-                        {
-                            float interpolator = (float)Main.time / 32000f;
-                            GradientA = Color.Lerp(new Color(57, 84, 204), new Color(126, 165, 248), interpolator);
-                            GradientB = Color.Lerp(new Color(36, 56, 145), new Color(80, 86, 245), interpolator);
-                        }
-                        else
-                        {
-                            float interpolator = ((float)Main.time - 32000f) / (54000f - 32000f);
-                            GradientA = Color.Lerp(new Color(126, 165, 248), new Color(214, 69, 124), interpolator);
-                            GradientB = Color.Lerp(new Color(80, 86, 245), new Color(255, 237, 102), interpolator);
-                        }
+                        float interpolator = (float)Main.time / 6700f;
+                        starAlpha = 1 - interpolator;
+                        GradientA = Color.Lerp(new Color(57, 84, 204), new Color(126, 165, 248), interpolator);
+                        GradientB = Color.Lerp(new Color(36, 56, 145), new Color(80, 86, 245), interpolator);
+                    }
+                    else if (Main.time < 40000f)
+                    {
+                        GradientA = new Color(126, 165, 248);
+                        GradientB = new Color(80, 86, 245);
                         starAlpha = 0;
-                    }
-                    else if (Main.time < 16200f)
-                    {
-                        float interpolator = (float)Main.time / 16200f;
-                        starAlpha = interpolator;
-                        GradientA = Color.Lerp(new Color(214, 69, 124), new Color(2, 3, 18), interpolator);
-                        GradientB = Color.Lerp(new Color(255, 237, 102), new Color(15, 10, 61), interpolator);
-                    }
-                    else if (Main.time < 24000f)
-                    {
-                        starAlpha = 1;
-                        GradientA = new Color(2, 3, 18);
-                        GradientB = new Color(15, 10, 61);
                     }
                     else
                     {
-                        float interpolator = ((float)Main.time - 24000f) / (32400f - 24000f);
-                        starAlpha = 1 - interpolator;
-                        GradientA = Color.Lerp(new Color(2, 3, 18), new Color(57, 84, 204), interpolator);
-                        GradientB = Color.Lerp(new Color(15, 10, 61), new Color(36, 56, 145), interpolator);
+                        float interpolator = ((float)Main.time - 40000f) / (54000f - 40000f);
+                        GradientA = Color.Lerp(new Color(126, 165, 248), new Color(46, 35, 101), interpolator);
+                        GradientB = Color.Lerp(new Color(80, 86, 245), new Color(63, 59, 104), interpolator);
+                        starAlpha = 0;
+
+                        if (Main.time > 48000f)
+                        {
+                            starAlpha = ((float)Main.time - 48000f) / (54000f - 48000f);
+                        }
                     }
                 }
-                else
+                else if (Main.time < 1100f)
+                {
+                    float interpolator = (float)Main.time / 1100f;
+                    starAlpha = 1;
+                    GradientA = Color.Lerp(new Color(46, 35, 101), new Color(2, 3, 18), interpolator);
+                    GradientB = Color.Lerp(new Color(63, 59, 104), new Color(15, 10, 61), interpolator);
+                }
+                else if (Main.time < 28000f)
                 {
                     starAlpha = 1;
                     GradientA = new Color(2, 3, 18);
                     GradientB = new Color(15, 10, 61);
+                }
+                else
+                {
+                    float interpolator = ((float)Main.time - 28000f) / (32400f - 28000f);
+                    starAlpha = 1;
+                    GradientA = Color.Lerp(new Color(2, 3, 18), new Color(57, 84, 204), interpolator);
+                    GradientB = Color.Lerp(new Color(15, 10, 61), new Color(36, 56, 145), interpolator);
                 }
 
                 // Draw gradient.
@@ -102,7 +105,7 @@ namespace WizenkleBoss.Content.UI
                         float starSize = star.BaseSize * (MathF.Sin(Main.GlobalTimeWrappedHourly / 3f + star.BaseRotation) + 1.2f);
 
                         starSize *= star.SupernovaSize;
-                        starSize = MathF.Max(starSize, 0.35f);
+                        starSize = MathF.Max(starSize * 1.1f, 0.2f);
 
                         Color starColor = Color.Lerp(star.Color * starAlpha, Color.Orange, 1f - star.SupernovaSize) with { A = 0 };
 
