@@ -31,10 +31,10 @@ namespace WizenkleBoss.Assets.Helper
 
         private Vector2 HideTHICKCursor(On_Main.orig_DrawThickCursor orig, bool smart)
         {
-            if (!ObservatorySatelliteDishUISystem.inUI)
+            if (!StarMapUIHelper.inUI)
                 return orig(smart);
 
-            bool hovering = ObservatorySatelliteDishUISystem.CanTargetStar();
+            bool hovering = StarMapUIHelper.CanTargetStar();
 
             if (hovering)
                 return Vector2.Zero;
@@ -44,10 +44,10 @@ namespace WizenkleBoss.Assets.Helper
 
         private void HideCursor(On_Main.orig_DrawCursor orig, Microsoft.Xna.Framework.Vector2 bonus, bool smart)
         {
-            if (!ObservatorySatelliteDishUISystem.inUI)
+            if (!StarMapUIHelper.inUI)
                 orig(bonus, smart);
 
-            bool hovering = ObservatorySatelliteDishUISystem.CanTargetStar();
+            bool hovering = StarMapUIHelper.CanTargetStar();
 
             if (hovering)
                 return;

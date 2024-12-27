@@ -144,7 +144,7 @@ namespace WizenkleBoss.Content.UI
                             ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, font, ((int)telescopeUIOffsetVelocity.X).ToString(), new Vector2(0, 130), Color.Gray, 0, Vector2.Zero, Vector2.One * 0.5f);
                             ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, font, ((int)telescopeUIOffsetVelocity.Y).ToString(), new Vector2(0, 155), Color.Gray, 0, Vector2.Zero, Vector2.One * 0.5f);
 
-                            ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, font, BarrierStarSystem.TheOneImportantThingInTheSky.ToString(), new Vector2(0, 195), Color.Gray, 0, Vector2.Zero, Vector2.One * 0.5f);
+                            ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, font, BarrierStarSystem.BigStar.ToString(), new Vector2(0, 195), Color.Gray, 0, Vector2.Zero, Vector2.One * 0.5f);
 
                             ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, font, BarrierStarSystem.Stars.Where(s => s.State > 0).ToString(), new Vector2(0, 220), Color.Gray, 0, Vector2.Zero, Vector2.One * 0.5f);
                         }

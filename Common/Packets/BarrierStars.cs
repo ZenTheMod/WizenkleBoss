@@ -20,7 +20,7 @@ namespace WizenkleBoss.Common.Packets
             {
                     // HORRIBLE IDEA
                     // its probably FINE cus i only run it for joining players
-                var sendstars = new SendStars(BarrierStarSystem.Stars, BarrierStarSystem.TheOneImportantThingInTheSky);
+                var sendstars = new SendStars(BarrierStarSystem.Stars, BarrierStarSystem.BigStar);
                 sendstars.Send(toClient: fromWho, runLocally: false);
             }
         }
@@ -40,7 +40,7 @@ namespace WizenkleBoss.Common.Packets
         protected override void Receive()
         {
             BarrierStarSystem.Stars = Stars;
-            BarrierStarSystem.TheOneImportantThingInTheSky = ImportantStar;
+            BarrierStarSystem.BigStar = ImportantStar;
         }
     }
 }

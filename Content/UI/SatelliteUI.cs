@@ -9,10 +9,11 @@ using Terraria.UI.Gamepad;
 using WizenkleBoss.Assets.Config;
 using WizenkleBoss.Assets.Helper;
 using WizenkleBoss.Assets.Textures;
+using static WizenkleBoss.Content.UI.StarMapUIHelper;
 
 namespace WizenkleBoss.Content.UI
 {
-    public class ObservatorySatelliteDishUI : BaseFancyUI
+    public class SatelliteUI : BaseFancyUI
     {
         public UIElement ModConfigButton;
         public override void InitializeUI()
@@ -60,17 +61,17 @@ namespace WizenkleBoss.Content.UI
                 IngameFancyUI.OpenUIState(this);
             }, scrollToOption: nameof(WizenkleBossConfig.TelescopeMovementKeyPrompt), centerScrolledOption: true);
         }
-        public override bool DistanceCheck => Main.LocalPlayer.Center.Distance(ObservatorySatelliteDishUISystem.satelliteTilePosition) >= 200;
+        public override bool DistanceCheck => Main.LocalPlayer.Center.Distance(CurrentTileWorldPosition) >= 200;
         public override void OnActivate()
         {
             SoundEngine.PlaySound(AudioRegistry.HumStart with { Volume = 0.2f });
             InitializeUI();
 
-            if (ObservatorySatelliteDishUISystem.targetedStarIndex > -1)
-                ObservatorySatelliteDishUISystem.prompt = ComplexPromptState.Fire;
+            if (TargetedStar > -1)
+                Prompt = PromptState.Fire;
 
-            ObservatorySatelliteDishUISystem.boot = 0;
-            ObservatorySatelliteDishUISystem.ConsoleState = ContactingState.None;
+            BootAnim = 0;
+            TerminalState = ContactingState.None;
 
             if (PlayerInput.UsingGamepadUI)
                 UILinkPointNavigator.ChangePoint(3002);

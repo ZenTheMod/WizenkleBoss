@@ -81,7 +81,7 @@ namespace WizenkleBoss.Content.UI
     public class BarrierStarSystem : ModSystem
     {
         public static BarrierStar[] Stars;
-        public static BarrierStar TheOneImportantThingInTheSky;
+        public static BarrierStar BigStar;
         public static Vector2[] OldMeteoritePosition = new Vector2[25];
         public override void OnWorldLoad()
         {
@@ -106,7 +106,7 @@ namespace WizenkleBoss.Content.UI
                     };
                 }
 
-                TheOneImportantThingInTheSky = new()
+                BigStar = new()
                 {
                     BaseRotation = 0f,
                     BaseSize = 1f,
@@ -128,21 +128,25 @@ namespace WizenkleBoss.Content.UI
         public override void PostUpdateEverything()
         {
                 // null check :sob:
-            if (Stars == null || Stars.Length == 0 || TheOneImportantThingInTheSky == default) 
+            if (Stars == null || Stars.Length == 0 || BigStar == default) 
                 return;
 
-            if (TheOneImportantThingInTheSky.State == SupernovaState.Expanding && BarrierTelescopeUISystem.telescopeTargetByRequest.IsReady)
+            if (BigStar.State == SupernovaState.Expanding && BarrierTelescopeUISystem.telescopeTargetByRequest.IsReady)
             {
                 for (int i = OldMeteoritePosition.Length - 2; i >= 0; i--)
                 {
                     OldMeteoritePosition[i + 1] = OldMeteoritePosition[i];
                 }
                 Vector2 size = BarrierTelescopeUISystem.telescopeTargetByRequest.GetTarget().Size();
-                OldMeteoritePosition[0] = Vector2.Lerp((size / 2f) + TheOneImportantThingInTheSky.Position, new Vector2(size.X / 2, size.Y * 3f), MathHelper.Clamp((TheOneImportantThingInTheSky.SupernovaSize * 4.7f) - 0.2f, 0, 2));
+                OldMeteoritePosition[0] = Vector2.Lerp((size / 2f) + BigStar.Position, new Vector2(size.X / 2, size.Y * 3f), MathHelper.Clamp((BigStar.SupernovaSize * 4.7f) - 0.2f, 0, 2));
             }
-            bool ImportantStarSupernova = TheOneImportantThingInTheSky.State > SupernovaState.None && TheOneImportantThingInTheSky.State != SupernovaState.Complete;
+
+
+            bool ImportantStarSupernova = BigStar.State > SupernovaState.None && BigStar.State != SupernovaState.Complete;
             if (!Stars.Where(s => s.State > SupernovaState.None && s.State != SupernovaState.Complete).Any() && !ImportantStarSupernova)
                 return;
+
+
             for (int i = 0; i <= Stars.Length - 1; i++)
             {
                 BarrierStar star = Stars[i];
@@ -160,18 +164,20 @@ namespace WizenkleBoss.Content.UI
                         Stars[i].State = SupernovaState.Expanding;
                 }
             }
+
+
             if (ImportantStarSupernova)
             {
-                if (TheOneImportantThingInTheSky.State == SupernovaState.Expanding && TheOneImportantThingInTheSky.SupernovaSize <= 1)
-                    TheOneImportantThingInTheSky.SupernovaSize += 0.0006f;
-                else if (TheOneImportantThingInTheSky.State == SupernovaState.Expanding && TheOneImportantThingInTheSky.SupernovaSize > 1)
-                    TheOneImportantThingInTheSky.State = SupernovaState.Complete;
-                if (TheOneImportantThingInTheSky.State == SupernovaState.Shrinking)
+                if (BigStar.State == SupernovaState.Expanding && BigStar.SupernovaSize <= 1)
+                    BigStar.SupernovaSize += 0.0006f;
+                else if (BigStar.State == SupernovaState.Expanding && BigStar.SupernovaSize > 1)
+                    BigStar.State = SupernovaState.Complete;
+                if (BigStar.State == SupernovaState.Shrinking)
                 {
-                    if (TheOneImportantThingInTheSky.SupernovaSize >= 0.005)
-                        TheOneImportantThingInTheSky.SupernovaSize -= 0.003f;
+                    if (BigStar.SupernovaSize >= 0.005)
+                        BigStar.SupernovaSize -= 0.003f;
                     else
-                        TheOneImportantThingInTheSky.State = SupernovaState.Expanding;
+                        BigStar.State = SupernovaState.Expanding;
                 }
             }
         }

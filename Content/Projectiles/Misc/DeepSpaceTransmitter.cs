@@ -161,7 +161,7 @@ namespace WizenkleBoss.Content.Projectiles.Misc
             }
             if (charge > 0.02)
             {
-                if (BarrierTelescopeUISystem.inUI || ObservatorySatelliteDishUISystem.inUI)
+                if (BarrierTelescopeUISystem.inUI || StarMapUIHelper.inUI)
                 {
                     Main.menuMode = 0;
                     IngameFancyUI.Close();
@@ -243,12 +243,12 @@ namespace WizenkleBoss.Content.Projectiles.Misc
             {
                 counter = 0;
 
-                if (BarrierStarSystem.TheOneImportantThingInTheSky.State == SupernovaState.None && ObservatorySatelliteDishUISystem.targetedStarIndex == int.MaxValue)
-                    BarrierStarSystem.TheOneImportantThingInTheSky.State = SupernovaState.Shrinking;
-                if (ObservatorySatelliteDishUISystem.targetedStarIndex != int.MaxValue && ObservatorySatelliteDishUISystem.targetedStarIndex > -1)
+                if (BarrierStarSystem.BigStar.State == SupernovaState.None && StarMapUIHelper.TargetedStar == int.MaxValue)
+                    BarrierStarSystem.BigStar.State = SupernovaState.Shrinking;
+                if (StarMapUIHelper.TargetedStar != int.MaxValue && StarMapUIHelper.TargetedStar > -1)
                 {
-                    if (BarrierStarSystem.Stars[ObservatorySatelliteDishUISystem.targetedStarIndex].State == SupernovaState.None)
-                        BarrierStarSystem.Stars[ObservatorySatelliteDishUISystem.targetedStarIndex].State = SupernovaState.Shrinking;
+                    if (BarrierStarSystem.Stars[StarMapUIHelper.TargetedStar].State == SupernovaState.None)
+                        BarrierStarSystem.Stars[StarMapUIHelper.TargetedStar].State = SupernovaState.Shrinking;
                 }
                 Projectile.Kill();
             }

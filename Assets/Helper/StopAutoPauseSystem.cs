@@ -28,7 +28,7 @@ namespace WizenkleBoss.Assets.Helper
         {
             On_Main.CanPauseGame -= DisableAutoPause;
         }
-        public static bool ShouldNotPause() => BarrierTelescopeUISystem.inUI || ObservatorySatelliteDishUISystem.inUI || DeepSpaceTransmitter.charge > 0.01f;
+        public static bool ShouldNotPause() => BarrierTelescopeUISystem.inUI || StarMapUIHelper.inUI || DeepSpaceTransmitter.charge > 0.01f;
         private bool DisableAutoPause(On_Main.orig_CanPauseGame orig)
         {
             bool pause = orig();

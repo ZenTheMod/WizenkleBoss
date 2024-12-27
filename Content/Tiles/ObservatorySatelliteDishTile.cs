@@ -58,9 +58,6 @@ namespace WizenkleBoss.Content.Tiles
             if (Helper.AnyProjectiles(ModContent.ProjectileType<DeepSpaceTransmitter>()))
                 return false;
 
-            if (Main.player.Where(p => p.active && p.Center.Distance(new Point(i, j).ToWorldCoordinates()) >= 400).Any())
-                return false;
-
             Player player = Main.LocalPlayer;
 
             if (player.Center.Y >= Main.worldSurface * 16)
@@ -87,12 +84,12 @@ namespace WizenkleBoss.Content.Tiles
             Main.chatText = string.Empty;
             Main.inFancyUI = true;
 
-            ObservatorySatelliteDishUISystem.satelliteTilePosition = pos16.ToWorldCoordinates();
+            StarMapUIHelper.CurrentTileWorldPosition = pos16.ToWorldCoordinates();
 
-            ObservatorySatelliteDishUISystem.logtimer = 0f;
-            ObservatorySatelliteDishUISystem.ConsoleState = ContactingState.None;
+            StarMapUIHelper.TerminalAnim = 0f;
+            StarMapUIHelper.TerminalState = ContactingState.None;
 
-            Main.InGameUI.SetState(ObservatorySatelliteDishUISystem.observatorySatelliteDishUI);
+            Main.InGameUI.SetState(StarMapUIHelper.satelliteUI);
 
             return true;
         }
