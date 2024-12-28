@@ -28,14 +28,14 @@ using WizenkleBoss.Assets.Textures;
 
 namespace WizenkleBoss.Content.UI
 {
-    public class BarrierTelescopeUI : BaseFancyUI
+    public class TelescopeUI : BaseFancyUI
     {
-        public override bool DistanceCheck => Main.LocalPlayer.Center.Distance(BarrierTelescopeUISystem.telescopeTilePosition) >= 140;
+        public override bool DistanceCheck => Main.LocalPlayer.Center.Distance(TelescopeUISystem.telescopeTilePosition) >= 140;
         public override void OnActivate()
         {
-            BarrierTelescopeUISystem.telescopeUIOffset = Vector2.Zero;
-            BarrierTelescopeUISystem.telescopeUIOffsetVelocity = Vector2.Zero;
-            BarrierTelescopeUISystem.blinkCounter = -10;
+            TelescopeUISystem.telescopeUIOffset = Vector2.Zero;
+            TelescopeUISystem.telescopeUIOffsetVelocity = Vector2.Zero;
+            TelescopeUISystem.blinkCounter = -10;
 
             InitializeUI();
 

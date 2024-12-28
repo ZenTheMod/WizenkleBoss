@@ -47,7 +47,7 @@ namespace WizenkleBoss.Content.UI
 
                 float interpolator = MathF.Pow(2f, 10 * (ScaleAnim - 1));
 
-                Rectangle frame = new((int)((Main.screenWidth * Main.UIScale) / 2), (int)((Main.screenHeight * Main.UIScale) / 2), (int)(Main.screenHeight * interpolator * Main.UIScale), (int)(Main.screenHeight * interpolator * Main.UIScale));
+                Rectangle frame = new((int)(ScreenSize.X / 2), (int)(ScreenSize.Y / 2), (int)(ScreenSize.Y * interpolator), (int)(ScreenSize.Y * interpolator));
 
                 Main.spriteBatch.Draw(satelliteDishTargetByRequest.GetTarget(), frame, null, Color.White * interpolator, 0, TargetSize / 2, SpriteEffects.None, 0f);
 
@@ -63,7 +63,7 @@ namespace WizenkleBoss.Content.UI
             if (fancyUIIndex != -1)
             {
                 layers.Insert(fancyUIIndex, new LegacyGameInterfaceLayer(
-                    "WizenkleBoss: Satellite Dish UI",
+                    "WizenkleBoss: Satellite UI",
                     delegate
                     {
                         var snapshit = Main.spriteBatch.CaptureSnapshot();

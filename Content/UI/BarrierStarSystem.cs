@@ -131,13 +131,13 @@ namespace WizenkleBoss.Content.UI
             if (Stars == null || Stars.Length == 0 || BigStar == default) 
                 return;
 
-            if (BigStar.State == SupernovaState.Expanding && BarrierTelescopeUISystem.telescopeTargetByRequest.IsReady)
+            if (BigStar.State == SupernovaState.Expanding && TelescopeUISystem.telescopeTargetByRequest.IsReady)
             {
                 for (int i = OldMeteoritePosition.Length - 2; i >= 0; i--)
                 {
                     OldMeteoritePosition[i + 1] = OldMeteoritePosition[i];
                 }
-                Vector2 size = BarrierTelescopeUISystem.telescopeTargetByRequest.GetTarget().Size();
+                Vector2 size = TelescopeUISystem.telescopeTargetByRequest.GetTarget().Size();
                 OldMeteoritePosition[0] = Vector2.Lerp((size / 2f) + BigStar.Position, new Vector2(size.X / 2, size.Y * 3f), MathHelper.Clamp((BigStar.SupernovaSize * 4.7f) - 0.2f, 0, 2));
             }
 

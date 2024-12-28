@@ -32,9 +32,9 @@ using WizenkleBoss.Assets.Config;
 
 namespace WizenkleBoss.Content.UI
 {
-    public partial class BarrierTelescopeUISystem : ModSystem
+    public partial class TelescopeUISystem : ModSystem
     {
-        public static BarrierTelescopeUI barrierTelescopeUI = new();
+        public static TelescopeUI barrierTelescopeUI = new();
 
         public static bool inUI => Main.InGameUI.CurrentState == barrierTelescopeUI;
 

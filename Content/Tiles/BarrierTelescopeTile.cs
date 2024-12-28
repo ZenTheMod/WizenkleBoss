@@ -58,7 +58,7 @@ namespace WizenkleBoss.Content.Tiles
                 Main.LocalPlayer.mount.Dismount(Main.LocalPlayer);
             }
 
-            BarrierTelescopeUISystem.telescopeTilePosition = new Point(i, j).ToWorldCoordinates();
+            TelescopeUISystem.telescopeTilePosition = new Point(i, j).ToWorldCoordinates();
                 // I HATE FANCY UI
             IngameFancyUI.CoverNextFrame();
             Main.ClosePlayerChat();
@@ -70,7 +70,7 @@ namespace WizenkleBoss.Content.Tiles
             Main.chatText = string.Empty;
             Main.inFancyUI = true;
 
-            Main.InGameUI.SetState(BarrierTelescopeUISystem.barrierTelescopeUI);
+            Main.InGameUI.SetState(TelescopeUISystem.barrierTelescopeUI);
                 // IngameFancyUI.OpenUIState(BarrierTelescopeUISystem.barrierTelescopeUI); wouldnt work because this game is coded perfectly :3
             return true;
         }

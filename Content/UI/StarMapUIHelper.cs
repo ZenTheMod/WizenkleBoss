@@ -47,28 +47,27 @@ namespace WizenkleBoss.Content.UI
         public static Vector2 CurrentTileWorldPosition;
 
         public static Vector2 UIPosition;
-        public static float UIZoom = 1f;
-
         public static Vector2 UIVelocity;
+        public static float UIZoom = 1f;
+        public static Matrix UIZoomMatrix =>
+            Matrix.CreateScale(UIZoom) *
+            Matrix.CreateTranslation(SatelliteUISystem.TargetSize.X / 2, SatelliteUISystem.TargetSize.Y / 2, 0);
 
         public static int TargetedStar = -1;
-
         public static int OldTargetedStar = -1;
 
         public static float SelectAnim = 0;
-
         public static float ScaleAnim = 0;
-
         public static float BootAnim = 0f;
 
         public static PromptState Prompt = 0;
         public static float FireAnim = 0f;
-
         public static float PromptAnim = 1f;
 
         public static ContactingState TerminalState;
         public static int TerminalLine = 0;
         public static float TerminalAnim = 0f;
+
         public static Vector2 ScreenSize => new Vector2(Main.screenWidth, Main.screenHeight) * Main.UIScale;
 
         internal const int MaxStarDistance = 830;
@@ -106,14 +105,6 @@ namespace WizenkleBoss.Content.UI
                 Vector2 origin = new(TextureRegistry.ConfigIcon.Width / 2f, TextureRegistry.ConfigIcon.Height);
                 Main.spriteBatch.Draw(TextureRegistry.ConfigIcon, position, null, color, 0f, origin, Vector2.One, SpriteEffects.None, 0f);
             }
-        }
-        public static Vector2 GetScaledStarPosition(BarrierStar star)
-        {
-            Vector2 starPosition = UIPosition + star.Position;
-            starPosition *= UIZoom;
-            starPosition += SatelliteUISystem.TargetSize / 2f;
-
-            return starPosition;
         }
         public static void HandleTerminalText()
         {
@@ -162,11 +153,8 @@ namespace WizenkleBoss.Content.UI
         }
         public static void HandleInput()
         {
+            HandleZoom();
             TriggersPack triggers = PlayerInput.Triggers;
-            if (triggers.Current.ViewZoomIn)
-                UIZoom = MathHelper.Clamp(UIZoom + 0.02f, 1f, 1.6f);
-            if (triggers.Current.ViewZoomOut)
-                UIZoom = MathHelper.Clamp(UIZoom - 0.02f, 1f, 1.6f);
 
             Vector2 normalized = Vector2.Zero;
 
@@ -181,7 +169,7 @@ namespace WizenkleBoss.Content.UI
 
             normalized = normalized.SafeNormalize(Vector2.Zero);
 
-            UIVelocity += normalized * 0.7f * Utils.Remap(ModContent.GetInstance<WizenkleBossConfig>().SatelliteMovementVelocity, 0f, 1f, 1.9f, 3.1f); // WOOOO HARD CODED VALUES
+            UIVelocity += normalized * 0.7f * Utils.Remap(ModContent.GetInstance<WizenkleBossConfig>().SatelliteMovementVelocity, 0f, 1f, 2.3f, 4.6f); // WOOOO HARD CODED VALUES
             UIVelocity *= 0.5f;
             UIPosition += UIVelocity;
             UIPosition = UIPosition.SafeNormalize(Vector2.Zero) * Utils.Clamp(UIPosition.Length(), 0, 550);
@@ -191,6 +179,14 @@ namespace WizenkleBoss.Content.UI
                 BarrierStar star = GetStarFromIndex(TargetedStar);
                 UIPosition = Vector2.Lerp(UIPosition, -star.Position, SelectAnim < 0.51f ? 0.003f : 0.7f);
             }
+        }
+        internal static void HandleZoom()
+        {
+            TriggersPack triggers = PlayerInput.Triggers;
+            if (triggers.Current.ViewZoomIn)
+                UIZoom = MathHelper.Clamp(UIZoom + 0.02f, 1f, 1.6f);
+            if (triggers.Current.ViewZoomOut)
+                UIZoom = MathHelper.Clamp(UIZoom - 0.02f, 1f, 1.6f);
         }
         public static void UpdateSelection()
         {
@@ -237,7 +233,7 @@ namespace WizenkleBoss.Content.UI
             for (int i = 0; i <= BarrierStarSystem.Stars.Length - 1; i++)
             {
                 BarrierStar star = BarrierStarSystem.Stars[i];
-                Vector2 starPosition = GetScaledStarPosition(star);
+                Vector2 starPosition = Vector2.Transform(star.Position + UIPosition, UIZoomMatrix);
 
                 if (starPosition.Distance(centerpos) < 50 * UIZoom && star.Position.Length() < MaxStarDistance)
                 {
@@ -253,9 +249,9 @@ namespace WizenkleBoss.Content.UI
 
                 // Because my dumbass put the eldritch star seperatly to the rest of the array i have to suffer :D
                 // Basically just sets it to a value that it'd never reach normally.
-            Vector2 bigStarPosition = GetScaledStarPosition(bigstar);
+            Vector2 bigStarPosition = Vector2.Transform(bigstar.Position + UIPosition, UIZoomMatrix);
 
-            if (bigStarPosition.Distance(centerpos) < 50 * UIZoom && bigstar.Position.Length() < MaxStarDistance)
+            if (bigStarPosition.Distance(centerpos) < 50 * UIZoom && bigstar.Position.Length() < MaxStarDistance && bigStarPosition.Distance(centerpos) < ClosestPosition.Distance(centerpos))
                 ClosestStar = int.MaxValue;
 
             if (ClosestStar > -1)

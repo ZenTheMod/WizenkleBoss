@@ -161,7 +161,7 @@ namespace WizenkleBoss.Content.Projectiles.Misc
             }
             if (charge > 0.02)
             {
-                if (BarrierTelescopeUISystem.inUI || StarMapUIHelper.inUI)
+                if (TelescopeUISystem.inUI || StarMapUIHelper.inUI)
                 {
                     Main.menuMode = 0;
                     IngameFancyUI.Close();

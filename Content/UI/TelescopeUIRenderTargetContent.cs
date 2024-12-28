@@ -15,7 +15,7 @@ using WizenkleBoss.Assets.Textures;
 
 namespace WizenkleBoss.Content.UI
 {
-    public partial class BarrierTelescopeUISystem : ModSystem
+    public partial class TelescopeUISystem : ModSystem
     {
         public static Vector2 TargetSize = new(540);
         public class TelescopeTargetContent : ARenderTargetContentByRequest

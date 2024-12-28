@@ -1,8 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Microsoft.CodeAnalysis.Text;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using ReLogic.Graphics;
 using System;
+// using System.Drawing; DIE DIE DIE DIE DIE DIE DIE DIE DIE DIE
 using System.IO;
 using System.Linq;
 using Terraria;
@@ -32,43 +34,44 @@ namespace WizenkleBoss.Content.UI
                 device.SetRenderTarget(_target);
                 device.Clear(Color.Black);
 
-                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-
                     // i hate my chud life
                 float overallcolormultiplier = 2 - MathF.Pow(2f, 10 * (ScaleAnim - 1));
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
 
+                    // Draw the background, i would normally use a different clear color, but that seems to break for some users.
                 spriteBatch.Draw(TextureRegistry.Pixel, new Rectangle(0, 0, (int)TargetSize.X, (int)TargetSize.Y), new Color(11, 8, 18) * Utils.Remap(overallcolormultiplier, 1, 2, 1, 10));
 
-                    // Stars.
-
-                    // debug code:
-                        //Vector2 osition = new Vector2((_target.Width / 2f) - 1400, (_target.Height / 2f) - 1400) + satelliteUIOffset;
-                        //spriteBatch.Draw(TextureRegistry.Pixel, new Rectangle((int)osition.X * 3, (int)osition.Y * 3, 2800 * 3, 2800 * 3), Color.Red * 0.4f);
-
-                DynamicSpriteFont font = FontRegistry.SpaceMono;
+                    // USE the matrix
+                spriteBatch.End();
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, default, default, default, null, UIZoomMatrix);
 
                 Vector2 Center = new(_target.Width / 2f, _target.Height / 2f);
+
+                DynamicSpriteFont font = FontRegistry.SpaceMono;
 
                 Color BloomColor = new Color(214, 196, 255) * 0.04f * overallcolormultiplier;
                 BloomColor.A = 0;
 
-                if (TerminalState == ContactingState.None)
-                {
-                    if (BootAnim > 0.3f)
-                        DrawStars(spriteBatch, Center, BloomColor, font);
+                bool InTerminal = TerminalState != ContactingState.None;
 
-                        // Draw the weird bracket selector inspired by you know what at this point.
+                    // Draw the stars.
+                if (BootAnim > 0.3f && !InTerminal)
+                    DrawStars(spriteBatch, BloomColor, font);
 
-                    if (BootAnim > 0.4f)
-                        DrawSelection(spriteBatch, new(214, 196, 255), Center);
+                    // Draw the weird bracket selector inspired by you know what at this point.
+                if (BootAnim > 0.4f && !InTerminal)
+                    DrawSelection(spriteBatch, new(214, 196, 255));
 
-                    if (BootAnim > 0.8f)
-                        DrawTextPrompt(spriteBatch, Center + new Vector2(0, Center.Y / 2), BloomColor, font);
-                }
-                else
-                {
+                    // Reset the sb to remove the matrix.
+                spriteBatch.End();
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+
+                if (BootAnim > 0.8f && !InTerminal)
+                    DrawTextPrompt(spriteBatch, Center + new Vector2(0, Center.Y / 2), BloomColor, font);
+
+                if (InTerminal)
                     DrawLog(spriteBatch, BloomColor, font);
-                }
+
 
                 bool cursormode = ModContent.GetInstance<WizenkleBossConfig>().SatelliteUseMousePosition;
 
@@ -146,7 +149,7 @@ namespace WizenkleBoss.Content.UI
             if (Prompt < PromptState.Fire)
                 ChatManager.DrawColorCodedString(spriteBatch, font, Language.GetTextValue("Mods.WizenkleBoss.UI.Telescope.MovementKeyPromptUnder"), Center, Color.Gray with { A = 0 }, 0, new(fontSizeMovementUnder.X / 2f, 0), Vector2.One * size / 1.3f);
         }
-        public static void DrawSelection(SpriteBatch spriteBatch, Color color, Vector2 Center)
+        public static void DrawSelection(SpriteBatch spriteBatch, Color color)
         {
             float overallcolormultiplier = 2 - MathF.Pow(2f, 10 * (ScaleAnim - 1));
 
@@ -158,11 +161,9 @@ namespace WizenkleBoss.Content.UI
 
                 // ExponentialInOut easing to make the animation feel a little snappier.
             float interpolator = SelectAnim < 0.5f ? MathF.Pow(2f, 10 * SelectAnim * 2f - 10) : 2f - MathF.Pow(2f, 10 * SelectAnim * -2f + 10);
-            interpolator *= UIZoom;
 
             BarrierStar star = GetStarFromIndex(TargetedStar);
-
-            Vector2 position = GetScaledStarPosition(star);
+            Vector2 position = star.Position + UIPosition;
 
             Vector2 origin = TextureRegistry.Circle.Size() / 2;
 
@@ -180,101 +181,93 @@ namespace WizenkleBoss.Content.UI
             if (BootAnim > 0.45f)
                 spriteBatch.Draw(TextureRegistry.Bracket, offsetPosition, null, offsetColor * interpolator, 0, TextureRegistry.Bracket.Size() / 2, 0.06f * interpolator, SpriteEffects.None, 0f);
         }
-        public static void DrawStars(SpriteBatch spriteBatch, Vector2 Center, Color BloomColor, DynamicSpriteFont font)
+        public static void DrawStars(SpriteBatch spriteBatch, Color BloomColor, DynamicSpriteFont font)
         {
             float overallcolormultiplier = 2 - MathF.Pow(2f, 10 * (ScaleAnim - 1));
 
-            float interpolator = SelectAnim < 0.5f ? MathF.Pow(2f, 10 * SelectAnim * 2f - 10) : 2f - MathF.Pow(2f, 10 * SelectAnim * -2f + 10);
             foreach (var star in BarrierStarSystem.Stars.Where(s => s.State <= SupernovaState.Shrinking))
             {
                 bool currentStar = BarrierStarSystem.Stars[(int)MathHelper.Clamp(TargetedStar, 0, BarrierStarSystem.Stars.Length - 1)] == star && !(TargetedStar == -1 || TargetedStar == int.MaxValue);
 
-                float starSize = MathF.Max(star.BaseSize * star.SupernovaSize, 0.35f) * 1.3f * UIZoom;
+                    // Draw the dots slightly bigger.
+                float starSize = MathF.Max(star.BaseSize * star.SupernovaSize, 0.35f) * 1.3f;
 
-                Vector2 starPosition = GetScaledStarPosition(star);
+                Vector2 position = star.Position + UIPosition;
 
-                if (starPosition.Distance(Center) > 900 || star.Position.Length() > 830)
+                if (position.Length() > 900 || star.Position.Length() > 830)
                     continue;
 
                     // Makes the grey stars not cover the brighter more important stars.
                 Color color = (star.BaseSize < 0.55f  && !currentStar ? Color.Gray with { A = 0 } : Color.White) * overallcolormultiplier;
 
-                if (BootAnim > 0.7f)
-                {
-                    spriteBatch.Draw(TextureRegistry.Bloom, starPosition, null, BloomColor, 0, TextureRegistry.Bloom.Size() / 2, starSize * 1.2f, SpriteEffects.None, 0f);
-                    spriteBatch.Draw(TextureRegistry.Bloom, starPosition, null, BloomColor * 0.3f, 0, TextureRegistry.Bloom.Size() / 2, starSize * 2.2f, SpriteEffects.None, 0f);
-                    spriteBatch.Draw(TextureRegistry.Bloom, starPosition, null, BloomColor * 0.05f, 0, TextureRegistry.Bloom.Size() / 2, starSize * 4.4f, SpriteEffects.None, 0f);
-                }
-
-                spriteBatch.Draw(TextureRegistry.Circle, starPosition, null, color, 0, TextureRegistry.Circle.Size() / 2, starSize * 0.2f, SpriteEffects.None, 0f);
-
-                    // don't draw a fuckton of text asshole
-                if (starPosition.Distance(Center) > 300)
-                    continue;
-
-                float offset = OldTargetedStar == -1 || OldTargetedStar == int.MaxValue? 1 : (BarrierStarSystem.Stars[(int)MathHelper.Clamp(OldTargetedStar, 0, BarrierStarSystem.Stars.Length - 1)] == star ? MathHelper.Lerp(1, 1.75f, interpolator) : 1);
-
-                float extraoffset = OldTargetedStar == -1 || OldTargetedStar == int.MaxValue ? 1 : (BarrierStarSystem.Stars[(int)MathHelper.Clamp(OldTargetedStar, 0, BarrierStarSystem.Stars.Length - 1)] == star ? (1 + (MathHelper.Clamp(FireAnim * 3, 0, 1) * 0.6f)) : 1);
-
-                Vector2 textPosition = starPosition + (Vector2.UnitY * 4 * offset * UIZoom * extraoffset);
-
-                float textSize = Utils.Remap(starPosition.Distance(Center), 0, 300, 0.2f, 0.3f) * UIZoom;
-
-                Vector2 textOrigin = Helper.MeasureString(star.Name, font);
-
-                if (star.BaseSize > 0.85f || currentStar)
-                    ChatManager.DrawColorCodedStringShadow(spriteBatch, font, star.Name, textPosition, Color.Black, 0, new Vector2(textOrigin.X / 2f, 0), Vector2.One * textSize * MathF.Min(starSize * offset / UIZoom, 2));
-
-                if (BootAnim > 0.75f)
-                    ChatManager.DrawColorCodedString(spriteBatch, font, star.Name, textPosition, color, 0, new Vector2(textOrigin.X / 2f, 0), Vector2.One * textSize * MathF.Min(starSize * offset / UIZoom, 2));
+                DrawStar(spriteBatch, BloomColor, star, color);
+                bool CurrentStar = !(OldTargetedStar == -1 || OldTargetedStar == int.MaxValue) && BarrierStarSystem.Stars[(int)MathHelper.Clamp(OldTargetedStar, 0, BarrierStarSystem.Stars.Length - 1)] == star;
+                DrawText(spriteBatch, star, font, color, CurrentStar);
             }
 
             BarrierStar bigstar = BarrierStarSystem.BigStar;
             if (bigstar.State <= SupernovaState.Shrinking)
             {
-                float size = bigstar.SupernovaSize * UIZoom;
-                Vector2 position = GetScaledStarPosition(bigstar);
+                Vector2 position = bigstar.Position + UIPosition;
 
-                spriteBatch.Draw(TextureRegistry.Bloom, position, null, BloomColor * 3f, 0, TextureRegistry.Bloom.Size() / 2, 0.8f * size, SpriteEffects.None, 0f);
+                DrawStar(spriteBatch, BloomColor, bigstar, Color.White);
+                DrawText(spriteBatch, bigstar, font, Color.White, OldTargetedStar == int.MaxValue, 1.15f);
 
-                spriteBatch.Draw(TextureRegistry.Bloom, position, null, BloomColor * 0.4f, 0, TextureRegistry.Bloom.Size() / 2, 1.5f * size, SpriteEffects.None, 0f);
-
-                spriteBatch.Draw(TextureRegistry.Bloom, position, null, BloomColor * 0.08f, 0, TextureRegistry.Bloom.Size() / 2, 3.1f * size, SpriteEffects.None, 0f);
-
-                if (BootAnim > 0.9f)
-                    spriteBatch.Draw(TextureRegistry.Circle, position, null, Color.White, 0, TextureRegistry.Circle.Size() / 2, 0.2f * size, SpriteEffects.None, 0f);
-
-                if (position.Distance(Center) < 300)
+                if (Main.GlobalTimeWrappedHourly * 60 % 50 < 25)
                 {
-                    float offset = OldTargetedStar == int.MaxValue ? MathHelper.Lerp(0.8f, 1.2f, interpolator) : 0.8f;
+                    Vector2 warningPosition = position + (-Vector2.UnitY * 29);
 
-                    float extraoffset = OldTargetedStar != int.MaxValue ? 1 : (1 + (MathHelper.Clamp(FireAnim * 3, 0, 1) * 0.6f));
+                    Vector2 warningSize = Helper.MeasureString("!", font);
 
-                    Vector2 textPosition = position + (Vector2.UnitY * 6 * offset * UIZoom * extraoffset);
+                    float textScale = Utils.Remap(position.Length(), 0, 300, 0.4f, 0.5f);
 
-                    float textSize = Utils.Remap(position.Distance(Center), 0, 300, 0.3f, 0.4f) * UIZoom;
-
-                    Vector2 textOrigin = Helper.MeasureString(bigstar.Name, font);
-
-                    ChatManager.DrawColorCodedStringShadow(spriteBatch, font, bigstar.Name, textPosition, Color.Black, 0, new Vector2(textOrigin.X / 2f, 0), Vector2.One * textSize * offset);
-
-                    ChatManager.DrawColorCodedString(spriteBatch, font, bigstar.Name, textPosition, Color.White, 0, new Vector2(textOrigin.X / 2f, 0), Vector2.One * textSize * offset);
-
-                    if ((Main.GlobalTimeWrappedHourly * 60) % 50 < 25)
-                    {
-                        Vector2 warningPosition = position + (-Vector2.UnitY * 25 * UIZoom);
-
-                        Vector2 warningOrigin = Helper.MeasureString("!", font);
-
-                        if (BootAnim > 0.8f)
-                            ChatManager.DrawColorCodedStringShadow(spriteBatch, font, "!", warningPosition, Color.Black, 0, new Vector2(warningOrigin.X / 2f, 0), Vector2.One * textSize * 1.3f);
-                        if (BootAnim > 0.7f)
-                            ChatManager.DrawColorCodedString(spriteBatch, font, FireAnim.ToString(), warningPosition, Color.Red * overallcolormultiplier, 0, new Vector2(warningOrigin.X / 2f, 0), Vector2.One * textSize * 1.3f);
-                    }
+                    if (BootAnim > 0.8f)
+                        ChatManager.DrawColorCodedStringShadow(spriteBatch, font, "!", warningPosition, Color.Black, 0, new Vector2(warningSize.X / 2f, 0), Vector2.One * textScale * 1.2f);
+                    if (BootAnim > 0.7f)
+                        ChatManager.DrawColorCodedString(spriteBatch, font, "!", warningPosition, Color.Red * overallcolormultiplier, 0, new Vector2(warningSize.X / 2f, 0), Vector2.One * textScale * 1.2f);
                 }
             }
         }
+        internal static void DrawText(SpriteBatch spriteBatch, BarrierStar star, DynamicSpriteFont font, Color color, bool CurrentStar, float Scale = 1f)
+        {
+            Vector2 position = star.Position + UIPosition;
+            if (position.Length() > 300)
+                return;
 
+            float interpolator = SelectAnim < 0.5f ? MathF.Pow(2f, 10 * SelectAnim * 2f - 10) : 2f - MathF.Pow(2f, 10 * SelectAnim * -2f + 10);
+
+            float offset = CurrentStar ? MathHelper.Lerp(1, 1.65f, interpolator) : 1;
+
+            float extraoffset = CurrentStar ? 1 + (MathHelper.Clamp(FireAnim * 3, 0, 1) * 0.6f) : 1;
+
+            Vector2 textPosition = position + (Vector2.UnitY * 4 * offset * extraoffset);
+
+            float size = MathF.Max(star.BaseSize * star.SupernovaSize, 0.35f) * 1.3f;
+            float textScale = Utils.Remap(position.Length(), 0, 300, 0.3f, 0.2f);
+
+            Vector2 textSize = Helper.MeasureString(star.Name, font);
+
+            if (star.BaseSize > 0.85f || CurrentStar)
+                ChatManager.DrawColorCodedStringShadow(spriteBatch, font, star.Name, textPosition, Color.Black, 0, new Vector2(textSize.X / 2f, 0), Vector2.One * textScale * MathF.Min(size * offset, 2) * Scale);
+
+            if (BootAnim > 0.75f)
+                ChatManager.DrawColorCodedString(spriteBatch, font, star.Name, textPosition, color, 0, new Vector2(textSize.X / 2f, 0), Vector2.One * textScale * MathF.Min(size * offset, 2) * Scale);
+        }
+        internal static void DrawStar(SpriteBatch spriteBatch, Color BloomColor, BarrierStar star, Color color)
+        {
+            float size = MathF.Max(star.BaseSize * star.SupernovaSize, 0.35f) * 1.3f;
+            Vector2 position = star.Position + UIPosition;
+
+            if (BootAnim > 0.7f)
+            {
+                spriteBatch.Draw(TextureRegistry.Bloom, position, null, BloomColor, 0, TextureRegistry.Bloom.Size() / 2, size * 1.2f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(TextureRegistry.Bloom, position, null, BloomColor * 0.3f, 0, TextureRegistry.Bloom.Size() / 2, size * 2.2f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(TextureRegistry.Bloom, position, null, BloomColor * 0.05f, 0, TextureRegistry.Bloom.Size() / 2, size * 4.4f, SpriteEffects.None, 0f);
+            }
+
+            if (BootAnim > 0.55f)
+                spriteBatch.Draw(TextureRegistry.Circle, position, null, color, 0, TextureRegistry.Circle.Size() / 2, 0.2f * size, SpriteEffects.None, 0f);
+        }
 
         public static SatelliteDishTargetContent satelliteDishTargetByRequest;
         public override void Load()
