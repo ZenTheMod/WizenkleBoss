@@ -29,6 +29,13 @@ namespace WizenkleBoss.Assets.Helper
         }
         public override void PostUpdateBuffs()
         {
+            if (DeepSpaceTransmitter.charge > 0)
+            {
+                if (!Helper.AnyProjectiles(ModContent.ProjectileType<DeepSpaceTransmitter>()))
+                {
+                    DeepSpaceTransmitter.charge = 0;
+                }
+            }
             if (StopAutoPauseSystem.ShouldNotPause())
             {
                 Player.releaseMount = false;

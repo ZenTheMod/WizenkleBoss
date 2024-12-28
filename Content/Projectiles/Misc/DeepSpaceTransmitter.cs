@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.Map;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 using Terraria.UI;
@@ -16,8 +17,6 @@ using WizenkleBoss.Assets.Helper;
 using WizenkleBoss.Assets.Textures;
 using WizenkleBoss.Content.Tiles;
 using WizenkleBoss.Content.UI;
-using static WizenkleBoss.Assets.Helper.InkSystem;
-using static WizenkleBoss.Content.Projectiles.Misc.DeepSpaceTransmitter;
 
 namespace WizenkleBoss.Content.Projectiles.Misc
 {
@@ -72,13 +71,14 @@ namespace WizenkleBoss.Content.Projectiles.Misc
 
                     // I was fucking around in shadertoy for like an hour with custom textures and found that these two look the best.
                     // Also, for you bitchass theives who arent going to credit me, heres the shader :3 https://www.shadertoy.com/view/4fKyzt
+                device.Textures[0] = TextureRegistry.Lichen;
+                device.SamplerStates[0] = SamplerState.LinearWrap;
                 device.Textures[1] = TextureRegistry.Space[1];
                 device.SamplerStates[1] = SamplerState.LinearWrap;
                 device.Textures[2] = TextureRegistry.Wood;
                 device.SamplerStates[2] = SamplerState.LinearWrap;
 
                 Laser.Value.CurrentTechnique.Passes[0].Apply();
-
 
                 foreach (var p in Main.ActiveProjectiles)
                 {
@@ -131,8 +131,25 @@ namespace WizenkleBoss.Content.Projectiles.Misc
 
         public void Laser(SpriteBatch spriteBatch, GraphicsDevice device)
         {
-            if (charge > 0)
-                spriteBatch.Draw(TextureRegistry.Pixel, new Rectangle((int)(Projectile.Center.X - Main.screenPosition.X) / 2, (int)(Projectile.Center.Y - Main.screenPosition.Y) / 2, 1500, (int)(420 * charge) + 4), null, Color.White, (-Vector2.One).ToRotation(), new Vector2(TextureRegistry.Pixel.Width * 0.01f, TextureRegistry.Pixel.Height / 2f), SpriteEffects.None, 0f);
+            if (charge <= 0.02)
+                return;
+            List<VertexInfo2> verticies = [];
+            for (float i = 0; i < _PointsCache.Count; i++)
+            {
+                float progress = i / _PointsCache.Count;
+
+                float width = 420 * charge;
+
+                verticies.Add(new VertexInfo2((_PointsCache[(int)i] - Main.screenPosition + new Vector2(width, 0).RotatedBy(Projectile.rotation - MathHelper.PiOver2)) / 2,
+                    new Vector3(progress, 0f, 0f),
+                    Color.White));
+                verticies.Add(new VertexInfo2((_PointsCache[(int)i] - Main.screenPosition + new Vector2(width, 0).RotatedBy(Projectile.rotation + MathHelper.PiOver2)) / 2,
+                    new Vector3(progress, 1f, 0f),
+                    Color.White));
+            }
+            if (verticies.Count > 3)
+                device.DrawUserPrimitives(PrimitiveType.TriangleStrip, verticies.ToArray(), 0, verticies.Count - 2);
+                //spriteBatch.Draw(TextureRegistry.Pixel, new Rectangle((int)(Projectile.Center.X - Main.screenPosition.X) / 2, (int)(Projectile.Center.Y - Main.screenPosition.Y) / 2, 1500, (int)(420 * charge) + 4), null, Color.White, Projectile.rotation, new Vector2(TextureRegistry.Pixel.Width * 0.01f, TextureRegistry.Pixel.Height / 2f), SpriteEffects.None, 0f);
         }
         public override string Texture => "WizenkleBoss/Assets/Textures/MagicPixel";
         public override void SetDefaults()
@@ -151,9 +168,13 @@ namespace WizenkleBoss.Content.Projectiles.Misc
         private LaserState laserState = 0;
         private bool SoundPlayed = false;
         private int counter;
+
+        private readonly List<Vector2> _PointsCache = [];
         public override void AI()
         {
             Center = Projectile.Center;
+            Projectile.rotation = (-Vector2.One).ToRotation();
+            PointSetUp();
             for (int i = 0; i < Points.Length - 1; i++)
             {
                 if (Points[i] != Vector2.Zero)
@@ -179,9 +200,17 @@ namespace WizenkleBoss.Content.Projectiles.Misc
                     OpenAI(); // omg just like the shitty ai company !!!!! yayyy i love stealing work and profiting off of it !!!!!!!!!!!!!!!!!!!!
                     break;
                 case LaserState.FadeOut:
-                    FadeOutAI();
+                        FadeOutAI();
                     break;
             }
+        }
+        private void PointSetUp()
+        {
+            int length = 27;
+            Vector2 endPoint = Projectile.Center + Projectile.rotation.ToRotationVector2() * 3000;
+            _PointsCache.Clear();
+            for (int i = 0; i < length; i++)
+                _PointsCache.Add(Vector2.Lerp(Projectile.Center, endPoint, (float)i / (float)(length - 1)));
         }
         private void FadeInAI()
         {
@@ -242,13 +271,12 @@ namespace WizenkleBoss.Content.Projectiles.Misc
             if (darkness <= 0f)
             {
                 counter = 0;
-
-                if (BarrierStarSystem.BigStar.State == SupernovaState.None && StarMapUIHelper.TargetedStar == int.MaxValue)
+                if (BarrierStarSystem.BigStar.State == SupernovaState.None && Projectile.ai[0] >= int.MaxValue / 2)
                     BarrierStarSystem.BigStar.State = SupernovaState.Shrinking;
-                if (StarMapUIHelper.TargetedStar != int.MaxValue && StarMapUIHelper.TargetedStar > -1)
+                if ((int)Projectile.ai[0] != int.MaxValue && (int)Projectile.ai[0] > -1)
                 {
-                    if (BarrierStarSystem.Stars[StarMapUIHelper.TargetedStar].State == SupernovaState.None)
-                        BarrierStarSystem.Stars[StarMapUIHelper.TargetedStar].State = SupernovaState.Shrinking;
+                    if (BarrierStarSystem.Stars[(int)Projectile.ai[0]].State == SupernovaState.None)
+                        BarrierStarSystem.Stars[(int)Projectile.ai[0]].State = SupernovaState.Shrinking;
                 }
                 Projectile.Kill();
             }

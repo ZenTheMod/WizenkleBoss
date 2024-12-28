@@ -129,7 +129,7 @@ namespace WizenkleBoss.Content.UI
                     IngameFancyUI.Close();
 
                         // Spawn God 
-                    Projectile.NewProjectile(new EntitySource_TileInteraction(Main.LocalPlayer, (int)CurrentTileWorldPosition.X / 16, (int)CurrentTileWorldPosition.Y / 16), CurrentTileWorldPosition, Vector2.Zero, ModContent.ProjectileType<DeepSpaceTransmitter>(), 0, 0, Main.myPlayer);
+                    Projectile.NewProjectile(new EntitySource_TileInteraction(Main.LocalPlayer, (int)CurrentTileWorldPosition.X / 16, (int)CurrentTileWorldPosition.Y / 16), CurrentTileWorldPosition, Vector2.Zero, ModContent.ProjectileType<DeepSpaceTransmitter>(), 0, 0, Main.myPlayer, TargetedStar);
                 }
             }
             if (TerminalState == ContactingState.ErrorNoPower || TerminalState == ContactingState.ErrorStarNotFound)
@@ -299,13 +299,13 @@ namespace WizenkleBoss.Content.UI
                             TerminalLine = 0;
                             if (TargetedStar != int.MaxValue && TargetedStar > -1)
                             {
-                                if (BarrierStarSystem.Stars[TargetedStar].State >= SupernovaState.Expanding)
+                                if (BarrierStarSystem.Stars[TargetedStar].State != SupernovaState.None)
                                 {
                                     TerminalState = ContactingState.ErrorStarNotFound;
                                     break;
                                 }
                             }
-                            if (BarrierStarSystem.BigStar.State >= SupernovaState.Expanding && TargetedStar == int.MaxValue)
+                            if (BarrierStarSystem.BigStar.State != SupernovaState.None && TargetedStar == int.MaxValue)
                             {
                                 TerminalState = ContactingState.ErrorStarNotFound;
                                 break;
