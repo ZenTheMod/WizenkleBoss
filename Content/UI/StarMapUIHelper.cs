@@ -311,8 +311,8 @@ namespace WizenkleBoss.Content.UI
                                 break;
                             }
                             TerminalState = ContactingState.ContactingHighPower;
-                            //if (lackOFpOWER)
-                            //    ConsoleState = ContactingState.ErrorStarNotFound;
+                                // if (lackOFpOWER)
+                                //     ConsoleState = ContactingState.ErrorStarNotFound;
                         }
                         break;
                     }
