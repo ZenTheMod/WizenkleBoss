@@ -2,29 +2,18 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.Audio;
-using Terraria.GameContent;
-using Terraria.Map;
 using Terraria.ModLoader;
-using Terraria.ModLoader.Config;
 using Terraria.UI;
 using WizenkleBoss.Assets.Config;
 using WizenkleBoss.Assets.Helper;
 using WizenkleBoss.Assets.Textures;
-using WizenkleBoss.Content.Tiles;
 using WizenkleBoss.Content.UI;
+using static WizenkleBoss.Content.Projectiles.Misc.DeepSpaceTransmitterHelper;
 
 namespace WizenkleBoss.Content.Projectiles.Misc
 {
-        // Im doing this in the stupid rare chance gameraiders101 pulls a gameraiders101 and somehow breaks it idk :P
-    public interface IDrawLasers
-    {
-        public void Laser(SpriteBatch spriteBatch, GraphicsDevice device);
-    }
         // Super stupid in the long run.
     public enum LaserState
     {
@@ -34,122 +23,79 @@ namespace WizenkleBoss.Content.Projectiles.Misc
     }
     public class DeepSpaceTransmitter : ModProjectile, IDrawLasers
     {
-        public static float charge;
-        public static float darkness;
-        private static Vector2[] Points = new Vector2[40];
-        private static Vector2 Center;
-        public class DeepSpaceTransmitterTargetContent : ARenderTargetContentByRequest
-        {
-            protected override void HandleUseReqest(GraphicsDevice device, SpriteBatch spriteBatch)
-            {
-                PrepareARenderTarget_AndListenToEvents(ref _target, device, Main.screenWidth / 2, Main.screenHeight / 2, (RenderTargetUsage)1);
-
-                device.SetRenderTarget(_target);
-                device.Clear(Color.Transparent);
-                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-
-                spriteBatch.Draw(ObservatorySatelliteDishTile.GlowTexture.Value, (Center - new Vector2(8) - Main.screenPosition) / 2f, null, (Color.Lerp(new Color(255, 196, 255), new Color(255, 197, 147), charge) * charge * 0.2f) with { A = 0 }, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0f);
-
-                spriteBatch.Draw(TextureRegistry.Bloom, (Center - Main.screenPosition) / 2f, null, (Color.Lerp(new Color(255, 196, 255), new Color(255, 197, 147), charge) * darkness * 0.5f) with { A = 0 }, 0f, TextureRegistry.Bloom.Size() / 2, 0.6f * darkness + 0.01f, SpriteEffects.None, 0f);
-
-                for (int i = 0; i < Points.Length - 1; i++)
-                    spriteBatch.Draw(TextureRegistry.Bloom, (Points[i] - Main.screenPosition) / 2, null, (Color.Lerp(new Color(255, 196, 255), new Color(255, 197, 147), charge)) with { A = 0 }, 0, TextureRegistry.Bloom.Size() / 2, .03f, SpriteEffects.None, 0f);
-                
-                var Laser = Helper.TransmitShader;
-
-                    // Param setup.
-                Laser.Value.Parameters["globalTime"]?.SetValue(Main.GlobalTimeWrappedHourly);
-                Laser.Value.Parameters["laserColor"]?.SetValue(new Color(85, 0, 255, 255).ToVector4());
-                Laser.Value.Parameters["baseColor"]?.SetValue(new Color(0, 0, 0, 0).ToVector4());
-
-                    // Quantization
-                Laser.Value.Parameters["stepSize"]?.SetValue(MathHelper.Lerp(18f, 3f, charge));
-
-                    // Id like to mention this line in specific, I make charge use an exponential easing so that it extenuates the more 'pink'/'purple' hues rather than the 'sunset' colors.
-                Laser.Value.Parameters["centerIntensity"].SetValue(Utils.Remap(MathF.Pow(2, 10 * (charge - 1)), 0f, 1f, 500f, 100000f));
-                Laser.Value.Parameters["laserStartPercentage"].SetValue(MathHelper.Lerp(0.012f, 0.035f, charge));
-
-                    // I was fucking around in shadertoy for like an hour with custom textures and found that these two look the best.
-                    // Also, for you bitchass theives who arent going to credit me, heres the shader :3 https://www.shadertoy.com/view/4fKyzt
-                device.Textures[0] = TextureRegistry.Lichen;
-                device.SamplerStates[0] = SamplerState.LinearWrap;
-                device.Textures[1] = TextureRegistry.Space[1];
-                device.SamplerStates[1] = SamplerState.LinearWrap;
-                device.Textures[2] = TextureRegistry.Wood;
-                device.SamplerStates[2] = SamplerState.LinearWrap;
-
-                Laser.Value.CurrentTechnique.Passes[0].Apply();
-
-                foreach (var p in Main.ActiveProjectiles)
-                {
-                    if (!p.active || p.ModProjectile is not IDrawLasers drawer)
-                        continue;
-                    drawer.Laser(spriteBatch, device);
-                }
-
-                spriteBatch.End();
-                device.SetRenderTarget(null);
-                _wasPrepared = true;
-            }
-        }
-        public static DeepSpaceTransmitterTargetContent deepSpaceTransmitterTargetByRequest;
-        public override void Load()
-        {
-            deepSpaceTransmitterTargetByRequest = new();
-            Main.ContentThatNeedsRenderTargets.Add(deepSpaceTransmitterTargetByRequest);
-
-            On_Main.DrawInfernoRings += DrawAfterInfernoRings;
-        }
-        public override void Unload()
-        {
-            Main.ContentThatNeedsRenderTargets.Remove(deepSpaceTransmitterTargetByRequest);
-            On_Main.DrawInfernoRings -= DrawAfterInfernoRings;
-        }
-
-        private static void DrawAfterInfernoRings(On_Main.orig_DrawInfernoRings orig, Main self)
-        {
-            orig(self);
-
-            if (Main.projectile.Where(p => p.active && p.ModProjectile is IDrawLasers).Any())
-            {
-                Main.spriteBatch.End();
-                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
-
-                Main.spriteBatch.Draw(TextureRegistry.Pixel, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.Black * (darkness - 0.1f));
-
-                Main.spriteBatch.End();
-                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-
-                deepSpaceTransmitterTargetByRequest.Request();
-                if (deepSpaceTransmitterTargetByRequest.IsReady)
-                {
-                    Main.spriteBatch.Draw(deepSpaceTransmitterTargetByRequest.GetTarget(), new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), null, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0f);
-                }
-                Main.spriteBatch.ResetToDefault();
-            }
-        }
-
         public void Laser(SpriteBatch spriteBatch, GraphicsDevice device)
         {
-            if (charge <= 0.02)
+                // Stops weird results when at really low charge values.
+            if (charge <= 0.003)
                 return;
             List<VertexInfo2> verticies = [];
+
+                // Get an exponental charge value similar to how I got the center intensity value.
+            float exponentialCharge = MathF.Pow(2, 10 * (charge - 1)) * 0.75f;
             for (float i = 0; i < _PointsCache.Count; i++)
             {
                 float progress = i / _PointsCache.Count;
 
-                float width = 420 * charge;
+                    // Make the laser get bigger and wobblier
+                float baseWidth = 480 * charge;
+                float strongWidth = 830 * exponentialCharge + (MathF.Sin(i + Main.GlobalTimeWrappedHourly * -40) * 45);
+                float width = MathHelper.Lerp(baseWidth, strongWidth, progress * exponentialCharge);
+
+                    // Color color = Color.Lerp(Color.White, Color.Black, progress);
+
+                        //                                                   :::::                                            
+                        //                                                  :+@@@+:                                           
+                        //                                                  :+@@@+:                                           
+                        //          ____________________                    :+@@@*:                                           
+                        //       /                        \                 :+@@@*:                                           
+                        //      | its primitive time bitch |                :+@@@#:                                           
+                        //       \                        /                 :*@@@%:                                           
+                        //          ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ |                  :+@@@@::
+                        //                              \|                :::+@@@@---:                                        
+                        //  ::= *#*-::                   \                :+++======-:                                        
+                        // :+@@@%@@@-:                                       ::...::
+                        //:=%@+:::+@% -                                      :......::
+                        // :%@*:  :+@*:                                    ::.......::
+                        // ::-::  ::#@-:                                  ::.........::                                       
+                        //         :-%@::                                 :.......:....:                                      
+                        //          :*@@%:::                             :.... =.:::.....:                                     
+                        //          -#@@@%####+-:::::::                 :...--:....:-....:                                    
+                        //          ::*@@--= *#%%%%%@@@@#=----::::      ::..:....#-  ..:...:                                   
+                        //            :=@#::  :::::::-=+++*%@@@%#**+-:::..:.   .%=    .:...::                                 
+                        //             :*@*:               :::::::=#@@%=.:..   .+=.   .-....::                                
+                        //             ::%@=:                       ::....:-.  .::   .::.....::::::::::                       
+                        //              ::@% -:                      ::...... = -.    .-:::......*@@%%%%%#*=-:::::::        :%+: 
+                        //               :+@*:                     ::..........+--:::...........::::::= +####%@@%%*====--:=%+: 
+                        //                :#@+:                   ::.............................:       :::::::-===+#%@@@%:: 
+                        //                :-@@=:                  :..................:-...........::                 ::::#@%-:
+                        //                 :-@#:                 :...........+@%+-=#@@#............::                   :-%@*:
+                        //                  :+@=:               :............+@@-..:+@% -............::                   :=@+:
+                        //                  :-#@::             :.....................................::                    :  
+                        //                   ::::             ::......................................:                       
+                        //                                    ::...........:::........:==:.......:::::                        
+                        //                                     :::::::::::*% +::::::::::=%% +::
+                        //                                             :=@#-:          ::=%@+::                               
+                        //                                            -*@+::             ::=%% +::
+                        //                                            -#@::                ::+%%+::                           
+                        //                                            :=%%=:                 ::+%% +::    :::                  
+                        //                                             ::@% -:                  ::+@%=:::=%@-:                 
+                        //                                           :====%@=:                   ::+%%%@% *-:                  
+                        //  triangles are so hot am i right          :+#%%%%*:                     ::++-::                    
+                        //                                              ::::                                                  
 
                 verticies.Add(new VertexInfo2((_PointsCache[(int)i] - Main.screenPosition + new Vector2(width, 0).RotatedBy(Projectile.rotation - MathHelper.PiOver2)) / 2,
-                    new Vector3(progress, 0f, 0f),
-                    Color.White));
+                    new Vector3(progress, 0f, 0f), // texCoord
+                    Color.White)); // doesnt matter what color (itll get replaced by our shader anyway)
+
+                    // Then copy my own homework and change - MathHelper.PiOver2 to + MathHelper.PiOver2;
+
+                    // -- REMEMBER, verticies MUST be created CLOCKWISE, or whatever lolxd said. --
                 verticies.Add(new VertexInfo2((_PointsCache[(int)i] - Main.screenPosition + new Vector2(width, 0).RotatedBy(Projectile.rotation + MathHelper.PiOver2)) / 2,
                     new Vector3(progress, 1f, 0f),
                     Color.White));
             }
             if (verticies.Count > 3)
                 device.DrawUserPrimitives(PrimitiveType.TriangleStrip, verticies.ToArray(), 0, verticies.Count - 2);
-                //spriteBatch.Draw(TextureRegistry.Pixel, new Rectangle((int)(Projectile.Center.X - Main.screenPosition.X) / 2, (int)(Projectile.Center.Y - Main.screenPosition.Y) / 2, 1500, (int)(420 * charge) + 4), null, Color.White, Projectile.rotation, new Vector2(TextureRegistry.Pixel.Width * 0.01f, TextureRegistry.Pixel.Height / 2f), SpriteEffects.None, 0f);
         }
         public override string Texture => "WizenkleBoss/Assets/Textures/MagicPixel";
         public override void SetDefaults()
@@ -165,6 +111,8 @@ namespace WizenkleBoss.Content.Projectiles.Misc
 
             Projectile.hide = true;
         }
+
+            // WOO ENUMS
         private LaserState laserState = 0;
         private bool SoundPlayed = false;
         private int counter;
@@ -174,12 +122,17 @@ namespace WizenkleBoss.Content.Projectiles.Misc
         {
             Center = Projectile.Center;
             Projectile.rotation = (-Vector2.One).ToRotation();
-            PointSetUp();
-            for (int i = 0; i < Points.Length - 1; i++)
+
+                // Close enough to a runonce bool.
+            if (!SoundPlayed)
+                PointSetUp();
+
+            for (int i = 0; i < Particles.Length - 1; i++)
             {
-                if (Points[i] != Vector2.Zero)
-                    Points[i] = Projectile.timeLeft > 8998 || laserState == LaserState.FadeOut ? Vector2.Zero : Vector2.Lerp(Points[i], Projectile.Center, 0.09f);
+                if (Particles[i] != Vector2.Zero)
+                    Particles[i] = Projectile.timeLeft > 8998 || laserState == LaserState.FadeOut ? Vector2.Zero : Vector2.Lerp(Particles[i], Projectile.Center, 0.09f);
             }
+
             if (charge > 0.02)
             {
                 if (TelescopeUISystem.inUI || StarMapUIHelper.inUI)
@@ -200,31 +153,46 @@ namespace WizenkleBoss.Content.Projectiles.Misc
                     OpenAI(); // omg just like the shitty ai company !!!!! yayyy i love stealing work and profiting off of it !!!!!!!!!!!!!!!!!!!!
                     break;
                 case LaserState.FadeOut:
-                        FadeOutAI();
+                    FadeOutAI();
                     break;
+            }
+        }
+        public override void OnKill(int timeLeft)
+        {
+                // Kill whatever unfortionate star stands in my way :badasslonewolf:
+            if (BarrierStarSystem.BigStar.State == SupernovaState.None && Projectile.ai[0] >= int.MaxValue / 2) // float conversion :3
+                BarrierStarSystem.BigStar.State = SupernovaState.Shrinking;
+            if ((int)Projectile.ai[0] != int.MaxValue && (int)Projectile.ai[0] > -1)
+            {
+                if (BarrierStarSystem.Stars[(int)Projectile.ai[0]].State == SupernovaState.None)
+                    BarrierStarSystem.Stars[(int)Projectile.ai[0]].State = SupernovaState.Shrinking;
             }
         }
         private void PointSetUp()
         {
-            int length = 27;
+                // yeah they call me ms. efficient baby WOOOO.
+            int length = 90;
             Vector2 endPoint = Projectile.Center + Projectile.rotation.ToRotationVector2() * 3000;
             _PointsCache.Clear();
+            Vector2 offset = Vector2.One * 20;
             for (int i = 0; i < length; i++)
-                _PointsCache.Add(Vector2.Lerp(Projectile.Center, endPoint, (float)i / (float)(length - 1)));
+                _PointsCache.Add(Vector2.Lerp(Projectile.Center + offset, endPoint, (float)i / (float)(length - 1)));
         }
         private void FadeInAI()
         {
+                // Lustrous particles
             if (Main.rand.NextBool())
             {
-                int n = Main.rand.Next(Points.Length);
-                if (Points[n].Distance(Projectile.Center) < 1 || Points[n].Length() < 2)
+                int n = Main.rand.Next(Particles.Length);
+                if (Particles[n].Distance(Projectile.Center) < 1 || Particles[n].Length() < 2)
                 {
-                    Points[n] = Projectile.Center + Main.rand.NextVector2CircularEdge(224, 224);
+                    Particles[n] = Projectile.Center + Main.rand.NextVector2CircularEdge(224, 224);
                 }
             }
+
             if (!SoundPlayed)
             {
-                    // dont defean the elderly
+                    // Don't defean the elderly.
                 if (ModContent.GetInstance<WizenkleBossConfig>().LaserLoop)
                     SoundEngine.PlaySound(AudioRegistry.SateliteDeathray);
                 SoundPlayed = true;
@@ -271,13 +239,6 @@ namespace WizenkleBoss.Content.Projectiles.Misc
             if (darkness <= 0f)
             {
                 counter = 0;
-                if (BarrierStarSystem.BigStar.State == SupernovaState.None && Projectile.ai[0] >= int.MaxValue / 2)
-                    BarrierStarSystem.BigStar.State = SupernovaState.Shrinking;
-                if ((int)Projectile.ai[0] != int.MaxValue && (int)Projectile.ai[0] > -1)
-                {
-                    if (BarrierStarSystem.Stars[(int)Projectile.ai[0]].State == SupernovaState.None)
-                        BarrierStarSystem.Stars[(int)Projectile.ai[0]].State = SupernovaState.Shrinking;
-                }
                 Projectile.Kill();
             }
             else
