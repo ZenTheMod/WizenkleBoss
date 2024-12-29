@@ -129,7 +129,7 @@ namespace WizenkleBoss.Content.UI
                     IngameFancyUI.Close();
 
                         // Spawn God 
-                    Projectile.NewProjectile(new EntitySource_TileInteraction(Main.LocalPlayer, (int)CurrentTileWorldPosition.X / 16, (int)CurrentTileWorldPosition.Y / 16), CurrentTileWorldPosition, Vector2.Zero, ModContent.ProjectileType<DeepSpaceTransmitter>(), 0, 0, Main.myPlayer, TargetedStar);
+                    Projectile.NewProjectile(new EntitySource_TileInteraction(Main.LocalPlayer, (int)CurrentTileWorldPosition.X / 16, (int)CurrentTileWorldPosition.Y / 16), CurrentTileWorldPosition, Vector2.Zero, ModContent.ProjectileType<DeepSpaceTransmitter>(), 4000, 0, -1, TargetedStar);
                 }
             }
             if (TerminalState == ContactingState.ErrorNoPower || TerminalState == ContactingState.ErrorStarNotFound)
