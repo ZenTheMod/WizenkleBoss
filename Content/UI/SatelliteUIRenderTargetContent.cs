@@ -116,7 +116,7 @@ namespace WizenkleBoss.Content.UI
                 if (error && easteregg)
                     font = FontAssets.DeathText.Value;
 
-                spriteBatch.Draw(TextureRegistry.Bloom, position + (textSize / 2f * 0.25f), null, error ? (Color.Red * 0.1f) with { A = 0 } : (BloomColor * 2f), 0f, TextureRegistry.Bloom.Size() / 2f, (textSize / TextureRegistry.Ball.Size()) * 1.4f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(TextureRegistry.Bloom, position + (textSize / 2f * 0.22f), null, error ? (Color.Red * 0.1f) with { A = 0 } : (BloomColor * 2f), 0f, TextureRegistry.Bloom.Size() / 2f, (textSize / TextureRegistry.Ball.Size()) * 1.4f, SpriteEffects.None, 0f);
 
                 ChatManager.DrawColorCodedString(spriteBatch, font, lines[i], position, error ? Color.Red : Color.White, 0, Vector2.Zero, Vector2.One * 0.22f);
             }
