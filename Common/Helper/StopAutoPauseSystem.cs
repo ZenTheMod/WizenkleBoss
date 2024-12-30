@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.ModLoader;
-using WizenkleBoss.Assets.Textures;
+using WizenkleBoss.Common.Textures;
 using WizenkleBoss.Content.Projectiles.Misc;
 using WizenkleBoss.Content.UI;
 
-namespace WizenkleBoss.Assets.Helper
+namespace WizenkleBoss.Common.Helper
 {
     /// <summary>
     /// Vanilla's AutoPause system for whatever reason pauses when FancyUI is open, this also breaks sounds effects although I've been told theres workarounds for that.<br />

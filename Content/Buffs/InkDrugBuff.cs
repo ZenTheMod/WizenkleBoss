@@ -7,8 +7,9 @@ using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using WizenkleBoss.Assets.Helper;
-using WizenkleBoss.Assets.Textures;
+using WizenkleBoss.Common.Helper;
+using WizenkleBoss.Common.Textures;
+using WizenkleBoss.Common.Helper;
 using WizenkleBoss.Content.Dusts;
 using WizenkleBoss.Content.Items.Dyes;
 

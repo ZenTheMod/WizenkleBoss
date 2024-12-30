@@ -8,8 +8,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Terraria;
+using WizenkleBoss.Common.Helper;
 
-namespace WizenkleBoss.Assets.Helper
+namespace WizenkleBoss.Common.Helper
 {
     public static partial class Helper
     {

@@ -15,7 +15,7 @@ using Terraria;
 using Terraria.ModLoader;
 using static Theorafile;
 
-namespace WizenkleBoss.Assets.Helper
+namespace WizenkleBoss.Common.Helper
 {
     [Autoload(false)]
     public sealed class OgvReader : IAssetReader, ILoadable
@@ -24,7 +24,7 @@ namespace WizenkleBoss.Assets.Helper
 
         public static readonly string Extension = ".ogv";
 
-        private static readonly Dictionary<IntPtr, UnmanagedMemoryStream> memoryStreams = [];
+        private static readonly Dictionary<nint, UnmanagedMemoryStream> memoryStreams = [];
         // Stores delegates in heap so that they don't get eaten by the GC.
         private static readonly tf_callbacks callbacks = new()
         {
@@ -150,21 +150,21 @@ namespace WizenkleBoss.Assets.Helper
             }
         }
 
-        private static unsafe IntPtr ReadFunction(IntPtr ptr, IntPtr size, IntPtr nmemb, IntPtr dataSource)
+        private static unsafe nint ReadFunction(nint ptr, nint size, nint nmemb, nint dataSource)
         {
             if (!memoryStreams.TryGetValue(dataSource, out var stream))
             {
-                return IntPtr.Zero;
+                return nint.Zero;
             }
 
-            int numBytes = (int)((nint)nmemb * (nint)size);
+            int numBytes = (int)(nmemb * size);
             var span = new Span<byte>((void*)ptr, numBytes);
             int numRead = stream.Read(span);
 
-            return (IntPtr)numRead;
+            return numRead;
         }
 
-        private static int SeekFunction(IntPtr dataSource, long offset, SeekWhence whence)
+        private static int SeekFunction(nint dataSource, long offset, SeekWhence whence)
         {
             if (!memoryStreams.TryGetValue(dataSource, out var stream))
             {
@@ -183,7 +183,7 @@ namespace WizenkleBoss.Assets.Helper
             return (int)newPosition;
         }
 
-        private static int CloseFunction(IntPtr dataSource)
+        private static int CloseFunction(nint dataSource)
         {
             if (!memoryStreams.Remove(dataSource, out var stream))
             {
@@ -198,10 +198,10 @@ namespace WizenkleBoss.Assets.Helper
     }
     internal static class AssetReaderCollectionExtensions
     {
-        private static readonly FieldInfo? readersByExtensionField = typeof(AssetReaderCollection)
+        private static readonly FieldInfo readersByExtensionField = typeof(AssetReaderCollection)
             .GetField("_readersByExtension", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
 
-        private static readonly FieldInfo? extensionsField = typeof(AssetReaderCollection)
+        private static readonly FieldInfo extensionsField = typeof(AssetReaderCollection)
             .GetField("_extensions", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
 
         public static void RemoveExtension(this AssetReaderCollection collection, string extension)

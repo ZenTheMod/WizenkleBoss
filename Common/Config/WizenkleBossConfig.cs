@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria.ModLoader.Config;
 
-namespace WizenkleBoss.Assets.Config
+namespace WizenkleBoss.Common.Config
 {
     public class WizenkleBossConfig : ModConfig
     {

@@ -10,8 +10,8 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.ModLoader;
 using Terraria.Utilities;
-using WizenkleBoss.Assets.Helper;
-using WizenkleBoss.Assets.Textures;
+using WizenkleBoss.Common.Helper;
+using WizenkleBoss.Common.Helper;
 
 namespace WizenkleBoss.Content.UI
 {

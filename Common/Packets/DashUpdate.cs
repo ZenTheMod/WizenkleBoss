@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using NetEasy;
 using Terraria;
 using Terraria.ID;
-using WizenkleBoss.Assets.Helper;
+using WizenkleBoss.Common.Helper;
 using WizenkleBoss.Content.UI;
 
 namespace WizenkleBoss.Common.Packets

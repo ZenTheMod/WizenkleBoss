@@ -1,7 +1,7 @@
 ﻿using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
-using WizenkleBoss.Assets.Config;
+using WizenkleBoss.Common.Config;
 using Terraria.GameContent.UI.Elements;
 using Terraria;
 using System.Linq;
@@ -12,12 +12,8 @@ using Terraria.GameContent;
 using Terraria.UI.Chat;
 using Terraria.DataStructures;
 using Terraria.ObjectData;
-using Terraria.UI;
-using Terraria.Localization;
-using WizenkleBoss.Content.UI;
-using Microsoft.Xna.Framework.Graphics;
 
-namespace WizenkleBoss.Assets.Helper
+namespace WizenkleBoss.Common.Helper
 {
     public static partial class Helper
     {

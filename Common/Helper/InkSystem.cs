@@ -16,15 +16,14 @@ using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
-using WizenkleBoss.Assets.Config;
-using WizenkleBoss.Assets.Textures;
+using WizenkleBoss.Common.Config;
 using WizenkleBoss.Content.Buffs;
 
-namespace WizenkleBoss.Assets.Helper
+namespace WizenkleBoss.Common.Helper
 {
     public class InkSystem : ModSystem
     {
-            // easter eg
+        // easter eg
         public static Color OutlineColor { get; private set; }
         public override void OnWorldLoad()
         {
@@ -42,7 +41,7 @@ namespace WizenkleBoss.Assets.Helper
             else
                 OutlineColor = new(255, 230, 105);
         }
-            // Lame rt setup
+        // Lame rt setup
         #region RenderTargetSetup
         public class InkTargetContent : ARenderTargetContentByRequest
         {
@@ -102,7 +101,7 @@ namespace WizenkleBoss.Assets.Helper
 
             On_Main.CheckMonoliths -= DrawInsideInkTarget;
         }
-            // This makes sure that the target gets drawn to BEFORE the player normally draws.
+        // This makes sure that the target gets drawn to BEFORE the player normally draws.
         private void DrawInsideInkTarget(On_Main.orig_CheckMonoliths orig)
         {
             orig();
@@ -117,10 +116,10 @@ namespace WizenkleBoss.Assets.Helper
         {
             InkShaderData.ToggleActivityIfNecessary();
         }
-        public static bool AnyActiveInk() => 
-            Main.projectile.Where(p => p.active && (p.ModProjectile is IDrawInk || p.ModProjectile is IDrawInInk)).Any() || 
-            Main.npc.Where(npc => npc.active && (npc.ModNPC is IDrawInk || npc.ModNPC is IDrawInInk)).Any() || 
-            Main.player.Where(p => p.active && p.GetModPlayer<InkPlayer>().InkBuffActive && p.dye.Length > 0).Any() || 
+        public static bool AnyActiveInk() =>
+            Main.projectile.Where(p => p.active && (p.ModProjectile is IDrawInk || p.ModProjectile is IDrawInInk)).Any() ||
+            Main.npc.Where(npc => npc.active && (npc.ModNPC is IDrawInk || npc.ModNPC is IDrawInInk)).Any() ||
+            Main.player.Where(p => p.active && p.GetModPlayer<InkPlayer>().InkBuffActive && p.dye.Length > 0).Any() ||
             Main.LocalPlayer.GetModPlayer<InkPlayer>().Intoxication > 0f;
         public static void DrawInk()
         {
@@ -144,10 +143,10 @@ namespace WizenkleBoss.Assets.Helper
             {
                 float starRotation = rand.NextFloat(0, MathHelper.TwoPi) + Main.GlobalTimeWrappedHourly * rand.NextFloat(-0.2f, 0.2f);
                 float starSize = rand.NextFloat(0.01f, 0.4f);
-                
+
                 Color starColor = (Color.White * starSize) with { A = 0 };
 
-                Vector2 starPosition = new(((rand.NextFloat(Main.screenWidth + 50) + (Main.screenPosition.X * starSize)) % (Main.screenWidth + 50)) - 25, ((rand.NextFloat(Main.screenHeight + 50) + (Main.screenPosition.Y * starSize)) % (Main.screenHeight + 50)) - 25);
+                Vector2 starPosition = new((rand.NextFloat(Main.screenWidth + 50) + Main.screenPosition.X * starSize) % (Main.screenWidth + 50) - 25, (rand.NextFloat(Main.screenHeight + 50) + Main.screenPosition.Y * starSize) % (Main.screenHeight + 50) - 25);
                 starPosition = new Vector2(Main.screenWidth, Main.screenHeight) - starPosition;
 
                 Texture2D starTexture = TextureRegistry.Star;
@@ -189,10 +188,10 @@ namespace WizenkleBoss.Assets.Helper
 
                     if (player.GetModPlayer<InkPlayer>().InTile)
                     {
-                        int count = (int)(((Main.GlobalTimeWrappedHourly * 60) % 60) / 4);
+                        int count = (int)(Main.GlobalTimeWrappedHourly * 60 % 60 / 4);
                         Rectangle frame = TextureRegistry.InkDash.Frame(1, 15, 0, count, 0, 0);
                         Main.spriteBatch.Draw(TextureRegistry.InkDash, player.Center - Main.screenLastPosition, frame, Color.White, rot, new Vector2(26), 1f, SpriteEffects.None, 0f);
-                        count = (int)((((Main.GlobalTimeWrappedHourly + 20) * 60) % 60) / 4);
+                        count = (int)((Main.GlobalTimeWrappedHourly + 20) * 60 % 60 / 4);
                         frame = TextureRegistry.InkDash.Frame(1, 15, 0, count, 0, 0);
                         Main.spriteBatch.Draw(TextureRegistry.InkDash, player.Center - Main.screenLastPosition, frame, Color.White * 0.5f, rot, new Vector2(26), 2f, SpriteEffects.None, 0f);
                     }
@@ -204,7 +203,7 @@ namespace WizenkleBoss.Assets.Helper
                     for (int k = player.GetModPlayer<InkPlayer>().dashOldPos.Length - 1; k > 0; k--)
                     {
                         float interpolator = (player.GetModPlayer<InkPlayer>().dashOldPos.Length - k) / (float)player.GetModPlayer<InkPlayer>().dashOldPos.Length;
-                        Main.spriteBatch.Draw(TextureRegistry.Star, player.GetModPlayer<InkPlayer>().dashOldPos[k] - Main.screenLastPosition, null, (Color.White * interpolator) with { A = 0 }, rot + (MathHelper.PiOver4 * k), TextureRegistry.Star.Size() / 2f, 0.7f * MathF.Sin(Main.GlobalTimeWrappedHourly * interpolator * 5) * interpolator, SpriteEffects.None, 0f);
+                        Main.spriteBatch.Draw(TextureRegistry.Star, player.GetModPlayer<InkPlayer>().dashOldPos[k] - Main.screenLastPosition, null, (Color.White * interpolator) with { A = 0 }, rot + MathHelper.PiOver4 * k, TextureRegistry.Star.Size() / 2f, 0.7f * MathF.Sin(Main.GlobalTimeWrappedHourly * interpolator * 5) * interpolator, SpriteEffects.None, 0f);
                     }
                 }
                 else

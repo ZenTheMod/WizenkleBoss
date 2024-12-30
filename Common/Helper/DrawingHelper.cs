@@ -14,7 +14,7 @@ using Terraria.ModLoader.Default;
 using Terraria.UI;
 using Terraria.Graphics;
 using Terraria.Graphics.Renderers;
-using WizenkleBoss.Assets.Textures;
+using WizenkleBoss.Common.Helper;
 
 namespace WizenkleBoss.Assets.Helper
 {

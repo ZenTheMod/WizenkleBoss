@@ -7,8 +7,9 @@ using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using WizenkleBoss.Assets.Helper;
-using WizenkleBoss.Assets.Textures;
+using WizenkleBoss.Common.Helper;
+using WizenkleBoss.Common.Textures;
+using WizenkleBoss.Common.Helper;
 using WizenkleBoss.Content.Buffs;
 using WizenkleBoss.Content.Dusts;
 using WizenkleBoss.Content.Items.Dyes;
@@ -16,7 +17,7 @@ using WizenkleBoss.Content.Rarities;
 
 namespace WizenkleBoss.Content.Items
 {
-        // This is just the free copypaste work :3
+    // This is just the free copypaste work :3
     public abstract class BaseInkItem : ModItem
     {
         public Asset<Texture2D> GlowTexture;

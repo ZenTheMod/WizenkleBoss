@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 using Terraria.ModLoader;
 using Terraria.UI;
 using Terraria;
-using WizenkleBoss.Assets.Config;
+using WizenkleBoss.Common.Config;
 
-namespace WizenkleBoss.Assets.Helper
+namespace WizenkleBoss.Common.Helper
 {
     public class UIVideoPlayerSystem : ModSystem
     {
@@ -104,7 +104,7 @@ namespace WizenkleBoss.Assets.Helper
                         InterfaceScaleType.UI));
                 }
             }
-        }                                                                                      
+        }
         //                                                        ......                                    
         //                                                     .........:.                                  
         //                                                   .:::::::::::::.                                

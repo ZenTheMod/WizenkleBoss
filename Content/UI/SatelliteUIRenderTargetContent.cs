@@ -14,9 +14,9 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI.Chat;
 using Terraria.Utilities;
-using WizenkleBoss.Assets.Config;
-using WizenkleBoss.Assets.Helper;
-using WizenkleBoss.Assets.Textures;
+using WizenkleBoss.Common.Config;
+using WizenkleBoss.Common.Helper;
+using WizenkleBoss.Common.Helper;
 using static WizenkleBoss.Content.UI.StarMapUIHelper;
 
 namespace WizenkleBoss.Content.UI

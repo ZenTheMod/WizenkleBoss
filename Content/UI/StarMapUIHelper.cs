@@ -5,16 +5,16 @@ using Terraria.Audio;
 using Terraria.GameInput;
 using Terraria;
 using Terraria.ModLoader;
-using WizenkleBoss.Assets.Config;
-using WizenkleBoss.Assets.Textures;
+using WizenkleBoss.Common.Config;
 using Terraria.UI;
-using WizenkleBoss.Assets.Helper;
+using WizenkleBoss.Common.Helper;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 using Terraria.Localization;
 using Terraria.DataStructures;
 using WizenkleBoss.Content.Projectiles.Misc;
 using System.Linq;
+using WizenkleBoss.Common.Helper;
 
 namespace WizenkleBoss.Content.UI
 {

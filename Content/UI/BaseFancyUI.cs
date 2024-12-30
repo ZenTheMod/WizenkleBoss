@@ -5,7 +5,7 @@ using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.UI;
 using Terraria.UI.Gamepad;
-using WizenkleBoss.Assets.Helper;
+using WizenkleBoss.Common.Helper;
 
 namespace WizenkleBoss.Content.UI
 {

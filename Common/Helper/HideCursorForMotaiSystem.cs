@@ -10,11 +10,11 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.UI;
 using Terraria.ModLoader;
-using WizenkleBoss.Assets.Config;
+using WizenkleBoss.Common.Config;
 using WizenkleBoss.Content.Buffs;
 using WizenkleBoss.Content.UI;
 
-namespace WizenkleBoss.Assets.Helper
+namespace WizenkleBoss.Common.Helper
 {
     public class HideCursorForMotaiSystem : ModSystem
     {
@@ -42,7 +42,7 @@ namespace WizenkleBoss.Assets.Helper
             return orig(smart);
         }
 
-        private void HideCursor(On_Main.orig_DrawCursor orig, Microsoft.Xna.Framework.Vector2 bonus, bool smart)
+        private void HideCursor(On_Main.orig_DrawCursor orig, Vector2 bonus, bool smart)
         {
             if (!StarMapUIHelper.inUI)
                 orig(bonus, smart);

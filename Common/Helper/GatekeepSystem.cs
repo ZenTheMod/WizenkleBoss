@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 using WizenkleBoss.Content.Buffs;
 using MonoMod.Cil;
 
-namespace WizenkleBoss.Assets.Helper
+namespace WizenkleBoss.Common.Helper
 {
     public class GatekeepSystem : ModSystem
     {

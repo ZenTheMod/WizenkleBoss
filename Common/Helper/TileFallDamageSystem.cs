@@ -8,11 +8,11 @@ using Terraria;
 using Terraria.ModLoader;
 using WizenkleBoss.Content.Tiles.Clouds;
 
-namespace WizenkleBoss.Assets.Helper
+namespace WizenkleBoss.Common.Helper
 {
     public class TileFallDamageSystem : ModSystem
     {
-            // Huge thanks to lion8cake/Kittenbun.
+        // Huge thanks to lion8cake/Kittenbun.
         public override void OnModLoad()
         {
             IL_Player.Update += TileFallDamage;
@@ -29,7 +29,7 @@ namespace WizenkleBoss.Assets.Helper
             c.EmitLdloca(56);   //num26
             c.EmitDelegate((Player self, ref int num26) =>
             {
-                if (num26 > 0 || (self.gravDir == -1f && num26 < 0))
+                if (num26 > 0 || self.gravDir == -1f && num26 < 0)
                 {
 
                     int xPos = (int)(self.position.X / 16f);

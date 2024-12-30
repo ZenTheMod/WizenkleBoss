@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 #nullable enable
-namespace WizenkleBoss.Assets.Helper
+namespace WizenkleBoss.Common.Helper
 {
     public static class SpriteBatchSnapshotCache
     {
@@ -95,12 +95,12 @@ namespace WizenkleBoss.Assets.Helper
             return new SpriteBatchSnapshot(sortMode, blendState, samplerState, depthStencilState, rasterizerState, effect, transformMatrix);
         }
 
-            // void Revalidate()
-            // {
-            //     blendState ??= BlendState.AlphaBlend;
-            //     samplerState ??= SamplerState.LinearClamp;
-            //     depthStencilState ??= DepthStencilState.None;
-            //     rasterizerState ??= RasterizerState.CullCounterClockwise;
-            // }
+        // void Revalidate()
+        // {
+        //     blendState ??= BlendState.AlphaBlend;
+        //     samplerState ??= SamplerState.LinearClamp;
+        //     depthStencilState ??= DepthStencilState.None;
+        //     rasterizerState ??= RasterizerState.CullCounterClockwise;
+        // }
     }
 }

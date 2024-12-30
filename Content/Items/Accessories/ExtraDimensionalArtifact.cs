@@ -12,10 +12,10 @@ using ReLogic.Content;
 using Terraria.DataStructures;
 using Microsoft.Xna.Framework;
 using WizenkleBoss.Content.Rarities;
-using WizenkleBoss.Assets.Helper;
 using WizenkleBoss.Content.Items.Dyes;
 using WizenkleBoss.Content.Buffs;
 using Terraria.Localization;
+using WizenkleBoss.Common.Helper;
 
 namespace WizenkleBoss.Content.Items.Accessories
 {

@@ -13,7 +13,7 @@ using Terraria.ModLoader;
 using WizenkleBoss.Content.Buffs;
 using WizenkleBoss.Content.Tiles.Clouds;
 
-namespace WizenkleBoss.Assets.Helper
+namespace WizenkleBoss.Common.Helper
 {
     public class InkKeybindSystem : ModSystem
     {

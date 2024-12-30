@@ -6,9 +6,9 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
 using Terraria.UI.Gamepad;
-using WizenkleBoss.Assets.Config;
-using WizenkleBoss.Assets.Helper;
-using WizenkleBoss.Assets.Textures;
+using WizenkleBoss.Common.Config;
+using WizenkleBoss.Common.Helper;
+using WizenkleBoss.Common.Helper;
 using static WizenkleBoss.Content.UI.StarMapUIHelper;
 
 namespace WizenkleBoss.Content.UI

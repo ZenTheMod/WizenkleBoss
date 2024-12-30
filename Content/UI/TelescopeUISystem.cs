@@ -26,9 +26,9 @@ using System.Collections;
 using Terraria.ModLoader.IO;
 using Terraria.UI.Gamepad;
 using Terraria.Utilities;
-using WizenkleBoss.Assets.Helper;
-using WizenkleBoss.Assets.Textures;
-using WizenkleBoss.Assets.Config;
+using WizenkleBoss.Common.Helper;
+using WizenkleBoss.Common.Config;
+using WizenkleBoss.Common.Helper;
 
 namespace WizenkleBoss.Content.UI
 {

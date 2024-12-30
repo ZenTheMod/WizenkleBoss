@@ -12,7 +12,7 @@ using ReLogic.Content;
 using Terraria.DataStructures;
 using Microsoft.Xna.Framework;
 using WizenkleBoss.Content.Rarities;
-using WizenkleBoss.Assets.Helper;
+using WizenkleBoss.Common.Helper;
 
 namespace WizenkleBoss.Content.Items.Dyes
 {

@@ -13,9 +13,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using ReLogic.Graphics;
-using WizenkleBoss.Assets.Textures;
 
-namespace WizenkleBoss.Assets.Helper
+namespace WizenkleBoss.Common.Helper
 {
     public class RetroLightingWatermark : ModSystem
     {
@@ -46,7 +45,7 @@ namespace WizenkleBoss.Assets.Helper
 
                         text = Language.GetTextValue($"Mods.WizenkleBoss.rant2");
                         size = font.MeasureString(text);
-                        ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, font, text, new Vector2(Main.screenWidth / 2f * Main.UIScale, (Main.screenHeight * Main.UIScale) - size.Y), Color.White, 0f, size * 0.5f, Vector2.One);
+                        ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, font, text, new Vector2(Main.screenWidth / 2f * Main.UIScale, Main.screenHeight * Main.UIScale - size.Y), Color.White, 0f, size * 0.5f, Vector2.One);
 
                         Main.spriteBatch.End();
                         Main.spriteBatch.Begin(in snapshit);

@@ -13,15 +13,14 @@ using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using WizenkleBoss.Assets.Config;
-using WizenkleBoss.Assets.Helper;
-using WizenkleBoss.Assets.Textures;
+using WizenkleBoss.Common.Config;
+using WizenkleBoss.Common.Helper;
 using WizenkleBoss.Common.Packets;
 using WizenkleBoss.Content.Buffs;
 using WizenkleBoss.Content.Dusts;
 using WizenkleBoss.Content.Items.Dyes;
 
-namespace WizenkleBoss.Assets.Helper
+namespace WizenkleBoss.Common.Helper
 {
     public class InkPlayer : ModPlayer
     {
@@ -33,7 +32,7 @@ namespace WizenkleBoss.Assets.Helper
 
         private int timer = 0;
         private bool _InTile;
-        public bool InTile 
+        public bool InTile
         {
             get { return _InTile; }
             set
@@ -67,7 +66,7 @@ namespace WizenkleBoss.Assets.Helper
             }
         }
         public bool InGhostInk => Player.HasBuff<InkDrugStatBuff>() && InkyArtifact;
-        
+
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
             if (InkKeybindSystem.InkDash.JustPressed && InkDashCooldown > 0 && InGhostInk && !InTile)
@@ -191,7 +190,7 @@ namespace WizenkleBoss.Assets.Helper
             }
 
             InkBuffActive = Player.HasBuff<InkDrugStatBuff>() || Player.HasBuff<InkDrugBuff>();
-            if (!InkBuffActive || (!InkBuffActive && Player.dead))
+            if (!InkBuffActive || !InkBuffActive && Player.dead)
                 Intoxication = MathHelper.Clamp(Intoxication - 0.01f, 0f, 1f);
             if (InkBuffActive)
                 Player.aggro = -900;
@@ -206,10 +205,10 @@ namespace WizenkleBoss.Assets.Helper
 
                 ArmorShaderData shader = GameShaders.Armor.GetShaderFromItemId(ModContent.ItemType<InkDye>());
 
-                if ((Collision.SolidCollision(Player.position, (int)Player.Size.X, (int)Player.Size.Y) || 
+                if ((Collision.SolidCollision(Player.position, (int)Player.Size.X, (int)Player.Size.Y) ||
                     Collision.WetCollision(Player.position, (int)Player.Size.X, (int)Player.Size.Y)) && InkDashCooldown > 0)
                     InTile = true;
-                else 
+                else
                     InTile = false;
                 if (Player.whoAmI == Main.myPlayer)
                 {
@@ -248,7 +247,7 @@ namespace WizenkleBoss.Assets.Helper
         }
         public void DrawGoo()
         {
-            Main.spriteBatch.Draw(TextureRegistry.Bloom, new Rectangle(Main.screenWidth / 2, Main.screenHeight / 2, (int)(Main.screenWidth * Intoxication * 4.3f), (int)(Main.screenHeight * Intoxication * 3.3f)), null, (Color.White * Intoxication), 0, TextureRegistry.Bloom.Size() / 2f, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(TextureRegistry.Bloom, new Rectangle(Main.screenWidth / 2, Main.screenHeight / 2, (int)(Main.screenWidth * Intoxication * 4.3f), (int)(Main.screenHeight * Intoxication * 3.3f)), null, Color.White * Intoxication, 0, TextureRegistry.Bloom.Size() / 2f, SpriteEffects.None, 0f);
         }
         private void ProduceWaterRipples()
         {

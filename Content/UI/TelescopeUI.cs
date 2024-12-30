@@ -23,8 +23,8 @@ using Terraria.UI;
 using Terraria.UI.Chat;
 using Terraria.UI.Gamepad;
 using Terraria.Utilities;
-using WizenkleBoss.Assets.Helper;
-using WizenkleBoss.Assets.Textures;
+using WizenkleBoss.Common.Helper;
+using WizenkleBoss.Common.Helper;
 
 namespace WizenkleBoss.Content.UI
 {

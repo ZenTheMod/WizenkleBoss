@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WizenkleBoss.Assets.Textures;
+using WizenkleBoss.Common.Helper;
 using WizenkleBoss.Content.Projectiles;
 using WizenkleBoss.Content.Rarities;
 
