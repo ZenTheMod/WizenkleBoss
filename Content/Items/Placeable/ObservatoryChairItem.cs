@@ -1,20 +1,6 @@
 ﻿using Terraria;
 using Terraria.ModLoader;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using Terraria.ID;
-using ReLogic.Graphics;
-using Terraria.GameContent;
-using WizenkleBoss.Common.Helper;
-using WizenkleBoss.Common.Config;
-using Terraria.Utilities;
-using WizenkleBoss.Common.Textures;
-using Terraria.UI.Chat;
 using WizenkleBoss.Content.Tiles;
-using System.Collections.ObjectModel;
 using WizenkleBoss.Content.Rarities;
 
 namespace WizenkleBoss.Content.Items.Placeable

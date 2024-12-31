@@ -16,7 +16,7 @@ using Terraria.Graphics;
 using Terraria.Graphics.Renderers;
 using WizenkleBoss.Common.Helper;
 
-namespace WizenkleBoss.Assets.Helper
+namespace WizenkleBoss.Common.Helper
 {
     public static partial class Helper
     {

@@ -16,7 +16,6 @@ using ReLogic.Content;
 using Terraria.GameContent;
 using WizenkleBoss.Content.Items.Placeable;
 using WizenkleBoss.Common.Helper;
-using WizenkleBoss.Common.Textures;
 using Terraria.Localization;
 using WizenkleBoss.Content.UI;
 using Terraria.UI;

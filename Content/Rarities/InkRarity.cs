@@ -12,8 +12,6 @@ using Terraria.UI.Chat;
 using Terraria.Utilities;
 using WizenkleBoss.Common.Config;
 using WizenkleBoss.Common.Helper;
-using WizenkleBoss.Common.Textures;
-using WizenkleBoss.Common.Helper;
 
 namespace WizenkleBoss.Content.Rarities
 {

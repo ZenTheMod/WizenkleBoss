@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WizenkleBoss.Assets.Helper
+namespace WizenkleBoss.Common.Helper
 {
     public struct VertexInfo2(Vector2 position, Vector3 texCoord, Color color) : IVertexType
     {
@@ -20,5 +20,10 @@ namespace WizenkleBoss.Assets.Helper
         public Vector3 TexCoord = texCoord;
 
         public readonly VertexDeclaration VertexDeclaration => _vertexDeclaration;
+    }
+    public class TrailData(Vector2 Position, float Rotation)
+    {
+        public Vector2 Position = Position;
+        public float Rotation = Rotation;
     }
 }

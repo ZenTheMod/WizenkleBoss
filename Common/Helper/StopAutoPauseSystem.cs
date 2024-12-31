@@ -8,16 +8,15 @@ using System.Threading.Tasks;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.ModLoader;
-using WizenkleBoss.Common.Textures;
 using WizenkleBoss.Content.Projectiles.Misc;
 using WizenkleBoss.Content.UI;
 
 namespace WizenkleBoss.Common.Helper
 {
-    /// <summary>
-    /// Vanilla's AutoPause system for whatever reason pauses when FancyUI is open, this also breaks sounds effects although I've been told theres workarounds for that.<br />
-    /// Also I would prefer that the pussy shitfaces get to actually watch the stars move and change color over time.
-    /// </summary>
+        /// <summary>
+        /// Vanilla's AutoPause system for whatever reason pauses when FancyUI is open, this also breaks sounds effects although I've been told theres workarounds for that.<br />
+        /// Also I would prefer that the pussy shitfaces get to actually watch the stars move and change color over time.
+        /// </summary>
     public class StopAutoPauseSystem : ModSystem
     {
         public override void OnModLoad()

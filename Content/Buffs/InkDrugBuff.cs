@@ -8,10 +8,6 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using WizenkleBoss.Common.Helper;
-using WizenkleBoss.Common.Textures;
-using WizenkleBoss.Common.Helper;
-using WizenkleBoss.Content.Dusts;
-using WizenkleBoss.Content.Items.Dyes;
 
 namespace WizenkleBoss.Content.Buffs
 {

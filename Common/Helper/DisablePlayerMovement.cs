@@ -8,7 +8,7 @@ using Terraria;
 using WizenkleBoss.Content.UI;
 using WizenkleBoss.Content.Projectiles.Misc;
 
-namespace WizenkleBoss.Assets.Helper
+namespace WizenkleBoss.Common.Helper
 {
     /// <summary>
     /// <para>Some things to note:</para>

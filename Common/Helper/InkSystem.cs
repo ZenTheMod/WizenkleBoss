@@ -23,7 +23,7 @@ namespace WizenkleBoss.Common.Helper
 {
     public class InkSystem : ModSystem
     {
-        // easter eg
+            // easter eg
         public static Color OutlineColor { get; private set; }
         public override void OnWorldLoad()
         {
@@ -41,7 +41,7 @@ namespace WizenkleBoss.Common.Helper
             else
                 OutlineColor = new(255, 230, 105);
         }
-        // Lame rt setup
+            // Lame rt setup
         #region RenderTargetSetup
         public class InkTargetContent : ARenderTargetContentByRequest
         {
@@ -101,7 +101,7 @@ namespace WizenkleBoss.Common.Helper
 
             On_Main.CheckMonoliths -= DrawInsideInkTarget;
         }
-        // This makes sure that the target gets drawn to BEFORE the player normally draws.
+            // This makes sure that the target gets drawn to BEFORE the player normally draws.
         private void DrawInsideInkTarget(On_Main.orig_CheckMonoliths orig)
         {
             orig();
@@ -111,7 +111,7 @@ namespace WizenkleBoss.Common.Helper
                 insideInkTargetByRequest.Request();
         }
         #endregion
-        // This is so that the effect actually ends when youre not drugged asf
+            // This is so that the effect actually ends when youre not drugged asf
         public override void PostUpdateEverything()
         {
             InkShaderData.ToggleActivityIfNecessary();

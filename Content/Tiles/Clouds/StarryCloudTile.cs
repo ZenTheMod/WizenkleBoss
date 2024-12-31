@@ -12,7 +12,6 @@ using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
-using WizenkleBoss.Common.Textures;
 using WizenkleBoss.Content.Items.Placeable;
 using WizenkleBoss.Content.Items.Tiles;
 

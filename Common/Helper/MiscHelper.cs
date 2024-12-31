@@ -145,9 +145,9 @@ namespace WizenkleBoss.Common.Helper
                 return "F"; // :(
             }
             string value = "";
-            // i smashed my keyboard for this
+                // i smashed my keyboard for this
             string text = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890";
-            // this maybe a bad idea. but i dont care, i can do whatever i want :troll:
+                // this maybe a bad idea. but i dont care, i can do whatever i want :troll:
             if (badidea) { text += "!@#$%&*()-=_+~`[]{}|;'<>?,./"; }
             for (int i = 0; i < length; i++)
             {
@@ -196,7 +196,7 @@ namespace WizenkleBoss.Common.Helper
             bool bossFound = false;
             foreach (NPC npc in Main.ActiveNPCs)
             {
-                // If we've found a valid boss target, ignore ALL targets which aren't bosses.
+                    // If we've found a valid boss target, ignore ALL targets which aren't bosses.
                 if (bossFound && !(npc.boss || npc.type == NPCID.WallofFleshEye))
                     continue;
 
