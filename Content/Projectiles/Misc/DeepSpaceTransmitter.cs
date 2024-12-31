@@ -7,15 +7,15 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
 using Terraria.UI;
-using WizenkleBoss.Assets.Config;
-using WizenkleBoss.Assets.Helper;
-using WizenkleBoss.Assets.Textures;
+using WizenkleBoss.Common.Config;
+using WizenkleBoss.Common.Helper;
+using WizenkleBoss.Content.Dusts;
 using WizenkleBoss.Content.UI;
 using static WizenkleBoss.Content.Projectiles.Misc.DeepSpaceTransmitterHelper;
 
 namespace WizenkleBoss.Content.Projectiles.Misc
 {
-        // Super stupid in the long run.
+    // Super stupid in the long run.
     public enum LaserState
     {
         FadeIn,
@@ -121,11 +121,19 @@ namespace WizenkleBoss.Content.Projectiles.Misc
 
         private bool SoundPlayed = false;
         private int counter;
-        private float wave = 1f;
+        private float wave = 0.95f;
 
         private const float BeamLength = 3500;
 
         private readonly List<Vector2> _PointsCache = [];
+
+        public override bool? CanHitNPC(NPC target)
+        {
+                // No boss cheese for youuuu :3333333333333
+            if (target.boss)
+                return false;
+            return base.CanHitNPC(target);
+        }
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
@@ -145,14 +153,8 @@ namespace WizenkleBoss.Content.Projectiles.Misc
             Projectile.rotation = (-Vector2.One).ToRotation();
 
                 // Close enough to a runonce bool.
-            if (!SoundPlayed)
+            if (!SoundPlayed && !Main.dedServ)
                 PointSetUp();
-
-            for (int i = 0; i < Particles.Length - 1; i++)
-            {
-                if (Particles[i] != Vector2.Zero)
-                    Particles[i] = Projectile.timeLeft > 8998 || laserState == LaserState.FadeOut ? Vector2.Zero : Vector2.Lerp(Particles[i], Projectile.Center, 0.09f);
-            }
 
             if (charge > 0.02)
             {
@@ -205,16 +207,15 @@ namespace WizenkleBoss.Content.Projectiles.Misc
         private void FadeInAI()
         {
                 // Lustrous particles
-            if (Main.rand.NextBool())
+            if (Main.rand.NextBool((int)Utils.Remap(counter, 0, 140, 30, 2)) && !Main.dedServ)
             {
-                int n = Main.rand.Next(Particles.Length);
-                if (Particles[n].Distance(Projectile.Center) < 1 || Particles[n].Length() < 2)
-                {
-                    Particles[n] = Projectile.Center + Main.rand.NextVector2CircularEdge(224, 224);
-                }
+                Color color = new Color(255, 196, 255) * Main.rand.NextFloat(0.3f, 1.1f); // new Color(99, 0, 197)
+                color.A = 0;
+                Vector2 StartPosition = Projectile.Center + Main.rand.NextVector2CircularEdge(1000, 1000);
+                Dust.NewDustPerfect(StartPosition, ModContent.DustType<StarSpiralDust>(), Vector2.Zero, 0, color);
             }
 
-            if (!SoundPlayed)
+            if (!SoundPlayed && !Main.dedServ)
             {
                     // Don't defean the elderly.
                 if (ModContent.GetInstance<WizenkleBossConfig>().LaserLoop)
@@ -236,7 +237,8 @@ namespace WizenkleBoss.Content.Projectiles.Misc
                     charge += 0.001f;
                 if (darkness < 1f)
                     darkness += 0.03f;
-                wave -= 0.01f;
+                    // mmmmmm ripple
+                wave -= 0.0105f;
             }
             else
             {
@@ -247,8 +249,10 @@ namespace WizenkleBoss.Content.Projectiles.Misc
         private void OpenAI()
         {
             MusicKiller.MuffleFactor = 0f;
+                // mmmmm banish ripple to shadow realm :fire:
+            wave = -2;
             this.CameraShakeSimple(Projectile.Center, Vector2.Zero, 40, 40, 2, 0);
-            if (++counter > 435)
+            if (++counter > 405)
             {
                 laserState = LaserState.FadeOut;
                 counter = 0;

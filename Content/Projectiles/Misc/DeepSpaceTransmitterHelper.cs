@@ -7,12 +7,9 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.ModLoader;
-using Terraria.UI;
-using WizenkleBoss.Assets.Config;
-using WizenkleBoss.Assets.Helper;
-using WizenkleBoss.Assets.Textures;
-using WizenkleBoss.Content.Tiles;
-using WizenkleBoss.Content.UI;
+using WizenkleBoss.Common.Helper;
+using WizenkleBoss.Content.Dusts;
+using MonoMod.Cil;
 
 namespace WizenkleBoss.Content.Projectiles.Misc
 {
@@ -21,7 +18,6 @@ namespace WizenkleBoss.Content.Projectiles.Misc
             // There can only be ONE.
         public static float charge;
         public static float darkness;
-        public static Vector2[] Particles = new Vector2[40];
         public static Vector2 Center;
         public class DeepSpaceTransmitterTargetContent : ARenderTargetContentByRequest
         {
@@ -31,18 +27,26 @@ namespace WizenkleBoss.Content.Projectiles.Misc
 
                 device.SetRenderTarget(_target);
                 device.Clear(Color.Transparent);
-                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
 
-                    // Draw the glowing part of the satellite dish.
-                spriteBatch.Draw(ObservatorySatelliteDishTile.GlowTexture.Value, (Center - new Vector2(8) - Main.screenPosition) / 2f, null, (Color.Lerp(new Color(255, 196, 255), new Color(255, 197, 147), charge) * charge * 0.2f) with { A = 0 }, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0f);
+                Color color = Color.Lerp(new Color(255, 196, 255), new Color(255, 197, 147), charge) * darkness * 0.5f;
+                color.A = 0;
+
+                        // Draw the glowing part of the satellite dish.
+                    // spriteBatch.Draw(ObservatorySatelliteDishTile.GlowTexture.Value, (Center - new Vector2(8) - Main.screenPosition) / 2f, null, color, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0f);
 
                     // Draw an even brighter bloom at the start of the laser.
-                spriteBatch.Draw(TextureRegistry.Bloom, (Center - Main.screenPosition) / 2f, null, (Color.Lerp(new Color(255, 196, 255), new Color(255, 197, 147), charge) * darkness * 0.5f) with { A = 0 }, 0f, TextureRegistry.Bloom.Size() / 2, 0.6f * darkness + 0.01f, SpriteEffects.None, 0f);
-                
-                    // LUSTROUS PARTICLES ?????????????
-                for (int i = 0; i < Particles.Length - 1; i++)
-                    spriteBatch.Draw(TextureRegistry.Bloom, (Particles[i] - Main.screenPosition) / 2, null, (Color.Lerp(new Color(255, 196, 255), new Color(255, 197, 147), charge)) with { A = 0 }, 0, TextureRegistry.Bloom.Size() / 2, .03f, SpriteEffects.None, 0f);
-                
+                spriteBatch.Draw(TextureRegistry.Bloom, (Center - Main.screenPosition) / 2f, null, color, 0f, TextureRegistry.Bloom.Size() / 2, 0.6f * darkness + 0.01f, SpriteEffects.None, 0f);
+
+
+                    // Feel free to pr better ways I can do this :3
+                foreach (var d in Main.dust.Where(d => d.active))
+                {
+                    if (DustLoader.GetDust(d.type) is not IDrawDustAboveDarkness drawer)
+                        continue;
+                    drawer.DrawAbove(spriteBatch, device, d);
+                }
+
                 var Laser = Helper.TransmitShader;
 
                     // Param setup.
@@ -57,7 +61,7 @@ namespace WizenkleBoss.Content.Projectiles.Misc
                 Laser.Value.Parameters["centerIntensity"].SetValue(Utils.Remap(MathF.Pow(2, 10 * (charge - 1)), 0f, 1f, 500f, 100000f));
                 Laser.Value.Parameters["laserStartPercentage"].SetValue(MathHelper.Lerp(0.012f, 0.065f, charge));
 
-                 device.Textures[0] = TextureRegistry.Pixel;
+                device.Textures[0] = TextureRegistry.Pixel;
 
                     // I was fucking around in shadertoy for like an hour with custom textures and found that these two look the best.
                     // Also, for you bitchass theives who arent going to credit me, heres the shader :3 https://www.shadertoy.com/view/4fKyzt, or you can just ya-know, take it straight from the decomp you already have.
@@ -92,9 +96,11 @@ namespace WizenkleBoss.Content.Projectiles.Misc
 
             On_Main.DrawInfernoRings += DrawAfterInfernoRings;
         }
+
         public override void Unload()
         {
             Main.ContentThatNeedsRenderTargets.Remove(deepSpaceTransmitterTargetByRequest);
+
             On_Main.DrawInfernoRings -= DrawAfterInfernoRings;
         }
 
@@ -111,9 +117,7 @@ namespace WizenkleBoss.Content.Projectiles.Misc
                 var snapshit = Main.spriteBatch.CaptureSnapshot();
 
                 Main.spriteBatch.End();
-
-                    // OOOOOHHH LOOK A MATRIXXX AHHHHHHHHH SCARRRYYYYYYYYYYYY
-                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
+                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
                     // Darken the screen to make the laser really POP.
                 Main.spriteBatch.Draw(TextureRegistry.Pixel, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.Black * (darkness - 0.1f));
@@ -146,6 +150,11 @@ namespace WizenkleBoss.Content.Projectiles.Misc
         public interface IDrawLasers
         {
             public void Laser(SpriteBatch spriteBatch, GraphicsDevice device);
+        }
+
+        public interface IDrawDustAboveDarkness 
+        {
+            public void DrawAbove(SpriteBatch spriteBatch, GraphicsDevice device, Dust dust);
         }
     }
 }
