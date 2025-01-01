@@ -209,7 +209,7 @@ namespace WizenkleBoss.Content.Projectiles.Misc
                 // Lustrous particles
             if (Main.rand.NextBool((int)Utils.Remap(counter, 0, 140, 30, 2)) && !Main.dedServ)
             {
-                Color color = new Color(255, 196, 255) * Main.rand.NextFloat(0.3f, 1.1f); // new Color(99, 0, 197)
+                Color color = new Color(255, 196, 255) * Main.rand.NextFloat(0.3f, 1.1f);
                 color.A = 0;
                 Vector2 StartPosition = Projectile.Center + Main.rand.NextVector2CircularEdge(1000, 1000);
                 Dust.NewDustPerfect(StartPosition, ModContent.DustType<StarSpiralDust>(), Vector2.Zero, 0, color);
@@ -248,6 +248,16 @@ namespace WizenkleBoss.Content.Projectiles.Misc
 
         private void OpenAI()
         {
+                // Lustrous particles
+            if (Main.rand.NextBool() && !Main.dedServ)
+            {
+                float Magnitude = Main.rand.NextFloat(-120f, 120f);
+                Color color = Color.Lerp(new Color(99, 0, 197), new Color(255, 196, 196), Math.Abs(Magnitude) / 120f) * Main.rand.NextFloat(0.3f, 1.1f);
+                color.A = 0;
+                Vector2 Velocity = new Vector2(Magnitude, 0).RotatedBy(Projectile.rotation + MathHelper.PiOver2);
+                Dust.NewDustPerfect(Projectile.Center, ModContent.DustType<LerpAngleStarDust>(), Velocity, 0, color);
+            }
+
             MusicKiller.MuffleFactor = 0f;
                 // mmmmm banish ripple to shadow realm :fire:
             wave = -2;

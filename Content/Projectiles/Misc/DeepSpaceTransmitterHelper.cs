@@ -27,7 +27,7 @@ namespace WizenkleBoss.Content.Projectiles.Misc
 
                 device.SetRenderTarget(_target);
                 device.Clear(Color.Transparent);
-                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
+                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
 
                 Color color = Color.Lerp(new Color(255, 196, 255), new Color(255, 197, 147), charge) * darkness * 0.5f;
                 color.A = 0;
@@ -37,15 +37,6 @@ namespace WizenkleBoss.Content.Projectiles.Misc
 
                     // Draw an even brighter bloom at the start of the laser.
                 spriteBatch.Draw(TextureRegistry.Bloom, (Center - Main.screenPosition) / 2f, null, color, 0f, TextureRegistry.Bloom.Size() / 2, 0.6f * darkness + 0.01f, SpriteEffects.None, 0f);
-
-
-                    // Feel free to pr better ways I can do this :3
-                foreach (var d in Main.dust.Where(d => d.active))
-                {
-                    if (DustLoader.GetDust(d.type) is not IDrawDustAboveDarkness drawer)
-                        continue;
-                    drawer.DrawAbove(spriteBatch, device, d);
-                }
 
                 var Laser = Helper.TransmitShader;
 
@@ -78,6 +69,15 @@ namespace WizenkleBoss.Content.Projectiles.Misc
                     if (p.ModProjectile is not IDrawLasers drawer)
                         continue;
                     drawer.Laser(spriteBatch, device);
+                }
+
+                Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+
+                foreach (var d in Main.dust.Where(d => d.active))
+                {
+                    if (DustLoader.GetDust(d.type) is not IDrawDustAboveDarkness drawer)
+                        continue;
+                    drawer.DrawAbove(spriteBatch, device, d);
                 }
 
                 spriteBatch.End();
