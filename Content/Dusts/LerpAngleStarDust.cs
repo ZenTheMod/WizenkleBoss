@@ -73,7 +73,7 @@ namespace WizenkleBoss.Content.Dusts
                 return;
 
                 // PRIMITIVE DUST ????????????? VAEMA APROVED GUYS
-            List<VertexInfo2> verticies = [];
+            List<VertexPositionColorTexture> vertices = [];
             for (int i = 0; i < length; i++)
             {
                 float progress = (float)i / (float)length; // float cast ffs
@@ -84,19 +84,21 @@ namespace WizenkleBoss.Content.Dusts
 
                 Vector2 position = (Trail[i].Position - Main.screenPosition) / 2f;
 
-                verticies.Add(new VertexInfo2(position + new Vector2(width, 0).RotatedBy(Trail[i].Rotation - MathHelper.PiOver2),
-                    new Vector3(progress, 0f, 0f),
-                    col));
+                vertices.Add(new VertexPositionColorTexture(new Vector3(position + new Vector2(width, 0).RotatedBy(Trail[i].Rotation - MathHelper.PiOver2), 0),
+                    col,
+                    new Vector2(progress, 0f)
+                    ));
 
-                verticies.Add(new VertexInfo2(position + new Vector2(width, 0).RotatedBy(Trail[i].Rotation + MathHelper.PiOver2),
-                    new Vector3(progress, 1f, 0f),
-                    col));
+                vertices.Add(new VertexPositionColorTexture(new Vector3(position + new Vector2(width, 0).RotatedBy(Trail[i].Rotation + MathHelper.PiOver2), 0),
+                    col,
+                    new Vector2(progress, 0f)
+                    ));
             }
 
             Main.instance.GraphicsDevice.Textures[0] = TextureRegistry.TextBoxStars;
 
-            if (verticies.Count > 3)
-                Main.instance.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, verticies.ToArray(), 0, verticies.Count - 2);
+            if (vertices.Count > 3)
+                Main.instance.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, vertices.Count - 2);
         }
     }
 }

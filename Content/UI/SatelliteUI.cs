@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Terraria;
+﻿using Terraria;
 using Terraria.Audio;
 using Terraria.GameInput;
 using Terraria.ID;
@@ -7,7 +6,6 @@ using Terraria.ModLoader;
 using Terraria.UI;
 using Terraria.UI.Gamepad;
 using WizenkleBoss.Common.Config;
-using WizenkleBoss.Common.Helper;
 using WizenkleBoss.Common.Helper;
 using static WizenkleBoss.Content.UI.StarMapUIHelper;
 

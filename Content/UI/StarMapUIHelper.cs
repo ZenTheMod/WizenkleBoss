@@ -14,7 +14,8 @@ using Terraria.Localization;
 using Terraria.DataStructures;
 using WizenkleBoss.Content.Projectiles.Misc;
 using System.Linq;
-using WizenkleBoss.Common.Helper;
+using Terraria.ObjectData;
+using WizenkleBoss.Content.Tiles;
 
 namespace WizenkleBoss.Content.UI
 {
@@ -79,8 +80,9 @@ namespace WizenkleBoss.Content.UI
             float Multiplier = Scaled ? Main.UIScale : 1;
             Vector2 CursorPos = ((Main.MouseScreen * Multiplier) - (new Vector2(Main.screenWidth / 2, Main.screenHeight / 2) * Multiplier)) / 2;
 
-            return CursorPos.X > -SatelliteUISystem.TargetSize.X / 2 && CursorPos.X < SatelliteUISystem.TargetSize.X / 2 &&
-                CursorPos.Y > -SatelliteUISystem.TargetSize.Y / 2 && CursorPos.Y < SatelliteUISystem.TargetSize.Y / 2 &&
+            Rectangle bounds = new((int)-SatelliteUISystem.TargetSize.X / 2, (int)-SatelliteUISystem.TargetSize.Y / 2, (int)SatelliteUISystem.TargetSize.X, (int)SatelliteUISystem.TargetSize.Y);
+
+            return bounds.Contains((int)CursorPos.X, (int)CursorPos.Y) &&
                 inUI && ModContent.GetInstance<WizenkleBossConfig>().SatelliteUseMousePosition &&
                 !satelliteUI.BackPanel.IsMouseHovering &&
                 !satelliteUI.ModConfigButton.IsMouseHovering;
@@ -128,7 +130,7 @@ namespace WizenkleBoss.Content.UI
                     TerminalLine = 0;
                     IngameFancyUI.Close();
 
-                        // Spawn God 
+                    // Spawn God
                     Projectile.NewProjectile(new EntitySource_TileInteraction(Main.LocalPlayer, (int)CurrentTileWorldPosition.X / 16, (int)CurrentTileWorldPosition.Y / 16), CurrentTileWorldPosition, Vector2.Zero, ModContent.ProjectileType<DeepSpaceTransmitter>(), 4000, 0, -1, TargetedStar);
                 }
             }
@@ -297,22 +299,8 @@ namespace WizenkleBoss.Content.UI
                             FireAnim = 0f;
                             Prompt = PromptState.None;
                             TerminalLine = 0;
-                            if (TargetedStar != int.MaxValue && TargetedStar > -1)
-                            {
-                                if (BarrierStarSystem.Stars[TargetedStar].State != SupernovaState.None)
-                                {
-                                    TerminalState = ContactingState.ErrorStarNotFound;
-                                    break;
-                                }
-                            }
-                            if (BarrierStarSystem.BigStar.State != SupernovaState.None && TargetedStar == int.MaxValue)
-                            {
-                                TerminalState = ContactingState.ErrorStarNotFound;
-                                break;
-                            }
-                            TerminalState = ContactingState.ContactingHighPower;
-                                // if (lackOFpOWER)
-                                //     ConsoleState = ContactingState.ErrorStarNotFound;
+
+                            TerminalState = GetTerminalError();
                         }
                         break;
                     }
@@ -322,6 +310,42 @@ namespace WizenkleBoss.Content.UI
                     }
             }
         }
+
+        public static ContactingState GetTerminalError()
+        {
+            if (TargetedStar != int.MaxValue && TargetedStar > -1)
+            {
+                if (BarrierStarSystem.Stars[TargetedStar].State != SupernovaState.None)
+                {
+                    return ContactingState.ErrorStarNotFound;
+                }
+            }
+            if (BarrierStarSystem.BigStar.State != SupernovaState.None && TargetedStar == int.MaxValue)
+                return ContactingState.ErrorStarNotFound;
+
+                // Get the top left of the satellite dish.
+            Point16 point = Helper.GetTopLeftTileInMultitile((int)CurrentTileWorldPosition.X / 16, (int)CurrentTileWorldPosition.Y / 16);
+
+            Tile tile = Main.tile[point.X, point.Y];
+
+            TileObjectData data = TileObjectData.GetTileData(tile.TileType, 0);
+
+                // fuck you null checks
+            if (data == null || tile == null || tile.TileType != ModContent.TileType<ObservatorySatelliteDishTile>())
+                return ContactingState.ErrorNoPower;
+
+            Vector2 tileSize = new(data.Width, data.Height);
+            if (WiringHelper.WireScanForTileType(point.X, point.Y, (int)tileSize.X, (int)tileSize.Y, ModContent.TileType<SolarPanelTile>(), out Point16? tl))
+            {
+                if (tl == null)
+                    return ContactingState.ErrorNoPower;
+
+                    // insert tile entity checks here
+                return ContactingState.ContactingHighPower;
+            }
+            return ContactingState.ErrorNoPower;
+        }
+
         public static void HandleAnimations()
         {
             bool hovering = CanTargetStar();

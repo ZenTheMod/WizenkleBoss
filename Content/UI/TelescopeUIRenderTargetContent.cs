@@ -1,16 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using ReLogic.Graphics;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.ModLoader;
 using Terraria.Utilities;
-using WizenkleBoss.Common.Helper;
 using WizenkleBoss.Common.Helper;
 
 namespace WizenkleBoss.Content.UI

@@ -119,7 +119,7 @@ namespace WizenkleBoss.Common.Helper
         public static bool AnyActiveInk() =>
             Main.projectile.Where(p => p.active && (p.ModProjectile is IDrawInk || p.ModProjectile is IDrawInInk)).Any() ||
             Main.npc.Where(npc => npc.active && (npc.ModNPC is IDrawInk || npc.ModNPC is IDrawInInk)).Any() ||
-            Main.player.Where(p => p.active && p.GetModPlayer<InkPlayer>().InkBuffActive && p.dye.Length > 0).Any() ||
+            Main.LocalPlayer.GetModPlayer<InkPlayer>().InkBuffActive ||
             Main.LocalPlayer.GetModPlayer<InkPlayer>().Intoxication > 0f;
         public static void DrawInk()
         {

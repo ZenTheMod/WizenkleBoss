@@ -29,7 +29,7 @@ namespace WizenkleBoss.Content.Projectiles.Misc
                 // Stops weird results when at really low charge values.
             if (charge <= 0.003)
                 return;
-            List<VertexInfo2> verticies = [];
+            List<VertexPositionColorTexture> vertices = [];
                 // Get an exponental charge value similar to how I got the center intensity value.
             float exponentialCharge = MathF.Pow(2, 10 * (charge - 1)) * 0.75f;
             for (float i = 0; i < _PointsCache.Count; i++)
@@ -87,19 +87,19 @@ namespace WizenkleBoss.Content.Projectiles.Misc
                         //  triangles are so hot am i right          :+#%%%%*:                     ::++-::                    
                         //                                              ::::                                                  
 
-                verticies.Add(new VertexInfo2((_PointsCache[(int)i] - Main.screenPosition + new Vector2(width, 0).RotatedBy(Projectile.rotation - MathHelper.PiOver2)) / 2,
-                    new Vector3(progress, 0f, 0f), // texCoord
-                    Color.White)); // doesnt matter what color (itll get replaced by our shader anyway)
+                vertices.Add(new VertexPositionColorTexture(new Vector3((_PointsCache[(int)i] - Main.screenPosition + new Vector2(width, 0).RotatedBy(Projectile.rotation - MathHelper.PiOver2)) / 2, 0),
+                    Color.White, // doesnt matter what color (itll get replaced by our shader anyway)
+                    new Vector2(progress, 0f)
+                    ));
 
                     // Then copy my own homework and change - MathHelper.PiOver2 to + MathHelper.PiOver2;
-
-                    // -- REMEMBER, verticies MUST be created CLOCKWISE, or whatever lolxd said. --
-                verticies.Add(new VertexInfo2((_PointsCache[(int)i] - Main.screenPosition + new Vector2(width, 0).RotatedBy(Projectile.rotation + MathHelper.PiOver2)) / 2,
-                    new Vector3(progress, 1f, 0f),
-                    Color.White));
+                vertices.Add(new VertexPositionColorTexture(new Vector3((_PointsCache[(int)i] - Main.screenPosition + new Vector2(width, 0).RotatedBy(Projectile.rotation + MathHelper.PiOver2)) / 2, 0),
+                    Color.White, // doesnt matter what color (itll get replaced by our shader anyway)
+                    new Vector2(progress, 1f)
+                    ));
             }
-            if (verticies.Count > 3)
-                device.DrawUserPrimitives(PrimitiveType.TriangleStrip, verticies.ToArray(), 0, verticies.Count - 2);
+            if (vertices.Count > 3)
+                device.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, vertices.Count - 2);
         }
         public override string Texture => "WizenkleBoss/Assets/Textures/MagicPixel";
         public override void SetDefaults()

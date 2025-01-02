@@ -222,7 +222,6 @@ namespace WizenkleBoss.Common.Helper
                         }
                         if (InTile && InkDashCooldown > 0)
                         {
-                            ProduceWaterRipples();
                             if (timer++ >= 20)
                             {
                                 SoundEngine.PlaySound(AudioRegistry.InkBurrowing, null);
@@ -239,6 +238,8 @@ namespace WizenkleBoss.Common.Helper
                         }
                     }
                 }
+                if (InTile && InkDashCooldown > 0 && !Main.dedServ)
+                    ProduceWaterRipples();
             }
             else
             {
@@ -253,9 +254,9 @@ namespace WizenkleBoss.Common.Helper
         {
             WaterShaderData shaderData = (WaterShaderData)Filters.Scene["WaterDistortion"].GetShader();
 
-            float waveSine = 0.45f * (float)Math.Sin(Main.GlobalTimeWrappedHourly * 20f);
+            float waveSine = Utils.Remap(DashVelocity.Length(), 0f, 17f, 0, 1.4f) * (float)Math.Sin(Main.GlobalTimeWrappedHourly * 20f);
 
-            Color waveData = new Color(0.5f, 0.4f * Math.Sign(waveSine) + 0.5f, 0f, 1f) * Math.Abs(waveSine);
+            Color waveData = new Color(0.5f, 0.3f * Math.Sign(waveSine) + 0.5f, 0f, 1f) * Math.Abs(waveSine);
             shaderData.QueueRipple(Player.position, waveData, Player.Size, RippleShape.Circle, DashVelocity.ToRotation());
         }
         public override void HideDrawLayers(PlayerDrawSet drawInfo)

@@ -76,6 +76,11 @@ Items: {
 		DisplayName: Lights
 		Tooltip: "'Distant Ventures'"
 	}
+
+	SolarPanelItem: {
+		DisplayName: Solar Panel Item
+		Tooltip: ""
+	}
 }
 
 UI: {
@@ -495,7 +500,7 @@ StarNames: {
 	Name122: LUNA
 	Name123: NON-DESCRIPT
 	Name124: TRANS
-	Name125: PEESE
+	Name125: PURPLE CHEESE
 	Name126: CHURPLEY
 	Name127: BRIDGET
 	Name128: TOASTY
@@ -513,7 +518,7 @@ StarNames: {
 	Name140: BIG
 	Name141: SMOL
 	Name142: SCP
-	Name143: POI
+	Name143: JUPITER
 	Name144: LILY
 	Name145: LOLXD
 	Name146: HELL
@@ -529,11 +534,11 @@ StarNames: {
 	Name156: lowercase
 	Name157: THE CHICKEN
 	Name158: BEREFT
-	Name159: EMEOCS
+	Name159: ROTON
 	Name160: SHUH
-	Name161: UTRAICT
-	Name162: EQOA
-	Name163: AKLEO
+	Name161: ZENZEN
+	Name162: IWAVE
+	Name163: MOTAI_
 	Name164: PEUNTEC
 	Name165: ACAPPIUFT
 	Name166: WOHLIS
@@ -542,7 +547,7 @@ StarNames: {
 	Name169: WEI
 	Name170: XUNS
 	Name171: ZLAEX
-	Name172: INEUPH
+	Name172: PRISM--
 	Name173: DAAX
 	Name174: TEMIUB
 	Name175: SOAPUPH

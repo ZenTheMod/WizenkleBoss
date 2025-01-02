@@ -1,21 +1,14 @@
-﻿using Microsoft.CodeAnalysis.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using ReLogic.Graphics;
 using System;
-// using System.Drawing; DIE DIE DIE DIE DIE DIE DIE DIE DIE DIE
-using System.IO;
 using System.Linq;
 using Terraria;
 using Terraria.GameContent;
-using Terraria.GameInput;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI.Chat;
-using Terraria.Utilities;
 using WizenkleBoss.Common.Config;
-using WizenkleBoss.Common.Helper;
 using WizenkleBoss.Common.Helper;
 using static WizenkleBoss.Content.UI.StarMapUIHelper;
 

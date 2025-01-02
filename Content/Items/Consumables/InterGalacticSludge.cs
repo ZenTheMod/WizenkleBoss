@@ -1,18 +1,12 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
+﻿using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
-using WizenkleBoss.Common.Helper;
 using WizenkleBoss.Common.Helper;
 using WizenkleBoss.Content.Buffs;
 using WizenkleBoss.Content.Dusts;
 using WizenkleBoss.Content.Items.Dyes;
-using WizenkleBoss.Content.Rarities;
 
 namespace WizenkleBoss.Content.Items.Consumables
 {

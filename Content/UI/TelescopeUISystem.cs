@@ -1,34 +1,19 @@
 ﻿using log4net.Appender;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using ReLogic.Graphics;
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net.WebSockets;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
-using Terraria.Achievements;
 using Terraria.Audio;
 using Terraria.GameContent;
-using Terraria.GameContent.Bestiary;
-using Terraria.GameContent.UI.Elements;
 using Terraria.GameInput;
-using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
 using Terraria.UI.Chat;
-using System.Collections;
-using Terraria.ModLoader.IO;
-using Terraria.UI.Gamepad;
-using Terraria.Utilities;
 using WizenkleBoss.Common.Helper;
 using WizenkleBoss.Common.Config;
-using WizenkleBoss.Common.Helper;
 
 namespace WizenkleBoss.Content.UI
 {
@@ -162,6 +147,7 @@ namespace WizenkleBoss.Content.UI
         {
             if (inUI)
             {
+                Main.LocalPlayer.mouseInterface = true;
                 Vector2 normalized = Vector2.Zero;
 
                 if ((PlayerInput.Triggers.JustPressed.Up || PlayerInput.Triggers.JustPressed.Left || PlayerInput.Triggers.JustPressed.Right || PlayerInput.Triggers.JustPressed.Down) && Main.rand.NextBool(2))

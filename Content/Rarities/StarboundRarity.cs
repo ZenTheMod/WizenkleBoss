@@ -2,16 +2,11 @@
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Graphics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.UI.Chat;
 using Terraria.Utilities;
 using WizenkleBoss.Common.Config;
-using WizenkleBoss.Common.Helper;
 using WizenkleBoss.Common.Helper;
 
 namespace WizenkleBoss.Content.Rarities

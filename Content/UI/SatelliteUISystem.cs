@@ -1,20 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using Terraria.Audio;
-using Terraria.GameInput;
 using Terraria;
 using Terraria.ModLoader;
-using WizenkleBoss.Common.Config;
 using Terraria.UI;
 using WizenkleBoss.Common.Helper;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 using Terraria.Localization;
-using Terraria.DataStructures;
-using WizenkleBoss.Content.Projectiles.Misc;
 using static WizenkleBoss.Content.UI.StarMapUIHelper;
-using WizenkleBoss.Common.Helper;
 
 namespace WizenkleBoss.Content.UI
 {
@@ -91,8 +85,9 @@ namespace WizenkleBoss.Content.UI
         }
         public override void UpdateUI(GameTime gameTime)
         {
-            if (inUI || ScaleAnim > 0)
+            if (inUI || ScaleAnim > 0 && !Main.dedServ)
             {
+                Main.LocalPlayer.mouseInterface = true;
                 if (TerminalState != ContactingState.None)
                     HandleTerminalText();
                 else
