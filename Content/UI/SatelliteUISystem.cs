@@ -89,7 +89,7 @@ namespace WizenkleBoss.Content.UI
             {
                 Main.LocalPlayer.mouseInterface = true;
                 if (TerminalState != ContactingState.None)
-                    HandleTerminalText();
+                    HandleTerminal();
                 else
                 {
                     UpdatePrompt();

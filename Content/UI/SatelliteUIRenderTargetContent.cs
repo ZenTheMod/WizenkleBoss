@@ -78,31 +78,14 @@ namespace WizenkleBoss.Content.UI
         }
         public static void DrawLog(SpriteBatch spriteBatch, Color BloomColor, DynamicSpriteFont font)
         {
-            string LogPower = Language.GetTextValue("Mods.WizenkleBoss.UI.SatelliteDish.StarMapLogs.GetPower", DateTime.Today.Year);
-
-            string LogText = TerminalState switch
-            {
-                ContactingState.ContactingLowPower => Language.GetTextValue("Mods.WizenkleBoss.UI.SatelliteDish.StarMapLogs.SuccessfulLowPower", DateTime.Today.Year),
-                ContactingState.ContactingHighPower => Language.GetTextValue("Mods.WizenkleBoss.UI.SatelliteDish.StarMapLogs.SuccessfulHighPower", DateTime.Today.Year),
-                ContactingState.ErrorNoPower => Language.GetTextValue("Mods.WizenkleBoss.UI.SatelliteDish.StarMapLogs.ErrorInsufficiantPower", DateTime.Today.Year),
-                ContactingState.ErrorStarNotFound => Language.GetTextValue("Mods.WizenkleBoss.UI.SatelliteDish.StarMapLogs.ErrorStarDestroyed", DateTime.Today.Year),
-                _ => " "
-            };
-
             bool easteregg = Main.LocalPlayer.name == "Jim" || Main.LocalPlayer.name == "Wither";
-            if (TerminalState > ContactingState.ContactingHighPower && easteregg)
-                LogText = Language.GetTextValue("Mods.WizenkleBoss.UI.SatelliteDish.StarMapLogs.ErrorForWither", 1984);
-
-            string currentlog = TerminalLine <= 9 ? LogPower : LogText;
-
-            string[] lines = currentlog.Split(new string[] { "\n", "\r\n" }, StringSplitOptions.None);
 
             int line = TerminalLine <= 9 ? TerminalLine : TerminalLine - 9;
-            for (int i = 0; i <= lines.Length - 1; i++)
+            for (int i = 0; i <= TerminalLines.Length - 1; i++)
             {
                 if (i > line)
                     return;
-                Vector2 textSize = Helper.MeasureString(lines[i], font);
+                Vector2 textSize = Helper.MeasureString(TerminalLines[i], font);
                 Vector2 position = new(30, 30 + (textSize.Y * i * 0.25f));
                 bool error = TerminalState > ContactingState.ContactingHighPower && TerminalLine > 9 && i > 1;
 
@@ -111,7 +94,7 @@ namespace WizenkleBoss.Content.UI
 
                 spriteBatch.Draw(TextureRegistry.Bloom, position + (textSize / 2f * 0.22f), null, error ? (Color.Red * 0.1f) with { A = 0 } : (BloomColor * 2f), 0f, TextureRegistry.Bloom.Size() / 2f, (textSize / TextureRegistry.Ball.Size()) * 1.4f, SpriteEffects.None, 0f);
 
-                ChatManager.DrawColorCodedString(spriteBatch, font, lines[i], position, error ? Color.Red : Color.White, 0, Vector2.Zero, Vector2.One * 0.22f);
+                ChatManager.DrawColorCodedString(spriteBatch, font, TerminalLines[i], position, error ? Color.Red : Color.White, 0, Vector2.Zero, Vector2.One * 0.22f);
             }
         }
         public static void DrawTextPrompt(SpriteBatch spriteBatch, Vector2 Center, Color BloomColor, DynamicSpriteFont font)

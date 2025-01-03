@@ -204,11 +204,18 @@ namespace WizenkleBoss.Common.Helper
             // I am requesting at least: $467,589,489,634,896,754,986,756,758,936,793,465,975 in compensation.
             // You have until tommorow to comply.
         public static SoundStyle SateliteDeathray { get; internal set; }
+
         public static SoundStyle TelescopeOpen { get; internal set; }
         public static SoundStyle TelescopeClose { get; internal set; }
         public static SoundStyle TelescopePan { get; internal set; }
+
         public static SoundStyle NoteOpen { get; internal set; }
+
         public static SoundStyle HumStart { get; internal set; }
+        public static SoundStyle HumLoop { get; internal set; }
+        public static SoundStyle HumEnd { get; internal set; }
+        public static SoundStyle Beep { get; internal set; }
+        public static SoundStyle BeepError { get; internal set; }
         public static SoundStyle Select { get; internal set; }
         public static SoundStyle Deselect { get; internal set; }
         public static SoundStyle Fire { get; internal set; }
@@ -243,12 +250,17 @@ namespace WizenkleBoss.Common.Helper
 
             NoteOpen = new SoundStyle("WizenkleBoss/Sounds/NoteOpen") with { Volume = 0.7f, MaxInstances = 3, SoundLimitBehavior = SoundLimitBehavior.ReplaceOldest, PitchVariance = 0.1f, Pitch = 0f, PlayOnlyIfFocused = false };
 
-            HumStart = new SoundStyle("WizenkleBoss/Sounds/ComputerHumStart") with { Volume = 0.1f, MaxInstances = 1, SoundLimitBehavior = SoundLimitBehavior.ReplaceOldest, PlayOnlyIfFocused = false };
+            HumStart = new SoundStyle("WizenkleBoss/Sounds/SatelliteAmbienceStart") with { Volume = 0.25f, MaxInstances = 1, SoundLimitBehavior = SoundLimitBehavior.ReplaceOldest, PlayOnlyIfFocused = false };
+            HumLoop = new SoundStyle("WizenkleBoss/Sounds/SatelliteAmbienceLoop") with { Volume = 0.15f, MaxInstances = 1, SoundLimitBehavior = SoundLimitBehavior.ReplaceOldest, PlayOnlyIfFocused = false, IsLooped = true };
+            HumEnd = new SoundStyle("WizenkleBoss/Sounds/SatelliteAmbienceEnd") with { Volume = 0.15f, MaxInstances = 1, SoundLimitBehavior = SoundLimitBehavior.ReplaceOldest, PlayOnlyIfFocused = false };
 
             Select = new SoundStyle("WizenkleBoss/Sounds/Select1") with { Volume = 0.65f, MaxInstances = 3, SoundLimitBehavior = SoundLimitBehavior.ReplaceOldest, PitchVariance = 0.13f, Pitch = -0.1f, PlayOnlyIfFocused = true };
             Deselect = new SoundStyle("WizenkleBoss/Sounds/Deselect") with { Volume = 0.65f, MaxInstances = 3, SoundLimitBehavior = SoundLimitBehavior.ReplaceOldest, PitchVariance = 0.13f, Pitch = -0.1f, PlayOnlyIfFocused = true };
 
-            Fire = new SoundStyle("WizenkleBoss/Sounds/Select2") with { Volume = 0.9f, MaxInstances = 1, SoundLimitBehavior = SoundLimitBehavior.ReplaceOldest, PitchVariance = 0.05f, PlayOnlyIfFocused = false };
+            Beep = new SoundStyle("WizenkleBoss/Sounds/SatelliteBeep") with { Volume = 0.55f, MaxInstances = 10, SoundLimitBehavior = SoundLimitBehavior.ReplaceOldest, PitchVariance = 0.13f, PlayOnlyIfFocused = true };
+            BeepError = new SoundStyle("WizenkleBoss/Sounds/SatelliteErrorBeep") with { Volume = 0.55f, MaxInstances = 10, SoundLimitBehavior = SoundLimitBehavior.ReplaceOldest, PitchVariance = 0.13f, PlayOnlyIfFocused = true };
+
+            Fire = new SoundStyle("WizenkleBoss/Sounds/SatelliteCharge") with { Volume = 0.9f, MaxInstances = 1, SoundLimitBehavior = SoundLimitBehavior.ReplaceOldest, PitchVariance = 0.05f, PlayOnlyIfFocused = false };
         }
     }
 }

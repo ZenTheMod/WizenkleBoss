@@ -72,8 +72,8 @@ namespace WizenkleBoss.Content.UI
         }
         public override void Update(GameTime gameTime)
         {
-            if (MusicKiller.MuffleFactor >= 0.2f)
-                MusicKiller.MuffleFactor = 0.2f;
+            if (MusicKiller.MuffleFactor >= 0.1f)
+                MusicKiller.MuffleFactor = 0.1f;
             Player player = Main.LocalPlayer;
             if (player.dead || DistanceCheck || player.CCed || !player.active)
             {

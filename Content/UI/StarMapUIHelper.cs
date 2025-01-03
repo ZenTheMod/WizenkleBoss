@@ -68,6 +68,7 @@ namespace WizenkleBoss.Content.UI
         public static ContactingState TerminalState;
         public static int TerminalLine = 0;
         public static float TerminalAnim = 0f;
+        public static string[] TerminalLines = [];
 
         public static Vector2 ScreenSize => new Vector2(Main.screenWidth, Main.screenHeight) * Main.UIScale;
 
@@ -108,13 +109,23 @@ namespace WizenkleBoss.Content.UI
                 Main.spriteBatch.Draw(TextureRegistry.ConfigIcon, position, null, color, 0f, origin, Vector2.One, SpriteEffects.None, 0f);
             }
         }
-        public static void HandleTerminalText()
+        public static void HandleTerminal()
         {
+            HandleTerminalText();
             if (TerminalAnim >= 1)
             {
-                    // ADD SFX HERE DUMBASS
                 TerminalLine++;
                 TerminalAnim = 0;
+
+                bool error = TerminalState > ContactingState.ContactingHighPower && TerminalLine > 10;
+
+                int line = TerminalLine <= 9 ? TerminalLine : TerminalLine - 9;
+                int clampedLine = (int)MathHelper.Min(line, TerminalLines.Length - 1);
+
+                string linereal = TerminalLines[clampedLine];
+
+                if (linereal != "\n" && linereal != "..." && linereal != " " && linereal != "" && line < TerminalLines.Length)
+                    SoundEngine.PlaySound(error ? AudioRegistry.BeepError : AudioRegistry.Beep);
             }
             if (TerminalState == ContactingState.ContactingLowPower || TerminalState == ContactingState.ContactingHighPower)
             {
@@ -130,7 +141,7 @@ namespace WizenkleBoss.Content.UI
                     TerminalLine = 0;
                     IngameFancyUI.Close();
 
-                    // Spawn God
+                        // Spawn God
                     Projectile.NewProjectile(new EntitySource_TileInteraction(Main.LocalPlayer, (int)CurrentTileWorldPosition.X / 16, (int)CurrentTileWorldPosition.Y / 16), CurrentTileWorldPosition, Vector2.Zero, ModContent.ProjectileType<DeepSpaceTransmitter>(), 4000, 0, -1, TargetedStar);
                 }
             }
@@ -152,6 +163,27 @@ namespace WizenkleBoss.Content.UI
                 else
                     TerminalAnim += 0.4f;
             }
+        }
+        public static void HandleTerminalText()
+        {
+            string LogPower = Language.GetTextValue("Mods.WizenkleBoss.UI.SatelliteDish.StarMapLogs.GetPower", DateTime.Today.Year);
+
+            string LogText = TerminalState switch
+            {
+                ContactingState.ContactingLowPower => Language.GetTextValue("Mods.WizenkleBoss.UI.SatelliteDish.StarMapLogs.SuccessfulLowPower", DateTime.Today.Year),
+                ContactingState.ContactingHighPower => Language.GetTextValue("Mods.WizenkleBoss.UI.SatelliteDish.StarMapLogs.SuccessfulHighPower", DateTime.Today.Year),
+                ContactingState.ErrorNoPower => Language.GetTextValue("Mods.WizenkleBoss.UI.SatelliteDish.StarMapLogs.ErrorInsufficiantPower", DateTime.Today.Year),
+                ContactingState.ErrorStarNotFound => Language.GetTextValue("Mods.WizenkleBoss.UI.SatelliteDish.StarMapLogs.ErrorStarDestroyed", DateTime.Today.Year),
+                _ => " "
+            };
+
+            bool easteregg = Main.LocalPlayer.name == "Jim" || Main.LocalPlayer.name == "Wither";
+            if (TerminalState > ContactingState.ContactingHighPower && easteregg)
+                LogText = Language.GetTextValue("Mods.WizenkleBoss.UI.SatelliteDish.StarMapLogs.ErrorForWither", 1984);
+
+            string currentlog = TerminalLine <= 9 ? LogPower : LogText;
+
+            TerminalLines = currentlog.Split(new string[] { "\n", "\r\n" }, StringSplitOptions.None);
         }
         public static void HandleInput()
         {
@@ -296,6 +328,7 @@ namespace WizenkleBoss.Content.UI
                     {
                         if (triggers.JustReleased.MouseRight && hovering && FireAnim == 1f)
                         {
+                            SoundEngine.PlaySound(AudioRegistry.Fire);
                             FireAnim = 0f;
                             Prompt = PromptState.None;
                             TerminalLine = 0;

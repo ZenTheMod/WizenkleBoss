@@ -14,9 +14,9 @@ namespace WizenkleBoss.Common.Helper
     public static class WiringHelper
     {
 
-        // ALL CREDIT OF THIS GOES TO JUNE, IM SO ASS AT GOOD CODE ITS NOT EVEN FUNNY.
+            // ALL CREDIT OF THIS GOES TO JUNE, IM SO ASS AT GOOD CODE ITS NOT EVEN FUNNY.
 
-        // go checkout techaria if you havent already.
+            // go checkout techaria if you havent already.
 
         private static Point16[] Directions => [new(-1, 0), new(1, 0), new(0, -1), new(0, 1)];
         public static bool HasWire(byte wire, Tile tile) => wire switch
