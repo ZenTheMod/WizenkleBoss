@@ -78,7 +78,12 @@ Items: {
 	}
 
 	SolarPanelItem: {
-		DisplayName: Solar Panel Item
+		DisplayName: Solar Panel Array
+		Tooltip: "'Great for harvesting the sun's energy!'"
+	}
+
+	TerminalItem: {
+		DisplayName: Terminal Item
 		Tooltip: ""
 	}
 }
@@ -94,6 +99,7 @@ UI: {
 		SelectKeyPrompt: Press Attack or Jump to select stars.
 		ContactPrompt: Hold Interact to contact star system.
 		ErrorPrompt: An error has occurred.
+		NoMap: You must wire-connect a satellite dish.
 
 		StarMapLogs: {
 			GetPower:

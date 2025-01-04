@@ -17,8 +17,7 @@ namespace WizenkleBoss.Content.Tiles
 
             Main.tileFrameImportant[Type] = true;
             Main.tileLavaDeath[Type] = true;
-            Main.tileSpelunker[Type] = true;
-            Main.tileWaterDeath[Type] = false;
+            Main.tileWaterDeath[Type] = true;
 
             TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3Wall);
             TileObjectData.newTile.Width = 6;

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Microsoft.CodeAnalysis.Text;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Graphics;
 using System;
@@ -48,21 +49,21 @@ namespace WizenkleBoss.Content.UI
                 bool InTerminal = TerminalState != ContactingState.None;
 
                     // Draw the stars.
-                if (BootAnim > 0.3f && !InTerminal)
+                if (BootAnim > 0.3f && !InTerminal && MapAccess)
                     DrawStars(spriteBatch, BloomColor, font);
 
                     // Draw the weird bracket selector inspired by you know what at this point.
-                if (BootAnim > 0.4f && !InTerminal)
+                if (BootAnim > 0.4f && !InTerminal && MapAccess)
                     DrawSelection(spriteBatch, new(214, 196, 255));
 
                     // Reset the sb to remove the matrix.
                 spriteBatch.End();
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
 
-                if (BootAnim > 0.8f && !InTerminal)
+                if (BootAnim > 0.8f && !InTerminal && MapAccess)
                     DrawTextPrompt(spriteBatch, Center + new Vector2(0, Center.Y / 2), BloomColor, font);
 
-                if (InTerminal)
+                if (InTerminal && MapAccess)
                     DrawLog(spriteBatch, BloomColor, font);
 
 
@@ -71,10 +72,25 @@ namespace WizenkleBoss.Content.UI
                 if (BootAnim > 0.95f && CanTargetStar(false))
                     spriteBatch.Draw(cursormode ? TextureRegistry.Cursor : TextureRegistry.Circle, cursormode ? (Main.MouseScreen - new Vector2(Main.screenWidth / 2, Main.screenHeight / 2)) / 2 + Center : Center, null, cursormode ? Color.White : Color.Gray with { A = 0 }, 0, cursormode ? Vector2.Zero : TextureRegistry.Circle.Size() / 2, cursormode ? 1f : 0.05f, SpriteEffects.None, 0f);
 
+                    // Draw the error when you forget to plug in your router
+                if (!MapAccess && BootAnim > 0.4f)
+                    DrawFullScreenError(spriteBatch, font, Center);
+
                 spriteBatch.End();
                 device.SetRenderTarget(null);
                 _wasPrepared = true;
             }
+        }
+        public static void DrawFullScreenError(SpriteBatch spriteBatch, DynamicSpriteFont font, Vector2 Center)
+        {
+            string error = Language.GetTextValue("Mods.WizenkleBoss.UI.SatelliteDish.NoMap");
+            Vector2 textSize = Helper.MeasureString(error, font);
+
+            spriteBatch.Draw(TextureRegistry.Bloom, Center, null, (Color.Red * 0.1f) with { A = 0 }, 0f, TextureRegistry.Bloom.Size() / 2f, (TextureRegistry.ConsoleError[1].Size() / TextureRegistry.Ball.Size()) * 10f, SpriteEffects.None, 0f);
+            if (Main.GlobalTimeWrappedHourly * 60 % 50 < 25)
+                spriteBatch.Draw(TextureRegistry.ConsoleError[1], Center, null, Color.Red, 0, TextureRegistry.ConsoleError[1].Size() / 2, 0.5f, SpriteEffects.None, 0f);
+
+            ChatManager.DrawColorCodedString(spriteBatch, font, error, Center + new Vector2(0, 20 + TextureRegistry.ConsoleError[1].Height * 0.5f / 2), Color.Red, 0, textSize / 2, Vector2.One * 0.4f);
         }
         public static void DrawLog(SpriteBatch spriteBatch, Color BloomColor, DynamicSpriteFont font)
         {

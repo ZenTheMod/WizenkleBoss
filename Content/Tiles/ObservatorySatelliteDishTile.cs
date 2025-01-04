@@ -25,20 +25,13 @@ namespace WizenkleBoss.Content.Tiles
 {
     public class ObservatorySatelliteDishTile : ModTile
     {
-        public static Asset<Texture2D> GlowTexture;
         public override void SetStaticDefaults()
         {
-            if (!Main.dedServ)
-            {
-                GlowTexture = ModContent.Request<Texture2D>(Texture + "Glow");
-            }
             RegisterItemDrop(ModContent.ItemType<ObservatorySatelliteDishItem>());
 
             Main.tileFrameImportant[Type] = true;
             Main.tileNoAttach[Type] = true;
-            Main.tileSpelunker[Type] = true;
 
-            TileID.Sets.HasOutlines[Type] = true;
             TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3);
             TileObjectData.newTile.Width = 5;
             TileObjectData.newTile.Height = 5;
@@ -50,59 +43,6 @@ namespace WizenkleBoss.Content.Tiles
             TileObjectData.addTile(Type);
 
             AddMapEntry(new Color(142, 82, 82));
-        }
-        public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
-        public override bool RightClick(int i, int j)
-        {
-            if (Helper.AnyProjectiles(ModContent.ProjectileType<DeepSpaceTransmitter>()))
-                return false;
-
-            Player player = Main.LocalPlayer;
-
-            if (player.Center.Y >= Main.worldSurface * 16)
-                return false;
-
-            SoundEngine.PlaySound(SoundID.Mech, player.Center);
-
-            if (player.mount.Active)
-            {
-                player.mount.Dismount(player);
-            }
-            Point16 pos16 = Helper.GetTopLeftTileInMultitile(i, j);
-
-            IngameFancyUI.CoverNextFrame();
-            Main.ClosePlayerChat();
-
-            Main.mouseRightRelease = false;
-
-                // I HATE FANCY UI
-            Main.ingameOptionsWindow = false;
-            Main.playerInventory = false;
-            Main.editChest = false;
-            Main.npcChatText = string.Empty;
-            Main.chatText = string.Empty;
-            Main.inFancyUI = true;
-
-            StarMapUIHelper.CurrentTileWorldPosition = pos16.ToWorldCoordinates();
-
-            StarMapUIHelper.TerminalAnim = 0f;
-            StarMapUIHelper.TerminalState = ContactingState.None;
-
-            Main.InGameUI.SetState(StarMapUIHelper.satelliteUI);
-
-            return true;
-        }
-        public override void MouseOver(int i, int j)
-        {
-            if (Helper.AnyProjectiles(ModContent.ProjectileType<DeepSpaceTransmitter>()))
-                return;
-            Player player = Main.LocalPlayer;
-            if (player.Center.Distance(new Point(i, j).ToWorldCoordinates()) >= 140 || Main.LocalPlayer.Center.Y >= Main.worldSurface * 16)
-                return;
-            player.noThrow = 2;
-            player.cursorItemIconEnabled = true;
-            player.cursorItemIconID = -1;
-            player.cursorItemIconText = Language.GetTextValue("Mods.WizenkleBoss.Tiles.ObservatorySatelliteDish.Hover");
         }
     }
 }

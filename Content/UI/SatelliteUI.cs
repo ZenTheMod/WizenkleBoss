@@ -62,7 +62,7 @@ namespace WizenkleBoss.Content.UI
                 IngameFancyUI.OpenUIState(this);
             }, scrollToOption: nameof(WizenkleBossConfig.TelescopeMovementKeyPrompt), centerScrolledOption: true);
         }
-        public override bool DistanceCheck => Main.LocalPlayer.Center.Distance(CurrentTileWorldPosition) >= 200;
+        public override bool DistanceCheck => false;
         public override void OnActivate()
         {
             SoundEngine.PlaySound(AudioRegistry.HumStart);

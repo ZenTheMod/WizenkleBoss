@@ -29,7 +29,6 @@ namespace WizenkleBoss.Content.Tiles
 
             Main.tileFrameImportant[Type] = true;
             Main.tileNoAttach[Type] = true;
-            Main.tileSpelunker[Type] = true;
 
             TileID.Sets.HasOutlines[Type] = true;
             TileObjectData.newTile.CopyFrom(TileObjectData.Style3x4);

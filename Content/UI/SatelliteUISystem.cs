@@ -85,7 +85,7 @@ namespace WizenkleBoss.Content.UI
         }
         public override void UpdateUI(GameTime gameTime)
         {
-            if (inUI || ScaleAnim > 0 && !Main.dedServ)
+            if (inUI || ScaleAnim > 0 && !Main.dedServ && MapAccess)
             {
                 Main.LocalPlayer.mouseInterface = true;
                 if (TerminalState != ContactingState.None)

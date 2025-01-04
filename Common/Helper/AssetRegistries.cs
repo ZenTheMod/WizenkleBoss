@@ -35,7 +35,7 @@ namespace WizenkleBoss.Common.Helper
         public static Texture2D TextBoxStars { get; private set; }
         public static Texture2D TelescopeMap { get; private set; }
         public static Texture2D Cursor { get; private set; }
-            // public static Texture2D BatteryIcon { get; private set; }
+        public static Texture2D[] ConsoleError { get; private set; }
         public static Texture2D ConfigIcon { get; private set; }
         public override void Load()
         {
@@ -91,7 +91,11 @@ namespace WizenkleBoss.Common.Helper
             TelescopeMap = LoadTexture2D("Telescope/Map");
 
             Cursor = LoadTexture2D("Cursor");
-                // BatteryIcon = LoadTexture2D("Icons/BatterySwap");
+
+            ConsoleError = new Texture2D[2];
+            ConsoleError[0] = LoadTexture2D("Icons/NotConnectedToPower");
+            ConsoleError[1] = LoadTexture2D("Icons/NotConnectedToSatelliteDish");
+
             ConfigIcon = LoadTexture2D("Icons/Settings");
         }
         private static Texture2D LoadTexture2D(string TexturePath)

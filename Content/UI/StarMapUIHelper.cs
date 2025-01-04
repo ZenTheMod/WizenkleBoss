@@ -70,12 +70,13 @@ namespace WizenkleBoss.Content.UI
         public static float TerminalAnim = 0f;
         public static string[] TerminalLines = [];
 
+        public static bool MapAccess = false;
         public static Vector2 ScreenSize => new Vector2(Main.screenWidth, Main.screenHeight) * Main.UIScale;
 
         internal const int MaxStarDistance = 830;
         public static bool CanTargetStar(bool Scaled = true)
         {
-            if (satelliteUI.BackPanel == null || satelliteUI.ModConfigButton == null)
+            if (satelliteUI.BackPanel == null || satelliteUI.ModConfigButton == null || !MapAccess)
                 return false;
 
             float Multiplier = Scaled ? Main.UIScale : 1;
@@ -357,9 +358,9 @@ namespace WizenkleBoss.Content.UI
                 return ContactingState.ErrorStarNotFound;
 
                 // Get the top left of the satellite dish.
-            Point16 point = Helper.GetTopLeftTileInMultitile((int)CurrentTileWorldPosition.X / 16, (int)CurrentTileWorldPosition.Y / 16);
+            Point16 point = Utils.ToTileCoordinates16(CurrentTileWorldPosition);
 
-            Tile tile = Main.tile[point.X, point.Y];
+            Tile tile = Main.tile[point];
 
             TileObjectData data = TileObjectData.GetTileData(tile.TileType, 0);
 
