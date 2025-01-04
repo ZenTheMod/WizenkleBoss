@@ -31,7 +31,9 @@ namespace WizenkleBoss.Common.Helper
 
         private Vector2 HideTHICKCursor(On_Main.orig_DrawThickCursor orig, bool smart)
         {
-            if (!StarMapUIHelper.inUI)
+            bool cursormode = ModContent.GetInstance<WizenkleBossConfig>().SatelliteUseMousePosition;
+
+            if (!StarMapUIHelper.inUI || !cursormode)
                 return orig(smart);
 
             bool hovering = StarMapUIHelper.CanTargetStar();
@@ -44,7 +46,9 @@ namespace WizenkleBoss.Common.Helper
 
         private void HideCursor(On_Main.orig_DrawCursor orig, Vector2 bonus, bool smart)
         {
-            if (!StarMapUIHelper.inUI)
+            bool cursormode = ModContent.GetInstance<WizenkleBossConfig>().SatelliteUseMousePosition;
+
+            if (!StarMapUIHelper.inUI || !cursormode)
                 orig(bonus, smart);
 
             bool hovering = StarMapUIHelper.CanTargetStar();

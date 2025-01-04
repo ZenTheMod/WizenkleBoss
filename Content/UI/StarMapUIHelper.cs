@@ -47,6 +47,8 @@ namespace WizenkleBoss.Content.UI
 
         public static Vector2 CurrentTileWorldPosition;
 
+        public static Vector2 CurrentTerminalWorldPosition;
+
         public static Vector2 UIPosition;
         public static Vector2 UIVelocity;
         public static float UIZoom = 1f;
@@ -78,6 +80,10 @@ namespace WizenkleBoss.Content.UI
         {
             if (satelliteUI.BackPanel == null || satelliteUI.ModConfigButton == null || !MapAccess)
                 return false;
+
+            bool cursormode = ModContent.GetInstance<WizenkleBossConfig>().SatelliteUseMousePosition;
+            if (!cursormode)
+                return true;
 
             float Multiplier = Scaled ? Main.UIScale : 1;
             Vector2 CursorPos = ((Main.MouseScreen * Multiplier) - (new Vector2(Main.screenWidth / 2, Main.screenHeight / 2) * Multiplier)) / 2;

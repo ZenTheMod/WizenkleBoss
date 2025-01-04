@@ -70,7 +70,7 @@ namespace WizenkleBoss.Content.UI
                 bool cursormode = ModContent.GetInstance<WizenkleBossConfig>().SatelliteUseMousePosition;
 
                 if (BootAnim > 0.95f && CanTargetStar(false))
-                    spriteBatch.Draw(cursormode ? TextureRegistry.Cursor : TextureRegistry.Circle, cursormode ? (Main.MouseScreen - new Vector2(Main.screenWidth / 2, Main.screenHeight / 2)) / 2 + Center : Center, null, cursormode ? Color.White : Color.Gray with { A = 0 }, 0, cursormode ? Vector2.Zero : TextureRegistry.Circle.Size() / 2, cursormode ? 1f : 0.05f, SpriteEffects.None, 0f);
+                    spriteBatch.Draw(cursormode ? TextureRegistry.Cursor : TextureRegistry.Circle, cursormode ? (Main.MouseScreen - new Vector2(Main.screenWidth / 2, Main.screenHeight / 2)) / 2 + Center : Center, null, cursormode ? Color.White : Color.Gray with { A = 0 }, 0, cursormode ? Vector2.Zero : TextureRegistry.Circle.Size() / 2, cursormode ? 1f : 0.1f, SpriteEffects.None, 0f);
 
                     // Draw the error when you forget to plug in your router
                 if (!MapAccess && BootAnim > 0.4f)
@@ -86,11 +86,11 @@ namespace WizenkleBoss.Content.UI
             string error = Language.GetTextValue("Mods.WizenkleBoss.UI.SatelliteDish.NoMap");
             Vector2 textSize = Helper.MeasureString(error, font);
 
-            spriteBatch.Draw(TextureRegistry.Bloom, Center, null, (Color.Red * 0.1f) with { A = 0 }, 0f, TextureRegistry.Bloom.Size() / 2f, (TextureRegistry.ConsoleError[1].Size() / TextureRegistry.Ball.Size()) * 10f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(TextureRegistry.Bloom, Center, null, (Color.Red * 0.1f) with { A = 0 }, 0f, TextureRegistry.Bloom.Size() / 2f, (TextureRegistry.ConsoleError[1].Size() / TextureRegistry.Ball.Size()) * 9f, SpriteEffects.None, 0f);
             if (Main.GlobalTimeWrappedHourly * 60 % 50 < 25)
-                spriteBatch.Draw(TextureRegistry.ConsoleError[1], Center, null, Color.Red, 0, TextureRegistry.ConsoleError[1].Size() / 2, 0.5f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(TextureRegistry.ConsoleError[1], Center, null, Color.Red, 0, TextureRegistry.ConsoleError[1].Size() / 2, 1, SpriteEffects.None, 0f);
 
-            ChatManager.DrawColorCodedString(spriteBatch, font, error, Center + new Vector2(0, 20 + TextureRegistry.ConsoleError[1].Height * 0.5f / 2), Color.Red, 0, textSize / 2, Vector2.One * 0.4f);
+            ChatManager.DrawColorCodedString(spriteBatch, font, error, Center + new Vector2(0, 20 + TextureRegistry.ConsoleError[1].Height / 2), Color.Red, 0, textSize / 2, Vector2.One * 0.4f);
         }
         public static void DrawLog(SpriteBatch spriteBatch, Color BloomColor, DynamicSpriteFont font)
         {

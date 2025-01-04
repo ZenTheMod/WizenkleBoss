@@ -31,7 +31,10 @@ float4 PixelShaderFunction(float4 sampleColor : COLOR0, float2 coords : TEXCOORD
     float scanSpeed = frac(uTime);
     
         // As stated in the original shader by @devrique this fisheye distortion was made by @ddoodm, you can find their original shader here: https://www.shadertoy.com/view/ltSXRz
-    float2 eyefishuv = (coords - 0.5) * 3.3;
+    
+    float2 warpedcoords = float2(uv.x + (max(1 - abs((scanSpeed - uv.y) * 80.), 0.) / 8), uv.y);
+    
+    float2 eyefishuv = (warpedcoords - 0.5) * 3.3;
     float deform = (1 - eyefishuv.y * eyefishuv.y) * 0.02 * eyefishuv.x;
     
     float2 deformedCoords = float2(coords.x - deform * 0.95, coords.y);
@@ -49,7 +52,7 @@ float4 PixelShaderFunction(float4 sampleColor : COLOR0, float2 coords : TEXCOORD
     float3 vignette = float3(screenForm, screenForm, screenForm);
     
         // Get the deformed texture and add dithering
-    float3 color = tex2D(baseTexture, float2(coords.x - deform * 0.95, coords.y)).rgb / dithering;
+    float3 color = tex2D(baseTexture, deformedCoords).rgb / dithering;
     float dither = tex2D(ditherTexture, deformedCoords).r;
 
     color += float3(dither, dither, dither) / 255.0;

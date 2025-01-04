@@ -13,13 +13,20 @@ using Terraria.Localization;
 using WizenkleBoss.Content.UI;
 using Terraria.UI;
 using WizenkleBoss.Content.Projectiles.Misc;
+using ReLogic.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace WizenkleBoss.Content.Tiles
 {
     public class TerminalTile : ModTile
     {
+        private static Asset<Texture2D> GlowTexture;
         public override void SetStaticDefaults()
         {
+            if (!Main.dedServ)
+            {
+                GlowTexture = ModContent.Request<Texture2D>(Texture + "Glowmask");
+            }
             RegisterItemDrop(ModContent.ItemType<TerminalItem>());
 
             Main.tileFrameImportant[Type] = true;
@@ -28,13 +35,36 @@ namespace WizenkleBoss.Content.Tiles
             TileID.Sets.HasOutlines[Type] = true;
             TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
             TileObjectData.newTile.Origin = new Point16(1, 1);
+            TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.Table | AnchorType.SolidWithTop, TileObjectData.newTile.Width, 0);
             TileObjectData.newTile.CoordinateHeights = [16, 16];
             TileObjectData.newTile.StyleHorizontal = true;
             TileObjectData.newTile.LavaDeath = true;
+            TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
+            TileObjectData.newAlternate.Direction = TileObjectDirection.PlaceRight;
+            TileObjectData.addAlternate(1);
             TileObjectData.addTile(Type);
 
             AddMapEntry(new Color(142, 82, 82));
+        }
+        public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
+        {
+            Tile tile = Main.tile[i, j];
+
+            Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
+
+            if (Main.drawToScreen)
+                zero = Vector2.Zero;
+
+            Vector2 offsets = -Main.screenPosition + zero;
+
+            int iX16 = i * 16;
+            int jX16 = j * 16;
+            Vector2 location = new(iX16, jX16);
+
+            Vector2 drawCoordinates = location + offsets;
+
+            Main.spriteBatch.Draw(GlowTexture.Value, drawCoordinates, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
         }
         public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
         public override bool RightClick(int i, int j)
@@ -68,6 +98,7 @@ namespace WizenkleBoss.Content.Tiles
 
             Point16 point = (Point16)satelliteDish;
             StarMapUIHelper.CurrentTileWorldPosition = Helper.GetTopLeftTileInMultitile(point.X, point.Y).ToWorldCoordinates();
+            StarMapUIHelper.CurrentTerminalWorldPosition = pos16.ToWorldCoordinates();
 
             StarMapUIHelper.TerminalAnim = 0f;
             StarMapUIHelper.TerminalState = ContactingState.None;
