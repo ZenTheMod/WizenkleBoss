@@ -33,16 +33,6 @@ namespace WizenkleBoss.Common.Config
         [DefaultValue(true)]
         public bool TooltipEffects;
 
-        [DefaultValue(true)]
-        public bool Particles;
-
-        [DefaultValue(700)]
-        [Slider]
-        [Increment(1)]
-        [Range(10, 700)]
-        [SliderColor(254, 179, 255, 255)]
-        public int ParticleCap;
-
         [DefaultValue(0.75f)]
         [Slider]
         [Increment(0.05f)]
@@ -50,6 +40,14 @@ namespace WizenkleBoss.Common.Config
         [Range(0f, 1f)]
         [SliderColor(254, 179, 255, 255)]
         public float VideoOpacity;
+
+        [DefaultValue(0.75f)]
+        [Slider]
+        [Increment(0.05f)]
+        [DrawTicks]
+        [Range(0f, 1f)]
+        [SliderColor(254, 179, 255, 255)]
+        public float ScreenShake;
 
         [Header("Sounds")]
 
@@ -87,5 +85,8 @@ namespace WizenkleBoss.Common.Config
 
         [DefaultValue(true)]
         public bool SatelliteUseMousePosition;
+
+        [DefaultValue(false)]
+        public bool SatelliteMidnightMode;
     }
 }

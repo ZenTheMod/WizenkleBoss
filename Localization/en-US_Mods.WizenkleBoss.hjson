@@ -83,8 +83,8 @@ Items: {
 	}
 
 	TerminalItem: {
-		DisplayName: Terminal Item
-		Tooltip: ""
+		DisplayName: Satellite Dish Terminal
+		Tooltip: "'TARGET LOCATED'"
 	}
 }
 
@@ -248,7 +248,7 @@ Tiles: {
 }
 
 Projectiles: {
-	DeepSpaceTransmitter.DisplayName: Deep Space Transmitter
+	DeepSpaceTransmitter.DisplayName: Cosmic Fucking Lesbian Deathray
 	InkSplat.DisplayName: Ink Splat
 }
 
@@ -296,16 +296,6 @@ Configs: {
 			Tooltip: If this mod's visual effects on item tooltips are enabled or not.
 		}
 
-		Particles: {
-			Label: "[i:3576] Particle Effects"
-			Tooltip: If this mod's visual particles are enabled or not.
-		}
-
-		ParticleCap: {
-			Label: "[i:485] Max Particles"
-			Tooltip: Max amount of particles that can be spawned at once.
-		}
-
 		LaserLoop: {
 			Label: "[i:3541] Laser beam Sounds"
 			Tooltip: If the loud noise of laser beams is audable.
@@ -321,6 +311,11 @@ Configs: {
 			Tooltip: The volume of video based effects.
 		}
 
+		ScreenShake: {
+			Label: "[i:3546] Screenshake"
+			Tooltip: Controls the intensity of screenshaking effects..
+		}
+
 		TelescopeMovementKeyPrompt: {
 			Label: "[i:WizenkleBoss/ObservatoryChartItem] Screen Pan Prompt"
 			Tooltip: If a key prompt is shown when opening some UI.
@@ -332,13 +327,18 @@ Configs: {
 		}
 
 		SatelliteMovementVelocity: {
-			Label: "[i:WizenkleBoss/ObservatorySatelliteDishItem] Satellite Dish Screen Pan Speed"
+			Label: "[i:WizenkleBoss/ObservatorySatelliteDishItem] Terminal Pan Speed"
 			Tooltip: Controls satellite dish movement speed.
 		}
 
 		SatelliteUseMousePosition: {
-			Label: "[i:WizenkleBoss/ObservatorySatelliteDishItem] Satellite Dish Mouse Select"
+			Label: "[i:WizenkleBoss/ObservatorySatelliteDishItem] Terminal Mouse Select"
 			Tooltip: Makes target selection based on mouse position rather than the small crosshair.
+		}
+
+		SatelliteMidnightMode: {
+			Label: "[i:WizenkleBoss/ObservatorySatelliteDishItem] Terminal Midnight Mode"
+			Tooltip: Makes the terminal much darker.
 		}
 	}
 }

@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 using Terraria.DataStructures;
 using Terraria;
 using Terraria.ModLoader;
+using WizenkleBoss.Content.TileEntities;
+using ReLogic.Content;
+using System.ComponentModel;
+using Terraria.ID;
 
 namespace WizenkleBoss.Common.Helper
 {
@@ -90,6 +94,80 @@ namespace WizenkleBoss.Common.Helper
                 }
             }
             return found;
+        }
+
+        public static int WireScanAndConsumePower(int x, int y, int width, int height, int amountToConsume)
+        {
+            var set = WireScanForPower(0, x, y, width, height);
+                set.UnionWith(WireScanForPower(1, x, y, width, height));
+                set.UnionWith(WireScanForPower(2, x, y, width, height));
+                set.UnionWith(WireScanForPower(3, x, y, width, height));
+
+            int _amountToConsume = amountToConsume;
+            foreach (var tile in set)
+            {
+                if (_amountToConsume <= 0)
+                    break;
+                if (tile.Charge > 0)
+                {
+                    int consume = Math.Min(_amountToConsume, tile.Charge);
+                    tile.Charge -= consume;
+                    _amountToConsume -= consume;
+
+                        // lag
+                    if (Main.netMode == NetmodeID.Server)
+                        NetMessage.SendData(MessageID.TileEntitySharing, number: tile.ID, number2: tile.Position.X, number3: tile.Position.Y);
+                }
+            }
+
+            return amountToConsume - _amountToConsume;
+        }
+
+        public static HashSet<PowerSourceTileEntity> WireScanForPower(byte wire, int x, int y, int width, int height)
+        {
+                // MAD GENIUS BULLSHIT
+            Queue<Point16> frontier = new();
+            HashSet<Point16> visited = new();
+
+            for (int j = y; j < y + height; j++)
+            {
+                for (int i = x; i < x + width; i++)
+                {
+                    TravelToPoint(wire, new Point16(i, j), frontier, visited);
+                }
+            }
+
+            while (frontier.Count > 0)
+            {
+                var point = frontier.Dequeue();
+                for (int i = 0; i < 4; i++)
+                {
+                    var next = point + Directions[i];
+                    TravelToPoint(wire, next, frontier, visited);
+                }
+            }
+
+            for (int j = y; j < y + height; j++)
+            {
+                for (int i = x; i < x + width; i++)
+                {
+                    visited.Remove(new Point16(i, j));
+                }
+            }
+
+            HashSet<PowerSourceTileEntity> tileEntity = new();
+
+            foreach (var point in visited)
+            {
+                Point16 tl = Helper.GetTopLeftTileInMultitile(point.X, point.Y);
+                TileEntity.ByPosition.TryGetValue(tl, out TileEntity te);
+
+                if (te is PowerSourceTileEntity powerSource)
+                {
+                    tileEntity.Add(powerSource);
+                }
+            }
+            return tileEntity;
         }
     }
 }

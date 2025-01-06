@@ -15,6 +15,7 @@ using static WizenkleBoss.Content.UI.StarMapUIHelper;
 
 namespace WizenkleBoss.Content.UI
 {
+    [Autoload(Side = ModSide.Client)]
     public partial class SatelliteUISystem : ModSystem
     {
             // THATS SICK AND TWIIISSSTTEDDDD :333333
@@ -30,13 +31,17 @@ namespace WizenkleBoss.Content.UI
 
                     // i hate my chud life
                 float overallcolormultiplier = 2 - MathF.Pow(2f, 10 * (ScaleAnim - 1));
-                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
 
-                    // Draw the background, i would normally use a different clear color, but that seems to break for some users.
-                spriteBatch.Draw(TextureRegistry.Pixel, new Rectangle(0, 0, (int)TargetSize.X, (int)TargetSize.Y), new Color(11, 8, 18) * Utils.Remap(overallcolormultiplier, 1, 2, 1, 10));
+                if (!ModContent.GetInstance<WizenkleBossConfig>().SatelliteMidnightMode)
+                {
+                    spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
 
-                    // USE the matrix
-                spriteBatch.End();
+                        // Draw the background, i would normally use a different clear color, but that seems to break for some users.
+                    spriteBatch.Draw(TextureRegistry.Pixel, new Rectangle(0, 0, (int)TargetSize.X, (int)TargetSize.Y), new Color(11, 8, 18) * Utils.Remap(overallcolormultiplier, 1, 2, 1, 10));
+
+                        // USE the matrix
+                    spriteBatch.End();
+                }
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, default, default, default, null, UIZoomMatrix);
 
                 Vector2 Center = new(_target.Width / 2f, _target.Height / 2f);
@@ -137,7 +142,8 @@ namespace WizenkleBoss.Content.UI
             float heightmultiplier = Prompt >= PromptState.Fire ? 1f : 1.2f;
             Rectangle backing = new(-(int)(Center.X * 2f), (int)((Center.Y - (fontSizePrompt.Y * size)) - (17 * PromptAnim)), (int)(Center.X * 6f), (int)((fontSizePrompt.Y * heightmultiplier * size) + (34 * PromptAnim)));
             spriteBatch.Draw(TextureRegistry.Pixel, backing with { Y = (int)((Center.Y - (fontSizePrompt.Y * size)) - (19 * PromptAnim)), Height = (int)((fontSizePrompt.Y * heightmultiplier * size) + (38 * PromptAnim)) }, BloomColor * 10f);
-            spriteBatch.Draw(TextureRegistry.Pixel, backing, new Color(11, 8, 18));
+            Color backingColor = ModContent.GetInstance<WizenkleBossConfig>().SatelliteMidnightMode ? Color.Black : new Color(11, 8, 18);
+            spriteBatch.Draw(TextureRegistry.Pixel, backing, backingColor);
             spriteBatch.Draw(TextureRegistry.Bloom, backing, BloomColor * 4f);
 
             if (Prompt == PromptState.None)

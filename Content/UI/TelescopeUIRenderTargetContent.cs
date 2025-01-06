@@ -25,7 +25,7 @@ namespace WizenkleBoss.Content.UI
                 Vector2 Center = new(_target.Width / 2f, _target.Height / 2f);
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
 
-                // Example mod's ui uses like 17x this for their gradient.
+                    // Example mod's ui uses like 17x this for their gradient.
                 int steps = 120;
 
                 Color GradientA;

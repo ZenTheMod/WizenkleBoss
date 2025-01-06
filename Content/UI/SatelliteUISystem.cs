@@ -12,6 +12,7 @@ using static WizenkleBoss.Content.UI.StarMapUIHelper;
 
 namespace WizenkleBoss.Content.UI
 {
+    [Autoload(Side = ModSide.Client)]
     public partial class SatelliteUISystem : ModSystem
     {
         public override void OnWorldLoad()

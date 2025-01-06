@@ -375,14 +375,11 @@ namespace WizenkleBoss.Content.UI
                 return ContactingState.ErrorNoPower;
 
             Vector2 tileSize = new(data.Width, data.Height);
-            if (WiringHelper.WireScanForTileType(point.X, point.Y, (int)tileSize.X, (int)tileSize.Y, ModContent.TileType<SolarPanelTile>(), out Point16? tl))
-            {
-                if (tl == null)
-                    return ContactingState.ErrorNoPower;
 
-                    // insert tile entity checks here
+            int consumed = WiringHelper.WireScanAndConsumePower(point.X, point.Y, (int)tileSize.X, (int)tileSize.Y, 200);
+            if (consumed >= 200)
                 return ContactingState.ContactingHighPower;
-            }
+
             return ContactingState.ErrorNoPower;
         }
 

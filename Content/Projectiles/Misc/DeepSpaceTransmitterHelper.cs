@@ -10,6 +10,7 @@ using Terraria.ModLoader;
 using WizenkleBoss.Common.Helper;
 using WizenkleBoss.Content.Dusts;
 using MonoMod.Cil;
+using WizenkleBoss.Content.UI;
 
 namespace WizenkleBoss.Content.Projectiles.Misc
 {
@@ -58,7 +59,13 @@ namespace WizenkleBoss.Content.Projectiles.Misc
                     // Also, for you bitchass theives who arent going to credit me, heres the shader :3 https://www.shadertoy.com/view/4fKyzt, or you can just ya-know, take it straight from the decomp you already have.
                 device.Textures[1] = TextureRegistry.Space[1];
                 device.SamplerStates[1] = SamplerState.LinearWrap;
+
                 device.Textures[2] = TextureRegistry.Wood;
+                if (StarMapUIHelper.TargetedStar != int.MaxValue && StarMapUIHelper.TargetedStar > -1)
+                {
+                    if (BarrierStarSystem.Stars[StarMapUIHelper.TargetedStar].Name.Contains("QUEER"))
+                        device.Textures[2] = TextureRegistry.Rainbow;
+                }
                 device.SamplerStates[2] = SamplerState.LinearWrap;
 
                 Laser.Value.CurrentTechnique.Passes[0].Apply();
@@ -137,11 +144,12 @@ namespace WizenkleBoss.Content.Projectiles.Misc
             // Backup so that when you exit the world you dont get perma locked.
         public override void PostUpdateEverything()
         {
-            if (charge > 0)
+            if (charge > 0 || darkness > 0)
             {
                 if (!Helper.AnyProjectiles(ModContent.ProjectileType<DeepSpaceTransmitter>()))
                 {
                     charge = 0;
+                    darkness = 0;
                 }
             }
         }

@@ -6,6 +6,7 @@ using ReLogic.Graphics;
 using System;
 using Terraria.GameContent;
 using Terraria.Audio;
+using Steamworks;
 
 namespace WizenkleBoss.Common.Helper
 {
@@ -29,6 +30,7 @@ namespace WizenkleBoss.Common.Helper
         public static Texture2D Lichen { get; private set; }
         public static Texture2D Dither { get; private set; }
         public static Texture2D Wood { get; private set; }
+        public static Texture2D Rainbow { get; private set; }
         public static Texture2D Blink { get; private set; }
         public static Texture2D BlinkOuter { get; private set; }
         public static Texture2D InkDash { get; private set; }
@@ -37,6 +39,7 @@ namespace WizenkleBoss.Common.Helper
         public static Texture2D Cursor { get; private set; }
         public static Texture2D[] ConsoleError { get; private set; }
         public static Texture2D ConfigIcon { get; private set; }
+        public static Texture2D EnergyBar { get; private set; }
         public override void Load()
         {
             if (Main.dedServ)
@@ -80,6 +83,7 @@ namespace WizenkleBoss.Common.Helper
             Dither = LoadTexture2D("Noise/Dither");
 
             Wood = LoadTexture2D("Noise/Wood");
+            Rainbow = LoadTexture2D("Noise/PRIDEMONTH");
 
             Blink = LoadTexture2D("Telescope/Blink");
             BlinkOuter = LoadTexture2D("Telescope/BlinkOuter");
@@ -97,6 +101,8 @@ namespace WizenkleBoss.Common.Helper
             ConsoleError[1] = LoadTexture2D("Icons/NotConnectedToSatelliteDish");
 
             ConfigIcon = LoadTexture2D("Icons/Settings");
+
+            EnergyBar = LoadTexture2D("Icons/PowerBar");
         }
         private static Texture2D LoadTexture2D(string TexturePath)
         {
@@ -124,14 +130,16 @@ namespace WizenkleBoss.Common.Helper
             Lichen = null;
             Dither = null;
             Wood = null;
+            Rainbow = null;
             Blink = null;
             BlinkOuter = null;
             InkDash = null;
             TextBoxStars = null;
             TelescopeMap = null;
             Cursor = null;
-            // BatteryIcon = null;
+            ConsoleError = null;
             ConfigIcon = null;
+            EnergyBar = null;
         }
     }
     public class FontRegistry : ModSystem

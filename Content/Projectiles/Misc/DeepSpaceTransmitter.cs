@@ -226,7 +226,7 @@ namespace WizenkleBoss.Content.Projectiles.Misc
             if (counter >= 200)
             {
                 if (darkness >= 0.3f)
-                    this.CameraShakeSimple(Projectile.Center, Vector2.Zero, 18, 7, 2, 0);
+                    this.CameraShakeSimple(Projectile.Center, Vector2.Zero, 8, 6, 2, 0);
                 if (charge >= 0.1f && darkness >= 1f)
                 {
                     laserState = LaserState.Open;
