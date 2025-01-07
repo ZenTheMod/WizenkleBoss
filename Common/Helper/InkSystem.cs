@@ -23,24 +23,8 @@ namespace WizenkleBoss.Common.Helper
 {
     public class InkSystem : ModSystem
     {
-            // easter eg
-        public static Color OutlineColor { get; private set; }
-        public override void OnWorldLoad()
-        {
-            string name = Main.LocalPlayer.name;
-            if (name == "Zen")
-                OutlineColor = Color.Plum;
-            else if (name == "Wither" || name == "WizKid9000" || name == "White")
-                OutlineColor = Color.Crimson;
-            else if (name == "Buckle" || name == "BUKALE" || name == "Bicheal")
-                OutlineColor = Color.Aqua;
-            else if (name == "Violet")
-                OutlineColor = Color.Violet;
-            else if (name == "LESBIAN") // i luvb women
-                OutlineColor = Main.DiscoColor;
-            else
-                OutlineColor = new(255, 230, 105);
-        }
+        public static Color OutlineColor { get; private set; } = new(255, 230, 105); // just so i can change it later
+
             // Lame rt setup
         #region RenderTargetSetup
         public class InkTargetContent : ARenderTargetContentByRequest
