@@ -95,7 +95,7 @@ namespace WizenkleBoss.Content.Dusts
                     ));
             }
 
-            Main.instance.GraphicsDevice.Textures[0] = TextureRegistry.TextBoxStars;
+            Main.instance.GraphicsDevice.Textures[0] = TextureRegistry.TextBoxStars.Value;
 
             if (vertices.Count > 3)
                 Main.instance.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, vertices.Count - 2);

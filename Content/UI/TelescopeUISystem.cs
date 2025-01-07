@@ -44,7 +44,7 @@ namespace WizenkleBoss.Content.UI
                 var frostyLensShader = Helper.FrostyLensShader;
                 var gd = Main.instance.GraphicsDevice;
 
-                gd.Textures[1] = TextureRegistry.Lichen;
+                gd.Textures[1] = TextureRegistry.Lichen.Value;
                 gd.SamplerStates[1] = SamplerState.LinearWrap;
 
                 frostyLensShader.Value.CurrentTechnique.Passes[0].Apply();
@@ -84,17 +84,17 @@ namespace WizenkleBoss.Content.UI
 
                             float size = Main.screenHeight * Main.UIScale / 1080;
 
-                            Texture2D blinkOuter = TextureRegistry.BlinkOuter;
+                            Texture2D blinkOuter = TextureRegistry.BlinkOuter.Value;
                             Vector2 blinkOuterOrigin = new(blinkOuter.Width * 0.5f, blinkOuter.Height * 0.5f);
 
                             Main.spriteBatch.Draw(blinkOuter, ScreenSize / 2f, null, Color.Black, 0, blinkOuterOrigin, 1.498f * size, SpriteEffects.None, 0f);
 
-                            Texture2D blink = TextureRegistry.Blink;
+                            Texture2D blink = TextureRegistry.Blink.Value;
                             Vector2 blinkOrigin = new(blink.Width * 0.5f, blink.Width * 0.5f);
 
                             Main.spriteBatch.Draw(blink, ScreenSize / 2f, blink.Frame(1, 4, 0, blinkFrame), Color.Black, 0, blinkOrigin, 1.5f * size, SpriteEffects.None, 0f);
 
-                            Texture2D map = TextureRegistry.TelescopeMap;
+                            Texture2D map = TextureRegistry.TelescopeMap.Value;
                             Vector2 mapOrigin = new(map.Height * 0.5f, map.Height * 0.5f);
                             Vector2 mapPosition = new(blinkOrigin.X * 1.2f, blinkOrigin.Y * 1.2f);
 
@@ -104,7 +104,7 @@ namespace WizenkleBoss.Content.UI
                         }
                         else
                         {
-                            Main.spriteBatch.Draw(TextureRegistry.Pixel, new Rectangle(0, 0, (int)ScreenSize.X + 20, (int)ScreenSize.Y + 20), null, Color.Black * colormult, 0, Vector2.Zero, SpriteEffects.None, 0f);
+                            Main.spriteBatch.Draw(TextureRegistry.Pixel.Value, new Rectangle(0, 0, (int)ScreenSize.X + 20, (int)ScreenSize.Y + 20), null, Color.Black * colormult, 0, Vector2.Zero, SpriteEffects.None, 0f);
                         }
 
                         DynamicSpriteFont font = FontAssets.DeathText.Value;

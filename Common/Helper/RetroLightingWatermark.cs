@@ -40,7 +40,7 @@ namespace WizenkleBoss.Common.Helper
                         string text = Language.GetTextValue($"Mods.WizenkleBoss.rant");
                         Vector2 size = font.MeasureString(text);
 
-                        Main.spriteBatch.Draw(TextureRegistry.Pixel, new Rectangle(0, 0, (int)(Main.screenWidth * Main.UIScale), (int)(Main.screenHeight * Main.UIScale)), Color.Black * 0.6f);
+                        Main.spriteBatch.Draw(TextureRegistry.Pixel.Value, new Rectangle(0, 0, (int)(Main.screenWidth * Main.UIScale), (int)(Main.screenHeight * Main.UIScale)), Color.Black * 0.6f);
                         ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, font, text, center, Color.White, 0f, size * 0.5f, Vector2.One);
 
                         text = Language.GetTextValue($"Mods.WizenkleBoss.rant2");

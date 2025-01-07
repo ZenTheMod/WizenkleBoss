@@ -21,11 +21,11 @@ using Terraria.UI;
 
 namespace WizenkleBoss.Content.Tiles
 {
-    public class BarrierTelescopeTile : ModTile
+    public class TelescopeTile : ModTile
     {
         public override void SetStaticDefaults()
         {
-            RegisterItemDrop(ModContent.ItemType<BarrierTelescopeItem>());
+            RegisterItemDrop(ModContent.ItemType<TelescopeItem>());
 
             Main.tileFrameImportant[Type] = true;
             Main.tileNoAttach[Type] = true;

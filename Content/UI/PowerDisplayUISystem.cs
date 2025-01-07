@@ -57,7 +57,7 @@ namespace WizenkleBoss.Content.UI
                         Main.spriteBatch.End();
                         Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
 
-                        Texture2D texture = TextureRegistry.EnergyBar;
+                        Texture2D texture = TextureRegistry.EnergyBar.Value;
 
                         Rectangle frame = texture.Frame(1, 2, 0, 1);
 
@@ -68,7 +68,7 @@ namespace WizenkleBoss.Content.UI
                         frame2.Width = (int)(frame2.Width * DisplayValue);
                         Main.spriteBatch.Draw(texture, position - (frame.Size() / 2), frame2, Color.White * Timer, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
-                        Main.spriteBatch.Draw(TextureRegistry.Bloom, position - (frame.Size() / 2) + (frame2.Size() / 2), null, (Color.LightGoldenrodYellow * 0.5f * DisplayValue * Timer) with { A = 0 }, 0f, TextureRegistry.Bloom.Size() / 2f, (frame.Size() / TextureRegistry.Ball.Size()) * 1.4f, SpriteEffects.None, 0f);
+                        Main.spriteBatch.Draw(TextureRegistry.Bloom.Value, position - (frame.Size() / 2) + (frame2.Size() / 2), null, (Color.LightGoldenrodYellow * 0.5f * DisplayValue * Timer) with { A = 0 }, 0f, TextureRegistry.Bloom.Size() / 2f, (frame.Size() / TextureRegistry.Ball.Size()) * 1.4f, SpriteEffects.None, 0f);
 
                         string display = ((int)(DisplayValue * 500)).ToString() + " / 500";
 

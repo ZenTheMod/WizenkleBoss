@@ -16,6 +16,8 @@ namespace WizenkleBoss.Content.Items.Placeable
         public override void SetDefaults()
         {
             Item.DefaultToPlaceableTile(ModContent.TileType<ObservatorySatelliteDishTile>());
+            Item.width = 44;
+            Item.width = 46;
             Item.rare = ModContent.RarityType<StarboundRarity>();
             Item.value = 0;
         }

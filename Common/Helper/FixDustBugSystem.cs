@@ -17,15 +17,15 @@ namespace WizenkleBoss.Common.Helper
     {
         public override void Load()
         {
-            IL_Dust.NewDust += IL_Dust_NewDust;
+            IL_Dust.NewDust += FixStupidBugBecauseTerrariaDevsAreIncompetent;
         }
 
         public override void Unload()
         {
-            IL_Dust.NewDust -= IL_Dust_NewDust;
+            IL_Dust.NewDust -= FixStupidBugBecauseTerrariaDevsAreIncompetent;
         }
 
-        private void IL_Dust_NewDust(ILContext il)
+        private void FixStupidBugBecauseTerrariaDevsAreIncompetent(ILContext il)
         {
             ILCursor c = new(il);
 

@@ -1,5 +1,5 @@
 Items: {
-	BarrierTelescopeItem: {
+	TelescopeItem: {
 		DisplayName: Ancient Telescope
 		Tooltip: "'An old golden telescope gifted to the Guild Astronomer.'"
 	}
@@ -322,22 +322,22 @@ Configs: {
 		}
 
 		TelescopeMovementVelocity: {
-			Label: "[i:WizenkleBoss/BarrierTelescopeItem] Telescope Screen Pan Speed"
+			Label: "[i:WizenkleBoss/TelescopeItem] Telescope Screen Pan Speed"
 			Tooltip: Controls telescope movement speed.
 		}
 
 		SatelliteMovementVelocity: {
-			Label: "[i:WizenkleBoss/ObservatorySatelliteDishItem] Terminal Pan Speed"
+			Label: "[i:WizenkleBoss/TerminalItem] Terminal Pan Speed"
 			Tooltip: Controls satellite dish movement speed.
 		}
 
 		SatelliteUseMousePosition: {
-			Label: "[i:WizenkleBoss/ObservatorySatelliteDishItem] Terminal Mouse Select"
+			Label: "[i:WizenkleBoss/TerminalItem] Terminal Mouse Select"
 			Tooltip: Makes target selection based on mouse position rather than the small crosshair.
 		}
 
 		SatelliteMidnightMode: {
-			Label: "[i:WizenkleBoss/ObservatorySatelliteDishItem] Terminal Midnight Mode"
+			Label: "[i:WizenkleBoss/TerminalItem] Terminal Midnight Mode"
 			Tooltip: Makes the terminal much darker.
 		}
 	}

@@ -39,11 +39,11 @@ namespace WizenkleBoss.Content.Rarities
             Vector2 center = fontSize / 2f;
             Vector2 pos = new(X, Y);
             Vector2 starBoxPos = pos - new Vector2(7, 5);
-            Vector2 starOrigin = TextureRegistry.Star.Size() / 2;
+            Vector2 starOrigin = TextureRegistry.Star.Value.Size() / 2;
 
             float colmultiplier = MathHelper.Lerp(1.3f, 0.9f, Main.GameUpdateCount % 60 / 60f);
 
-            Main.spriteBatch.Draw(TextureRegistry.TextBoxStars, new Rectangle((int)starBoxPos.X, (int)starBoxPos.Y, (int)(TextureRegistry.TextBoxStars.Width * 1.4f), (int)fontSize.Y + 2), null, (InkSystem.OutlineColor * colmultiplier) with { A = 0 }, line.Rotation, Vector2.Zero, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(TextureRegistry.TextBoxStars.Value, new Rectangle((int)starBoxPos.X, (int)starBoxPos.Y, (int)(TextureRegistry.TextBoxStars.Value.Width * 1.4f), (int)fontSize.Y + 2), null, (InkSystem.OutlineColor * colmultiplier) with { A = 0 }, line.Rotation, Vector2.Zero, SpriteEffects.None, 0f);
 
             ChatManager.DrawColorCodedStringShadow(Main.spriteBatch, font, line.Text, pos, InkSystem.OutlineColor with { A = 0 }, rotation, origin, baseScale * 1.3f);
             ChatManager.DrawColorCodedString(Main.spriteBatch, font, line.Text, pos, Color.Black, rotation, origin, baseScale * 1.3f);
@@ -65,14 +65,14 @@ namespace WizenkleBoss.Content.Rarities
                 {
                     float sinValue = (float)Math.Sin((double)lifeTime);
                     Color white = (new Color(200 + color.R / 20, 200 + color.G / 20, 200 + color.B / 20, 255) * sinValue) with { A = 0 };
-                    Main.spriteBatch.Draw(TextureRegistry.Star, new Vector2(X, Y - lifeTime * 1f + 2f) + v, null, white, starRotation, starOrigin, (lifeTime / ((float)Math.PI * 2f) * 0.66f) / 2, SpriteEffects.None, 0f);
-                    Main.spriteBatch.Draw(TextureRegistry.Star, new Vector2(X, Y - lifeTime * 1f + 2f) + v, null, white * 0.5f, starRotation, starOrigin, (lifeTime / ((float)Math.PI * 2f)) / 2, SpriteEffects.None, 0f);
+                    Main.spriteBatch.Draw(TextureRegistry.Star.Value, new Vector2(X, Y - lifeTime * 1f + 2f) + v, null, white, starRotation, starOrigin, (lifeTime / ((float)Math.PI * 2f) * 0.66f) / 2, SpriteEffects.None, 0f);
+                    Main.spriteBatch.Draw(TextureRegistry.Star.Value, new Vector2(X, Y - lifeTime * 1f + 2f) + v, null, white * 0.5f, starRotation, starOrigin, (lifeTime / ((float)Math.PI * 2f)) / 2, SpriteEffects.None, 0f);
                     //float scale2 = (float)Math.Sin((double)(lifeTime / ((float)Math.PI / 2f))) + 1f;
                     float scale3 = lifeTime / ((float)Math.PI * 2f) * 1.5f;
                     Color col2 = (color2 * sinValue) with { A = 0 };
-                    Main.spriteBatch.Draw(TextureRegistry.Star, new Vector2(X, Y) + v, null, col2, starRotation, starOrigin, scale3 * 0.9f, SpriteEffects.None, 0f);
-                    Main.spriteBatch.Draw(TextureRegistry.Star, new Vector2(X, Y) + v, null, col2, starRotation, starOrigin, scale3 * 0.6f, SpriteEffects.None, 0f);
-                    Main.spriteBatch.Draw(TextureRegistry.Star, new Vector2(X, Y) + v, null, col2, starRotation, starOrigin, scale3 * 0.55f, SpriteEffects.None, 0f);
+                    Main.spriteBatch.Draw(TextureRegistry.Star.Value, new Vector2(X, Y) + v, null, col2, starRotation, starOrigin, scale3 * 0.9f, SpriteEffects.None, 0f);
+                    Main.spriteBatch.Draw(TextureRegistry.Star.Value, new Vector2(X, Y) + v, null, col2, starRotation, starOrigin, scale3 * 0.6f, SpriteEffects.None, 0f);
+                    Main.spriteBatch.Draw(TextureRegistry.Star.Value, new Vector2(X, Y) + v, null, col2, starRotation, starOrigin, scale3 * 0.55f, SpriteEffects.None, 0f);
                 }
             }
             return false;

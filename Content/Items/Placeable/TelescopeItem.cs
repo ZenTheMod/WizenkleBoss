@@ -6,7 +6,7 @@ using Terraria.ID;
 
 namespace WizenkleBoss.Content.Items.Placeable
 {
-    public class BarrierTelescopeItem : ModItem
+    public class TelescopeItem : ModItem
     {
         public override void SetStaticDefaults()
         {
@@ -15,7 +15,7 @@ namespace WizenkleBoss.Content.Items.Placeable
         }
         public override void SetDefaults()
         {
-            Item.DefaultToPlaceableTile(ModContent.TileType<BarrierTelescopeTile>());
+            Item.DefaultToPlaceableTile(ModContent.TileType<TelescopeTile>());
             Item.rare = ModContent.RarityType<StarboundRarity>();
             Item.value = 0;
         }

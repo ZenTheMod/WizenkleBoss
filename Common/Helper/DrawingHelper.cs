@@ -55,7 +55,7 @@ namespace WizenkleBoss.Common.Helper
                 }
 
                 Vector2 origin = new(textSize.X / 2f, textSize.Y * 0.75f);
-                spriteBatch.Draw(TextureRegistry.Ball, position - new Vector2(0, (textSize.Y / 2f) - 20), null, Color.Black * 0.5f, 0f, TextureRegistry.Ball.Size() / 2f, (textSize / TextureRegistry.Ball.Size()) * 1.2f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(TextureRegistry.Ball.Value, position - new Vector2(0, (textSize.Y / 2f) - 20), null, Color.Black * 0.5f, 0f, TextureRegistry.Ball.Size() / 2f, (textSize / TextureRegistry.Ball.Size()) * 1.2f, SpriteEffects.None, 0f);
                 ChatManager.DrawColorCodedStringShadow(spriteBatch, font, text, position, StringShadowCol, 0, origin, Vector2.One * scale);
                 ChatManager.DrawColorCodedString(spriteBatch, font, text, position, StringCol, 0, origin, Vector2.One * scale);
             }

@@ -12,34 +12,34 @@ namespace WizenkleBoss.Common.Helper
 {
     public class TextureRegistry : ModSystem
     {
-        public static Texture2D Invis { get; private set; }
-        public static Texture2D Pixel { get; private set; }
-        public static Texture2D[] Cosmos { get; private set; }
-        public static Texture2D Bloat { get; private set; }
-        public static Texture2D Roar { get; private set; }
-        public static Texture2D Shockwave { get; private set; }
-        public static Texture2D[] Space { get; private set; }
-        public static Texture2D Star { get; private set; }
-        public static Texture2D[] Stars { get; private set; }
-        public static Texture2D Bloom { get; private set; }
-        public static Texture2D Ball { get; private set; }
-        public static Texture2D Circle { get; private set; }
-        public static Texture2D Bracket { get; private set; }
-        public static Texture2D Tech { get; private set; }
-        public static Texture2D WavyNoise { get; private set; }
-        public static Texture2D Lichen { get; private set; }
-        public static Texture2D Dither { get; private set; }
-        public static Texture2D Wood { get; private set; }
-        public static Texture2D Rainbow { get; private set; }
-        public static Texture2D Blink { get; private set; }
-        public static Texture2D BlinkOuter { get; private set; }
-        public static Texture2D InkDash { get; private set; }
-        public static Texture2D TextBoxStars { get; private set; }
-        public static Texture2D TelescopeMap { get; private set; }
-        public static Texture2D Cursor { get; private set; }
-        public static Texture2D[] ConsoleError { get; private set; }
-        public static Texture2D ConfigIcon { get; private set; }
-        public static Texture2D EnergyBar { get; private set; }
+        public static Asset<Texture2D> Invis { get; private set; }
+        public static Asset<Texture2D> Pixel { get; private set; }
+        public static Asset<Texture2D>[] Cosmos { get; private set; }
+        public static Asset<Texture2D> Bloat { get; private set; }
+        public static Asset<Texture2D> Roar { get; private set; }
+        public static Asset<Texture2D> Shockwave { get; private set; }
+        public static Asset<Texture2D>[] Space { get; private set; }
+        public static Asset<Texture2D> Star { get; private set; }
+        public static Asset<Texture2D>[] Stars { get; private set; }
+        public static Asset<Texture2D> Bloom { get; private set; }
+        public static Asset<Texture2D> Ball { get; private set; }
+        public static Asset<Texture2D> Circle { get; private set; }
+        public static Asset<Texture2D> Bracket { get; private set; }
+        public static Asset<Texture2D> Tech { get; private set; }
+        public static Asset<Texture2D> WavyNoise { get; private set; }
+        public static Asset<Texture2D> Lichen { get; private set; }
+        public static Asset<Texture2D> Dither { get; private set; }
+        public static Asset<Texture2D> Wood { get; private set; }
+        public static Asset<Texture2D> Rainbow { get; private set; }
+        public static Asset<Texture2D> Blink { get; private set; }
+        public static Asset<Texture2D> BlinkOuter { get; private set; }
+        public static Asset<Texture2D> InkDash { get; private set; }
+        public static Asset<Texture2D> TextBoxStars { get; private set; }
+        public static Asset<Texture2D> TelescopeMap { get; private set; }
+        public static Asset<Texture2D> Cursor { get; private set; }
+        public static Asset<Texture2D>[] ConsoleError { get; private set; }
+        public static Asset<Texture2D> ConfigIcon { get; private set; }
+        public static Asset<Texture2D> EnergyBar { get; private set; }
         public override void Load()
         {
             if (Main.dedServ)
@@ -49,7 +49,7 @@ namespace WizenkleBoss.Common.Helper
 
             Pixel = LoadTexture2D("NotSoMagicPixel");
 
-            Cosmos = new Texture2D[2];
+            Cosmos = new Asset<Texture2D>[2];
             Cosmos[0] = LoadTexture2D("Cosmos");
             Cosmos[1] = LoadTexture2D("Cosmos2");
 
@@ -57,14 +57,14 @@ namespace WizenkleBoss.Common.Helper
             Roar = LoadTexture2D("Roar");
             Shockwave = LoadTexture2D("Shockwave");
 
-            Space = new Texture2D[3];
+            Space = new Asset<Texture2D>[3];
             Space[0] = LoadTexture2D("Space");
             Space[1] = LoadTexture2D("Space2");
             Space[2] = LoadTexture2D("Space3");
 
             Star = LoadTexture2D("Stars/Star");
 
-            Stars = new Texture2D[5];
+            Stars = new Asset<Texture2D>[5];
             Stars[0] = LoadTexture2D("Stars/Star_0");
             Stars[1] = LoadTexture2D("Stars/Star_1");
             Stars[2] = LoadTexture2D("Stars/Star_2");
@@ -96,7 +96,7 @@ namespace WizenkleBoss.Common.Helper
 
             Cursor = LoadTexture2D("Cursor");
 
-            ConsoleError = new Texture2D[2];
+            ConsoleError = new Asset<Texture2D>[2];
             ConsoleError[0] = LoadTexture2D("Icons/NotConnectedToPower");
             ConsoleError[1] = LoadTexture2D("Icons/NotConnectedToSatelliteDish");
 
@@ -104,11 +104,11 @@ namespace WizenkleBoss.Common.Helper
 
             EnergyBar = LoadTexture2D("Icons/PowerBar");
         }
-        private static Texture2D LoadTexture2D(string TexturePath)
+        private static Asset<Texture2D> LoadTexture2D(string TexturePath)
         {
                 // if (Main.netMode == NetmodeID.Server)
                 //     return default;
-            return ModContent.Request<Texture2D>("WizenkleBoss/Assets/Textures/" + TexturePath, AssetRequestMode.ImmediateLoad).Value;
+            return ModContent.Request<Texture2D>("WizenkleBoss/Assets/Textures/" + TexturePath);
         }
         public override void Unload()
         {

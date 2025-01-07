@@ -248,7 +248,7 @@ namespace WizenkleBoss.Common.Helper
         }
         public void DrawGoo()
         {
-            Main.spriteBatch.Draw(TextureRegistry.Bloom, new Rectangle(Main.screenWidth / 2, Main.screenHeight / 2, (int)(Main.screenWidth * Intoxication * 4.3f), (int)(Main.screenHeight * Intoxication * 3.3f)), null, Color.White * Intoxication, 0, TextureRegistry.Bloom.Size() / 2f, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(TextureRegistry.Bloom.Value, new Rectangle(Main.screenWidth / 2, Main.screenHeight / 2, (int)(Main.screenWidth * Intoxication * 4.3f), (int)(Main.screenHeight * Intoxication * 3.3f)), null, Color.White * Intoxication, 0, TextureRegistry.Bloom.Size() / 2f, SpriteEffects.None, 0f);
         }
         private void ProduceWaterRipples()
         {

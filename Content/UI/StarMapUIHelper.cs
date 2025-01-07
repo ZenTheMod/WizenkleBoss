@@ -112,8 +112,8 @@ namespace WizenkleBoss.Content.UI
                 Color color = config.IsMouseHovering ? Color.White : Color.Gray;
                 color *= ScaleAnim;
 
-                Vector2 origin = new(TextureRegistry.ConfigIcon.Width / 2f, TextureRegistry.ConfigIcon.Height);
-                Main.spriteBatch.Draw(TextureRegistry.ConfigIcon, position, null, color, 0f, origin, Vector2.One, SpriteEffects.None, 0f);
+                Vector2 origin = new(TextureRegistry.ConfigIcon.Value.Width / 2f, TextureRegistry.ConfigIcon.Value.Height);
+                Main.spriteBatch.Draw(TextureRegistry.ConfigIcon.Value, position, null, color, 0f, origin, Vector2.One, SpriteEffects.None, 0f);
             }
         }
         public static void HandleTerminal()
