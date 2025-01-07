@@ -110,37 +110,6 @@ namespace WizenkleBoss.Common.Helper
                 //     return default;
             return ModContent.Request<Texture2D>("WizenkleBoss/Assets/Textures/" + TexturePath);
         }
-        public override void Unload()
-        {
-            Invis = null;
-            Pixel = null;
-            Cosmos = null;
-            Bloat = null;
-            Roar = null;
-            Shockwave = null;
-            Space = null;
-            Star = null;
-            Stars = null;
-            Bloom = null;
-            Ball = null;
-            Circle = null;
-            Bracket = null;
-            Tech = null;
-            WavyNoise = null;
-            Lichen = null;
-            Dither = null;
-            Wood = null;
-            Rainbow = null;
-            Blink = null;
-            BlinkOuter = null;
-            InkDash = null;
-            TextBoxStars = null;
-            TelescopeMap = null;
-            Cursor = null;
-            ConsoleError = null;
-            ConfigIcon = null;
-            EnergyBar = null;
-        }
     }
     public class FontRegistry : ModSystem
     {
