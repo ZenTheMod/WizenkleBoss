@@ -8,6 +8,7 @@ using Terraria;
 using Terraria.ModLoader;
 using WizenkleBoss.Content.Buffs;
 using MonoMod.Cil;
+using WizenkleBoss.Common.Ink;
 
 namespace WizenkleBoss.Common.Helper
 {

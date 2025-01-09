@@ -7,11 +7,10 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.ModLoader;
-using WizenkleBoss.Common.Helper;
 using WizenkleBoss.Content.Dusts;
 using MonoMod.Cil;
 
-namespace WizenkleBoss.Common.Helper
+namespace WizenkleBoss.Common.ILDetourSystems
 {
     public class FixDustBugSystem : ModSystem
     {

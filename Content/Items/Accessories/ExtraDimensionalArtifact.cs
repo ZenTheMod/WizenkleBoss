@@ -16,6 +16,7 @@ using WizenkleBoss.Content.Items.Dyes;
 using WizenkleBoss.Content.Buffs;
 using Terraria.Localization;
 using WizenkleBoss.Common.Helper;
+using WizenkleBoss.Common.Ink;
 
 namespace WizenkleBoss.Content.Items.Accessories
 {

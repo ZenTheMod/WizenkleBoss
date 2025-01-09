@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Terraria;
-using WizenkleBoss.Common.Helper;
+using WizenkleBoss.Common.Ink;
 
 namespace WizenkleBoss.Common.Helper
 {

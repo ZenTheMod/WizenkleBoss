@@ -14,7 +14,7 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using WizenkleBoss.Common.Config;
-using WizenkleBoss.Common.Helper;
+using WizenkleBoss.Common.Ink;
 using WizenkleBoss.Common.Packets;
 using WizenkleBoss.Content.Buffs;
 using WizenkleBoss.Content.Dusts;

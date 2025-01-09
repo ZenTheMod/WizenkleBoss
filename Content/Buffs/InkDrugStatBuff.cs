@@ -5,6 +5,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
 using WizenkleBoss.Common.Helper;
+using WizenkleBoss.Common.Ink;
 
 namespace WizenkleBoss.Content.Buffs
 {

@@ -14,7 +14,7 @@ using WizenkleBoss.Common.Config;
 using WizenkleBoss.Content.Buffs;
 using WizenkleBoss.Content.UI;
 
-namespace WizenkleBoss.Common.Helper
+namespace WizenkleBoss.Common.ILDetourSystems
 {
     public class HideCursorForMotaiSystem : ModSystem
     {

@@ -8,11 +8,11 @@ using Terraria;
 using Terraria.ModLoader;
 using WizenkleBoss.Content.Tiles.Clouds;
 
-namespace WizenkleBoss.Common.Helper
+namespace WizenkleBoss.Common.ILDetourSystems
 {
     public class TileFallDamageSystem : ModSystem
     {
-            // Huge thanks to lion8cake/Kittenbun.
+        // Huge thanks to lion8cake/Kittenbun.
         public override void OnModLoad()
         {
             IL_Player.Update += TileFallDamage;

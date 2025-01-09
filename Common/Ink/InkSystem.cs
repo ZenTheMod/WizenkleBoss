@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,22 +9,19 @@ using System.Threading.Tasks;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.Graphics.Capture;
-using Terraria.Graphics.Effects;
 using Terraria.Graphics.Renderers;
-using Terraria.Graphics.Shaders;
-using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
-using WizenkleBoss.Common.Config;
+using WizenkleBoss.Common.Helper;
 using WizenkleBoss.Content.Buffs;
 
-namespace WizenkleBoss.Common.Helper
+namespace WizenkleBoss.Common.Ink
 {
     public class InkSystem : ModSystem
     {
         public static Color OutlineColor { get; private set; } = new(255, 230, 105); // just so i can change it later
 
-            // Lame rt setup
+        // Lame rt setup
         #region RenderTargetSetup
         public class InkTargetContent : ARenderTargetContentByRequest
         {
@@ -85,7 +81,7 @@ namespace WizenkleBoss.Common.Helper
 
             On_Main.CheckMonoliths -= DrawInsideInkTarget;
         }
-            // This makes sure that the target gets drawn to BEFORE the player normally draws.
+        // This makes sure that the target gets drawn to BEFORE the player normally draws.
         private void DrawInsideInkTarget(On_Main.orig_CheckMonoliths orig)
         {
             orig();
@@ -95,7 +91,7 @@ namespace WizenkleBoss.Common.Helper
                 insideInkTargetByRequest.Request();
         }
         #endregion
-            // This is so that the effect actually ends when youre not drugged asf
+        // This is so that the effect actually ends when youre not drugged asf
         public override void PostUpdateEverything()
         {
             InkShaderData.ToggleActivityIfNecessary();
@@ -139,10 +135,7 @@ namespace WizenkleBoss.Common.Helper
                 spriteBatch.Draw(starTexture, starPosition, null, starColor, starRotation, starOrigin, starSize, SpriteEffects.None, 0f);
             }
         }
-        public interface IDrawInk
-        {
-            public void Shape();
-        }
+
         public static void DrawInInk()
         {
             foreach (var p in Main.ActiveProjectiles)
@@ -196,88 +189,6 @@ namespace WizenkleBoss.Common.Helper
                     Main.PlayerRenderer.DrawPlayer(Main.Camera, player, player.position - (Main.screenPosition - Main.screenLastPosition), player.fullRotation, player.fullRotationOrigin, 0);
                 }
             }
-        }
-        public interface IDrawInInk
-        {
-            public void Shape();
-        }
-    }
-    public class InkShaderData : ScreenShaderData
-    {
-        public const string ShaderKey = "InkScreen";
-        public InkShaderData(Asset<Effect> shader, string passName)
-            : base(shader, passName)
-        {
-        }
-        public static void ToggleActivityIfNecessary()
-        {
-            if (Main.netMode == NetmodeID.Server)
-                return;
-
-            bool shouldBeActive = InkSystem.AnyActiveInk();
-
-            if (shouldBeActive && !Filters.Scene[$"WizenkleBoss:{ShaderKey}"].IsActive())
-                Filters.Scene.Activate($"WizenkleBoss:{ShaderKey}");
-
-            if (!shouldBeActive && Filters.Scene[$"WizenkleBoss:{ShaderKey}"].IsActive())
-                Filters.Scene.Deactivate($"WizenkleBoss:{ShaderKey}");
-        }
-        public override void Update(GameTime gameTime)
-        {
-            InkSystem.inkTargetByRequest.Request();
-
-            if (InkSystem.inkTargetByRequest.IsReady && InkSystem.insideInkTargetByRequest.IsReady)
-            {
-                var player = Main.LocalPlayer.GetModPlayer<InkPlayer>();
-
-                Shader.Parameters["embossColor"]?.SetValue(new Color(85, 25, 255, 255).ToVector4());
-
-                Shader.Parameters["outlineColor"]?.SetValue(InkSystem.OutlineColor.ToVector4());
-
-                Shader.Parameters["ScreenSize"]?.SetValue(new Vector2(Main.screenWidth, Main.screenHeight));
-
-                Shader.Parameters["MaskThreshold"]?.SetValue(0.4f);
-
-                Shader.Parameters["uTime"]?.SetValue(Main.GlobalTimeWrappedHourly);
-
-                Shader.Parameters["DrugStrength"]?.SetValue(player.Intoxication);
-
-                Shader.Parameters["contrast"]?.SetValue(ModContent.GetInstance<WizenkleBossConfig>().InkContrast);
-
-                Shader.Parameters["embossStrength"]?.SetValue(ModContent.GetInstance<WizenkleBossConfig>().EmbossStrength);
-            }
-        }
-        public override void Apply()
-        {
-            var gd = Main.instance.GraphicsDevice;
-
-            gd.SamplerStates[0] = SamplerState.LinearClamp;
-
-            gd.Textures[1] = InkSystem.inkTargetByRequest.GetTarget();
-            gd.SamplerStates[1] = SamplerState.LinearWrap;
-
-            gd.Textures[2] = InkSystem.insideInkTargetByRequest.GetTarget();
-            gd.SamplerStates[2] = SamplerState.LinearWrap;
-
-            base.Apply();
-
-            InkSystem.InsideInkTargetDrawnToThisFrame = false;
-        }
-    }
-    [Autoload(Side = ModSide.Client)]
-    public class InkEffect : ModSceneEffect
-    {
-        public override int Music => -1;
-        public override SceneEffectPriority Priority => SceneEffectPriority.BossHigh;
-        public override void SpecialVisuals(Player player, bool isActive)
-        {
-            player.ManageSpecialBiomeVisuals($"WizenkleBoss:{InkShaderData.ShaderKey}", isActive);
-        }
-        public override bool IsSceneEffectActive(Player player)
-        {
-            if (InkSystem.AnyActiveInk())
-                return true;
-            return false;
         }
     }
 }

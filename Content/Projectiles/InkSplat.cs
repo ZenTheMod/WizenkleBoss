@@ -5,7 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 using Terraria.ModLoader;
-using static WizenkleBoss.Common.Helper.InkSystem;
+using WizenkleBoss.Common.Ink;
+using static WizenkleBoss.Common.Ink.InkSystem;
 
 namespace WizenkleBoss.Content.Projectiles
 {

@@ -9,6 +9,7 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.UI;
 using Terraria.ModLoader;
+using WizenkleBoss.Common.Ink;
 using WizenkleBoss.Content.Buffs;
 
 namespace WizenkleBoss.Common.Helper
