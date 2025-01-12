@@ -1,45 +1,57 @@
-sampler sample : register(s0);
+sampler Form : register(s0);
+sampler Void : register(s1);
 
 float4 uShaderSpecificData;
-float2 globalTime;
-//float2 ScreenSize;
 
-float matrixbase1;
-float matrixbase2;
-float4 ColorArray[4];
-float multiplier;
+float4 baseColor;
+float globalTime;
 
-float4 posterize(float4 color, float numColors)
+float min;
+float max;
+
+float2 MatrixTransform2x2(float2 uv)
 {
-    return floor(color * numColors + 0.5) / numColors;
+    return mul(float2x2(0.841, 0.54, -0.841, 0.841), uv);
 }
-float2x2 R(float a)
+
+float map(float value, float start1, float stop1, float start2, float stop2)
 {
-    return float2x2(cos(a + float4(0, 33, 11, 0)));
+    return start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1));
 }
-float4 PixelShaderFunction(float4 sampleColor : COLOR0, float2 coords : TEXCOORD0) : COLOR0
+
+float Coronaries(float2 uv, float time)
 {
     float2 a = float2(0, 0);
-    float2 L = float2(0, 0);
     float2 res = float2(0, 0);
+    float s = -15;
     
-    float s = 10.;
-    for (float j = 0.; j < 17; j++)
+    for (float j = 0; j < 16; j++)
     {
-        coords = mul(coords, R(matrixbase1));
-        a = mul(a, R(matrixbase2));
-        L = coords * s + j + a - globalTime;
-        a += sin(L * multiplier);
-        res += (.5 + .5 * cos(L * multiplier)) / s;
-        s *= 1.2 - .07 * .1;
+        uv = MatrixTransform2x2(uv);
+        a = MatrixTransform2x2(a);
+        
+        float2 L = uv * s + j + a - time;
+        a += cos(L);
+        res += (.5 * sin(L)) / s;
+        s *= 1.2;
     }
-    float r = res.x + res.y;
-    float4 Col = lerp(
-        lerp(ColorArray[0], ColorArray[1], smoothstep(1., 1., clamp(r, 0, 1))),
-        lerp(ColorArray[2], ColorArray[3], smoothstep(.5, 1., clamp(r, 0, 1))),
-        smoothstep(0., 1., clamp(r, 0, 1))
-    ) * tex2D(sample, coords);
-    return posterize(Col, 16);
+    
+    return res.x + res.y;
+}
+
+float4 PixelShaderFunction(float4 sampleColor : COLOR0, float2 coords : TEXCOORD0) : COLOR0
+{
+    float blur = map(tex2D(Form, coords).b, 0, 1, min, max);
+    float veins = Coronaries(coords * 2, globalTime);
+    
+    float stars = tex2D(Void, coords).b * blur * 8;
+    
+    float mixed = clamp(lerp(blur * 0.7, 1.4 - veins, 0.49) - 0.5, 0, 1) * 6;
+
+    float valuebecausefuckyoufloatconstructor = stars + mixed;
+    
+    float4 col = float4(valuebecausefuckyoufloatconstructor, valuebecausefuckyoufloatconstructor, valuebecausefuckyoufloatconstructor, valuebecausefuckyoufloatconstructor) * baseColor * mixed * 1.2;
+    return abs(col);
 }
 
 technique Technique1

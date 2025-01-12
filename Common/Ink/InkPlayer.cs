@@ -14,13 +14,13 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using WizenkleBoss.Common.Config;
-using WizenkleBoss.Common.Ink;
+using WizenkleBoss.Common.Helper;
 using WizenkleBoss.Common.Packets;
 using WizenkleBoss.Content.Buffs;
 using WizenkleBoss.Content.Dusts;
 using WizenkleBoss.Content.Items.Dyes;
 
-namespace WizenkleBoss.Common.Helper
+namespace WizenkleBoss.Common.Ink
 {
     public class InkPlayer : ModPlayer
     {

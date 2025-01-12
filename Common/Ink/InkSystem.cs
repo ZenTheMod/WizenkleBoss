@@ -14,6 +14,7 @@ using Terraria.ModLoader;
 using Terraria.Utilities;
 using WizenkleBoss.Common.Helper;
 using WizenkleBoss.Content.Buffs;
+using WizenkleBoss.Content.NPCs.InkCreature;
 
 namespace WizenkleBoss.Common.Ink
 {
@@ -21,8 +22,9 @@ namespace WizenkleBoss.Common.Ink
     {
         public static Color OutlineColor { get; private set; } = new(255, 230, 105); // just so i can change it later
 
-        // Lame rt setup
+            // Lame rt setup
         #region RenderTargetSetup
+
         public class InkTargetContent : ARenderTargetContentByRequest
         {
             protected override void HandleUseReqest(GraphicsDevice device, SpriteBatch spriteBatch)
@@ -41,7 +43,9 @@ namespace WizenkleBoss.Common.Ink
                 _wasPrepared = true;
             }
         }
+
         public static InkTargetContent inkTargetByRequest;
+
         public class InsideInkTargetContent : ARenderTargetContentByRequest
         {
             protected override void HandleUseReqest(GraphicsDevice device, SpriteBatch spriteBatch)
@@ -52,7 +56,6 @@ namespace WizenkleBoss.Common.Ink
                 device.Clear(Color.Transparent);
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, default, default, default, null, Main.GameViewMatrix.ZoomMatrix);
 
-                DrawStars(spriteBatch, 50);
                 DrawInInk();
 
                 spriteBatch.End();
@@ -62,7 +65,9 @@ namespace WizenkleBoss.Common.Ink
             }
         }
         public static InsideInkTargetContent insideInkTargetByRequest;
+
         public static bool InsideInkTargetDrawnToThisFrame = false;
+
         public override void Load()
         {
             inkTargetByRequest = new();
@@ -73,6 +78,7 @@ namespace WizenkleBoss.Common.Ink
 
             On_Main.CheckMonoliths += DrawInsideInkTarget;
         }
+
         public override void Unload()
         {
             Main.ContentThatNeedsRenderTargets.Remove(inkTargetByRequest);
@@ -81,26 +87,32 @@ namespace WizenkleBoss.Common.Ink
 
             On_Main.CheckMonoliths -= DrawInsideInkTarget;
         }
-        // This makes sure that the target gets drawn to BEFORE the player normally draws.
+            // This makes sure that the target gets drawn to BEFORE the player normally draws.
         private void DrawInsideInkTarget(On_Main.orig_CheckMonoliths orig)
         {
             orig();
             if (Main.gameMenu)
                 return;
-            if (AnyActiveInk())
+            if (AnyActiveInk)
                 insideInkTargetByRequest.Request();
         }
+
         #endregion
-        // This is so that the effect actually ends when youre not drugged asf
+            // This is so that the effect actually ends when youre not drugged asf
         public override void PostUpdateEverything()
         {
+            AnyActiveInk = _AnyActiveInk();
+
             InkShaderData.ToggleActivityIfNecessary();
         }
-        public static bool AnyActiveInk() =>
+        public static bool AnyActiveInk;
+
+        private static bool _AnyActiveInk() =>
             Main.projectile.Where(p => p.active && (p.ModProjectile is IDrawInk || p.ModProjectile is IDrawInInk)).Any() ||
             Main.npc.Where(npc => npc.active && (npc.ModNPC is IDrawInk || npc.ModNPC is IDrawInInk)).Any() ||
             Main.LocalPlayer.GetModPlayer<InkPlayer>().InkBuffActive ||
             Main.LocalPlayer.GetModPlayer<InkPlayer>().Intoxication > 0f;
+
         public static void DrawInk()
         {
             foreach (var p in Main.ActiveProjectiles)
@@ -115,25 +127,7 @@ namespace WizenkleBoss.Common.Ink
                     continue;
                 drawer.Shape();
             }
-        }
-        public static void DrawStars(SpriteBatch spriteBatch, int num)
-        {
-            UnifiedRandom rand = new(Main.worldName.GetHashCode());
-            for (int i = 0; i < num; i++)
-            {
-                float starRotation = rand.NextFloat(0, MathHelper.TwoPi) + Main.GlobalTimeWrappedHourly * rand.NextFloat(-0.2f, 0.2f);
-                float starSize = rand.NextFloat(0.01f, 0.4f);
 
-                Color starColor = (Color.White * starSize) with { A = 0 };
-
-                Vector2 starPosition = new((rand.NextFloat(Main.screenWidth + 50) + Main.screenPosition.X * starSize) % (Main.screenWidth + 50) - 25, (rand.NextFloat(Main.screenHeight + 50) + Main.screenPosition.Y * starSize) % (Main.screenHeight + 50) - 25);
-                starPosition = new Vector2(Main.screenWidth, Main.screenHeight) - starPosition;
-
-                Texture2D starTexture = TextureRegistry.Star.Value;
-                Vector2 starOrigin = starTexture.Size() / 2;
-
-                spriteBatch.Draw(starTexture, starPosition, null, starColor, starRotation, starOrigin, starSize, SpriteEffects.None, 0f);
-            }
         }
 
         public static void DrawInInk()
@@ -150,8 +144,14 @@ namespace WizenkleBoss.Common.Ink
                     continue;
                 drawer.Shape();
             }
+
             DrawVanishedPlayers();
+
+            InkCreatureHelper bh = ModContent.GetInstance<InkCreatureHelper>();
+            if (bh is IDrawInInk bhdrawer)
+                bhdrawer.Shape();
         }
+
         public static void DrawVanishedPlayers()
         {
             foreach (var player in Main.player.Where(p => p.active && p.GetModPlayer<InkPlayer>().InkBuffActive && p.dye.Length > 0))

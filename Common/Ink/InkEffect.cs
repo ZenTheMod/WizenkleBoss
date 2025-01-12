@@ -12,11 +12,6 @@ namespace WizenkleBoss.Common.Ink
         {
             player.ManageSpecialBiomeVisuals($"WizenkleBoss:{InkShaderData.ShaderKey}", isActive);
         }
-        public override bool IsSceneEffectActive(Player player)
-        {
-            if (InkSystem.AnyActiveInk())
-                return true;
-            return false;
-        }
+        public override bool IsSceneEffectActive(Player player) => InkSystem.AnyActiveInk;
     }
 }

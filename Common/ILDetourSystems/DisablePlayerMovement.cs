@@ -7,9 +7,8 @@ using Terraria.ModLoader;
 using Terraria;
 using WizenkleBoss.Content.UI;
 using WizenkleBoss.Content.Projectiles.Misc;
-using WizenkleBoss.Common.ILDetourSystems;
 
-namespace WizenkleBoss.Common.Helper
+namespace WizenkleBoss.Common.ILDetourSystems
 {
     /// <summary>
     /// <para>Some things to note:</para>

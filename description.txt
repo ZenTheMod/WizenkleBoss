@@ -29,6 +29,10 @@ Shaders (ShaderToy):
 
 	☆ I am PRAYING I have the rights to use these :33
 
+★ Thanks to @supah for their base shader that I forked.
+	☆ https://www.shadertoy.com/view/M3dXzB (original)
+	☆ https://www.shadertoy.com/view/XXGyDK (my spooky fork)
+
 ★ Thanks to @MajorCallisto for their fork of https://www.shadertoy.com/view/Xd23Dh by @iq.
 	☆ https://www.shadertoy.com/view/MfsyRn
 	☆ (I litterally just got some ideas ab how to use lerping/mixing I didnt even use the noise :sob:, but I wanna make sure I credit everyone just in case.)
@@ -81,4 +85,4 @@ Special Thanks:
 
 
 
-★⎯⎯⎯ Contact @z_e_n_. on discord if you have any pressing questions, ESPECIALLY if you find any bugs, OR i forgot to credit you. ⎯⎯⎯★
+★⎯⎯⎯ Contact @z_e_n_. on discord if you have any pressing questions (about litterally anything vro), ESPECIALLY if you find any bugs, OR I forgot to credit you. ⎯⎯⎯★

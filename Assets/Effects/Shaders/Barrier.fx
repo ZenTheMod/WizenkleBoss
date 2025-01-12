@@ -21,15 +21,17 @@ float embossStrength;
 
 float4 PixelShaderFunction(float4 sampleColor : COLOR0, float2 coords : TEXCOORD0) : COLOR0
 {
-        // Col is the normal screen in this case
-    float4 col = tex2D(baseTexture, coords);
+        // Mask layer
+    float mask = (tex2D(maskTexture, coords).r - MaskThreshold) * 20;
+    mask = clamp(mask, 0, 1) * DrugStrength; // Clamp values cus x20
+    
+        // Col is the normal screen with the masked texture applied.
+    float4 maskcol = tex2D(maskedTexture, coords);
+        // Only darken the base texture, not the masked texture.
+    float3 col = lerp(tex2D(baseTexture, coords).rgb - (mask * contrast), maskcol.rgb, maskcol.a * mask);
     
         // Contrast it so that the emboss looks better on it
     float3 contrastCol = ((col - 0.75) * max(3, 0)) + 1;
-    
-        // Mix the mask layer with some noise
-    float mask = (tex2D(maskTexture, coords).r - MaskThreshold) * 20;
-    mask = clamp(mask, 0, 1) * DrugStrength; // Clamp values cus x20
     
         // If this pixel is an outline then just skip everything
     if (distance(tex2D(maskedTexture, coords) * mask, outlineColor) < 0.05)
@@ -65,9 +67,10 @@ float4 PixelShaderFunction(float4 sampleColor : COLOR0, float2 coords : TEXCOORD
     dirAvg.y = cos(uTime) * dirAvg.y;
     
         // Add the emboss layer to the base screen
-    float4 masked = tex2D(maskedTexture, coords) * mask * (1 - embossStrength);
-    col.rgb = lerp(col.rgb, masked.rgb, masked.a);
-    return float4((col.rgb - (mask * contrast)) + (((dirAvg.x * embossColor.rgb) + (dirAvg.y * embossColor.rgb)) * mask * embossStrength), 1);
+    float4 masked = maskcol * mask * (1 - embossStrength);
+    col = lerp(col, masked.rgb, masked.a);
+    
+    return float4(col + (((dirAvg.x * embossColor.rgb) + (dirAvg.y * embossColor.rgb)) * mask * embossStrength), 1);
 }
 
 technique Technique1

@@ -7,6 +7,7 @@ using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WizenkleBoss.Common.Config;
+using WizenkleBoss.Content.NPCs.InkCreature;
 
 namespace WizenkleBoss.Common.Ink
 {
@@ -22,7 +23,7 @@ namespace WizenkleBoss.Common.Ink
             if (Main.netMode == NetmodeID.Server)
                 return;
 
-            bool shouldBeActive = InkSystem.AnyActiveInk();
+            bool shouldBeActive = InkSystem.AnyActiveInk;
 
             if (shouldBeActive && !Filters.Scene[$"WizenkleBoss:{ShaderKey}"].IsActive())
                 Filters.Scene.Activate($"WizenkleBoss:{ShaderKey}");

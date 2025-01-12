@@ -618,3 +618,5 @@ StarNames: {
 	Name234: VOID
 	ImportantStarName: UNKNOWN
 }
+
+NPCs.InkCreature.DisplayName: Ink Creature

@@ -10,7 +10,7 @@ using WizenkleBoss.Content.Buffs;
 using MonoMod.Cil;
 using WizenkleBoss.Common.Ink;
 
-namespace WizenkleBoss.Common.Helper
+namespace WizenkleBoss.Common.ILDetourSystems
 {
     public class GatekeepSystem : ModSystem
     {
