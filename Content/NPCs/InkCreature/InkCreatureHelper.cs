@@ -7,7 +7,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.ModLoader;
-using WizenkleBoss.Common.Helper;
+using WizenkleBoss.Common.Helpers;
 using WizenkleBoss.Content.Dusts;
 using MonoMod.Cil;
 using WizenkleBoss.Content.UI;
@@ -56,11 +56,6 @@ namespace WizenkleBoss.Content.NPCs.InkCreature
             Main.ContentThatNeedsRenderTargets.Remove(beastTargetByRequest);
         }
 
-        public override void PostDrawTiles()
-        {
-            
-        }
-
             // Draw it ONLY draw in ink.
         public void Shape()
         {
@@ -79,8 +74,11 @@ namespace WizenkleBoss.Content.NPCs.InkCreature
 
                 Coronaries.Value.Parameters["globalTime"]?.SetValue(Main.GlobalTimeWrappedHourly * 2f);
                 Coronaries.Value.Parameters["baseColor"]?.SetValue(new Color(85, 25, 255, 255).ToVector4());
+
                 Coronaries.Value.Parameters["min"]?.SetValue(-0.8f);
-                Coronaries.Value.Parameters["max"]?.SetValue(1.1f);
+                Coronaries.Value.Parameters["max"]?.SetValue(1.4f);
+
+                Coronaries.Value.Parameters["screenPosition"]?.SetValue(Main.screenPosition / new Vector2(Main.screenWidth, Main.screenHeight));
 
                 device.Textures[1] = TextureRegistry.Space[1].Value;
                 device.SamplerStates[1] = SamplerState.LinearWrap;

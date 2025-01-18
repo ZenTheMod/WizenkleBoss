@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.UI;
-using WizenkleBoss.Common.Helper;
+using WizenkleBoss.Common.Helpers;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.UI.Chat;
 using Terraria.GameContent;

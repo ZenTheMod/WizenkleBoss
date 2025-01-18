@@ -2,7 +2,7 @@
 using Terraria.ModLoader;
 using MonoMod.Cil;
 using WizenkleBoss.Common.Ink;
-using WizenkleBoss.Common.Helper;
+using WizenkleBoss.Common.Helpers;
 using Microsoft.Xna.Framework.Graphics;
 using WizenkleBoss.Content.UI;
 

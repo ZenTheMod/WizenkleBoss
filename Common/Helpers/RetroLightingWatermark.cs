@@ -14,7 +14,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using ReLogic.Graphics;
 
-namespace WizenkleBoss.Common.Helper
+namespace WizenkleBoss.Common.Helpers
 {
     public class RetroLightingWatermark : ModSystem
     {

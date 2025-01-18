@@ -11,7 +11,7 @@ using Terraria.ModLoader;
 using Terraria.UI.Chat;
 using Terraria.Utilities;
 using WizenkleBoss.Common.Config;
-using WizenkleBoss.Common.Helper;
+using WizenkleBoss.Common.Helpers;
 
 namespace WizenkleBoss.Content.Rarities
 {
@@ -27,7 +27,7 @@ namespace WizenkleBoss.Content.Rarities
     {
         public override bool PreDrawTooltipLine(Item item, DrawableTooltipLine line, ref int yOffset)
         {
-            if (item.rare != ModContent.RarityType<InkRarity>() || !ModContent.GetInstance<WizenkleBossConfig>().TooltipEffects || !(line.Mod == "Terraria" && line.Name == "ItemName"))
+            if (item.rare != ModContent.RarityType<InkRarity>() || !ModContent.GetInstance<VFXConfig>().TooltipEffects || !(line.Mod == "Terraria" && line.Name == "ItemName"))
                 return base.PreDrawTooltipLine(item, line, ref yOffset);
 
             float X = line.X;

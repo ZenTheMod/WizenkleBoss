@@ -10,7 +10,7 @@ using System.Linq;
 using Terraria;
 using WizenkleBoss.Common.Ink;
 
-namespace WizenkleBoss.Common.Helper
+namespace WizenkleBoss.Common.Helpers
 {
     public static partial class Helper
     {
@@ -23,6 +23,9 @@ namespace WizenkleBoss.Common.Helper
         internal static Asset<Effect> FrostyLensShader;
         internal static Asset<Effect> TransmitShader;
         internal static Asset<Effect> OldMonitorShader;
+
+        internal static Asset<Effect> WaterProcessor;
+        internal static Asset<Effect> WaterInkColorizer;
 
         private const string ShaderPath = "WizenkleBoss/Assets/Effects/";
         private static void RegisterMiscShader(Asset<Effect> shader, string passName, string registrationName)
@@ -61,6 +64,12 @@ namespace WizenkleBoss.Common.Helper
 
             OldMonitorShader = LoadShader("Shaders/OldMonitor");
             RegisterMiscShader(OldMonitorShader, pass, "OldMonitor");
+
+            WaterProcessor = LoadShader("Water/WaterProcesser");
+            RegisterMiscShader(WaterProcessor, "Processer", "WaterProcessor");
+
+            WaterInkColorizer = LoadShader("Water/WaterProcesser");
+            RegisterMiscShader(WaterInkColorizer, "InkColorizer", "WaterInkColorizer");
 
             Asset<Effect> BarrierShader = LoadShader("Shaders/Barrier");
             Filters.Scene[$"WizenkleBoss:{InkShaderData.ShaderKey}"] = new Filter(new InkShaderData(BarrierShader, pass), EffectPriority.VeryHigh);

@@ -7,7 +7,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.ModLoader;
-using WizenkleBoss.Common.Helper;
+using WizenkleBoss.Common.Helpers;
 using WizenkleBoss.Content.Dusts;
 using MonoMod.Cil;
 using WizenkleBoss.Content.UI;

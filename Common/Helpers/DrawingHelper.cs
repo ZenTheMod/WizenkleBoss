@@ -12,11 +12,8 @@ using Terraria.UI.Chat;
 using ReLogic.Content;
 using Terraria.ModLoader.Default;
 using Terraria.UI;
-using Terraria.Graphics;
-using Terraria.Graphics.Renderers;
-using WizenkleBoss.Common.Helper;
 
-namespace WizenkleBoss.Common.Helper
+namespace WizenkleBoss.Common.Helpers
 {
     public static partial class Helper
     {

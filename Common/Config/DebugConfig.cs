@@ -8,11 +8,14 @@ using Terraria.ModLoader.Config;
 
 namespace WizenkleBoss.Common.Config
 {
-    public class ZDebugConfig : ModConfig
+    public class DebugConfig : ModConfig
     {
         public override ConfigScope Mode => ConfigScope.ClientSide;
 
         [DefaultValue(false)]
         public bool TelescopeDebugText;
+
+        [DefaultValue(false)]
+        public bool DebugColoredRipples;
     }
 }

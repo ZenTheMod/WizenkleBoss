@@ -13,7 +13,7 @@ using Terraria.UI.Chat;
 using Terraria.DataStructures;
 using Terraria.ObjectData;
 
-namespace WizenkleBoss.Common.Helper
+namespace WizenkleBoss.Common.Helpers
 {
     public static partial class Helper
     {
@@ -129,7 +129,7 @@ namespace WizenkleBoss.Common.Helper
             if (direction == Vector2.Zero)
                 direction = (Main.rand.NextFloat()*((float)Math.PI*2f)).ToRotationVector2();
 
-            float s = ModContent.GetInstance<WizenkleBossConfig>().ScreenShake;
+            float s = ModContent.GetInstance<VFXConfig>().ScreenShake / 100f;
 
             if (s <= 0)
                 return;

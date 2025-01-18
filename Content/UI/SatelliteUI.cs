@@ -8,7 +8,7 @@ using Terraria.ModLoader;
 using Terraria.UI;
 using Terraria.UI.Gamepad;
 using WizenkleBoss.Common.Config;
-using WizenkleBoss.Common.Helper;
+using WizenkleBoss.Common.Helpers;
 using static WizenkleBoss.Content.UI.StarMapUIHelper;
 
 namespace WizenkleBoss.Content.UI
@@ -58,9 +58,9 @@ namespace WizenkleBoss.Content.UI
         }
         private void OpenConfig(UIMouseEvent evt, UIElement listeningElement)
         {
-            ModContent.GetInstance<WizenkleBossConfig>().Open(onClose: () => {
+            ModContent.GetInstance<UIConfig>().Open(onClose: () => {
                 IngameFancyUI.OpenUIState(this);
-            }, scrollToOption: nameof(WizenkleBossConfig.TelescopeMovementKeyPrompt), centerScrolledOption: true);
+            }, scrollToOption: nameof(UIConfig.TelescopeMovementKeyPrompt), centerScrolledOption: true);
         }
         public override bool DistanceCheck => Main.LocalPlayer.Center.Distance(CurrentTerminalWorldPosition) >= 200;
         public override void OnActivate()

@@ -25,7 +25,7 @@ using System.Collections;
 using Terraria.ModLoader.IO;
 using Terraria.UI.Gamepad;
 using Terraria.Utilities;
-using WizenkleBoss.Common.Helper;
+using WizenkleBoss.Common.Helpers;
 using WizenkleBoss.Common.Config;
 using WizenkleBoss.Content.Projectiles.Misc;
 using WizenkleBoss.Common.Packets;

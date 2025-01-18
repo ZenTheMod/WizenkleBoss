@@ -12,7 +12,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
 using Terraria.UI.Chat;
-using WizenkleBoss.Common.Helper;
+using WizenkleBoss.Common.Helpers;
 using WizenkleBoss.Common.Config;
 
 namespace WizenkleBoss.Content.UI
@@ -113,13 +113,13 @@ namespace WizenkleBoss.Content.UI
                         Vector2 fontSizeMovement = Helper.MeasureString(Language.GetTextValue("Mods.WizenkleBoss.UI.Telescope.MovementKeyPrompt"), font);
                         Vector2 fontSizeMovementUnder = Helper.MeasureString(Language.GetTextValue("Mods.WizenkleBoss.UI.Telescope.MovementKeyPromptUnder"), font);
 
-                        if (ModContent.GetInstance<WizenkleBossConfig>().TelescopeMovementKeyPrompt && prompt && blinkFrame >= 0)
+                        if (ModContent.GetInstance<UIConfig>().TelescopeMovementKeyPrompt && prompt && blinkFrame >= 0)
                         {
                             ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, font, Language.GetTextValue("Mods.WizenkleBoss.UI.Telescope.MovementKeyPrompt"), ScreenSize / 2f, Color.White, 0, new(fontSizeMovement.X / 2f, fontSizeMovement.Y), Vector2.One * 0.8f);
 
                             ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, font, Language.GetTextValue("Mods.WizenkleBoss.UI.Telescope.MovementKeyPromptUnder"), ScreenSize / 2f + new Vector2(0, fontSizeMovement.Y), Color.Gray, 0, new(fontSizeMovementUnder.X / 2f, fontSizeMovementUnder.Y), Vector2.One * 0.4f);
                         }
-                        if (ModContent.GetInstance<ZDebugConfig>().TelescopeDebugText)
+                        if (ModContent.GetInstance<DebugConfig>().TelescopeDebugText)
                         {
                             ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, font, telescopeUIOffset.ToString(), new Vector2(0, 5), Color.Gray, 0, Vector2.Zero, Vector2.One * 0.5f);
                             ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, font, ((int)telescopeUIOffset.X).ToString(), new Vector2(0, 30), Color.Gray, 0, Vector2.Zero, Vector2.One * 0.5f);
@@ -153,7 +153,7 @@ namespace WizenkleBoss.Content.UI
                 if ((PlayerInput.Triggers.JustPressed.Up || PlayerInput.Triggers.JustPressed.Left || PlayerInput.Triggers.JustPressed.Right || PlayerInput.Triggers.JustPressed.Down) && Main.rand.NextBool(2))
                     SoundEngine.PlaySound(AudioRegistry.TelescopePan);
 
-                if ((PlayerInput.Triggers.Current.Up || PlayerInput.Triggers.Current.Left || PlayerInput.Triggers.Current.Right || PlayerInput.Triggers.Current.Down) && prompt && ModContent.GetInstance<WizenkleBossConfig>().TelescopeMovementKeyPrompt)
+                if ((PlayerInput.Triggers.Current.Up || PlayerInput.Triggers.Current.Left || PlayerInput.Triggers.Current.Right || PlayerInput.Triggers.Current.Down) && prompt && ModContent.GetInstance<UIConfig>().TelescopeMovementKeyPrompt)
                     prompt = false;
 
                 if (PlayerInput.Triggers.Current.Up)
@@ -167,7 +167,7 @@ namespace WizenkleBoss.Content.UI
 
                 normalized = normalized.SafeNormalize(Vector2.Zero);
 
-                telescopeUIOffsetVelocity += normalized * 0.06f * Utils.Remap(ModContent.GetInstance<WizenkleBossConfig>().TelescopeMovementVelocity, 0f, 1f, 1f, 3f);
+                telescopeUIOffsetVelocity += normalized * 0.06f * Utils.Remap(ModContent.GetInstance<UIConfig>().TelescopeMovementVelocity / 100, 0f, 1f, 1f, 3f);
             }
             telescopeUIOffsetVelocity *= 0.96f;
             telescopeUIOffset += telescopeUIOffsetVelocity;

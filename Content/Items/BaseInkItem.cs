@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
 using Terraria.ModLoader;
-using WizenkleBoss.Common.Helper;
+using WizenkleBoss.Common.Helpers;
 using WizenkleBoss.Content.Rarities;
 
 namespace WizenkleBoss.Content.Items

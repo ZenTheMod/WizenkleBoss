@@ -11,7 +11,7 @@ using ReLogic.Content;
 using System.ComponentModel;
 using Terraria.ID;
 
-namespace WizenkleBoss.Common.Helper
+namespace WizenkleBoss.Common.Helpers
 {
         // FUCK THE SERVER WOOOOOOOOO
     [Autoload(Side = ModSide.Client)]

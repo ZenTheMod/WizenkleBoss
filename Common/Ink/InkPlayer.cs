@@ -14,7 +14,7 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using WizenkleBoss.Common.Config;
-using WizenkleBoss.Common.Helper;
+using WizenkleBoss.Common.Helpers;
 using WizenkleBoss.Common.Packets;
 using WizenkleBoss.Content.Buffs;
 using WizenkleBoss.Content.Dusts;
@@ -238,8 +238,8 @@ namespace WizenkleBoss.Common.Ink
                         }
                     }
                 }
-                if (InTile && InkDashCooldown > 0 && !Main.dedServ)
-                    ProduceWaterRipples();
+                if (InkSystem.AnyActiveInk && InTile)
+                    ProduceInkRipples();
             }
             else
             {
@@ -250,14 +250,9 @@ namespace WizenkleBoss.Common.Ink
         {
             Main.spriteBatch.Draw(TextureRegistry.Bloom.Value, new Rectangle(Main.screenWidth / 2, Main.screenHeight / 2, (int)(Main.screenWidth * Intoxication * 4.3f), (int)(Main.screenHeight * Intoxication * 3.3f)), null, Color.White * Intoxication, 0, TextureRegistry.Bloom.Size() / 2f, SpriteEffects.None, 0f);
         }
-        private void ProduceWaterRipples()
+        private void ProduceInkRipples()
         {
-            WaterShaderData shaderData = (WaterShaderData)Filters.Scene["WaterDistortion"].GetShader();
-
-            float waveSine = Utils.Remap(DashVelocity.Length(), 0f, 17f, 0, 1.4f) * (float)Math.Sin(Main.GlobalTimeWrappedHourly * 20f);
-
-            Color waveData = new Color(0.5f, 0.3f * Math.Sign(waveSine) + 0.5f, 0f, 1f) * Math.Abs(waveSine);
-            shaderData.QueueRipple(Player.position, waveData, Player.Size, RippleShape.Circle, DashVelocity.ToRotation());
+            InkRippleSystem.QueueRipple(Player.Center, 0.95f, Vector2.One * 0.7f);
         }
         public override void HideDrawLayers(PlayerDrawSet drawInfo)
         {

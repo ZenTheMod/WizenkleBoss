@@ -27,15 +27,15 @@ INCOMPATIBLE WITH THE FOLLOWING MODS:
 
 Shaders (ShaderToy):
 
-	☆ I am PRAYING I have the rights to use these :33
+	☆☆ I am PRAYING I have the rights to use these :33
 
 ★ Thanks to @supah for their base shader that I forked.
-	☆ https://www.shadertoy.com/view/M3dXzB (original)
-	☆ https://www.shadertoy.com/view/XXGyDK (my spooky fork)
+	☆ https://www.shadertoy.com/view/M3dXzB (Original)
+	☆ https://www.shadertoy.com/view/XXGyDK (My spooky fork)
 
 ★ Thanks to @MajorCallisto for their fork of https://www.shadertoy.com/view/Xd23Dh by @iq.
 	☆ https://www.shadertoy.com/view/MfsyRn
-	☆ (I litterally just got some ideas ab how to use lerping/mixing I didnt even use the noise :sob:, but I wanna make sure I credit everyone just in case.)
+	☆☆ (I litterally just got some ideas ab how to use lerping/mixing I didnt even use the noise :sob:, but I wanna make sure I credit everyone just in case.)
 
 ★ Thanks to @shadmar for their fork of https://www.shadertoy.com/view/MtsSWs by @jackdavenport.
 	☆ https://www.shadertoy.com/view/MsySzy
@@ -44,13 +44,20 @@ Shaders (ShaderToy):
 	☆ https://www.shadertoy.com/view/4fKyzt
 
 ★ Thanks to @MysteryPancake for their base shader that I forked.
-	☆ https://www.shadertoy.com/view/dtfSz4 (original)
-	☆ https://www.shadertoy.com/view/XftfzM (my fork)
+	☆ https://www.shadertoy.com/view/dtfSz4 (Original)
+	☆ https://www.shadertoy.com/view/XftfzM (My fork)
 
 ★ Thanks to @devrique for their base shader that I forked*.
-	☆ https://www.shadertoy.com/view/wllBDM (original)
-	☆ https://www.shadertoy.com/view/ltSXRz (fisheye shader they used made by @ddoodm)
-	☆ https://www.shadertoy.com/view/lcyfzm (my buggy fork)
+	☆ https://www.shadertoy.com/view/wllBDM (Original)
+	☆ https://www.shadertoy.com/view/ltSXRz (Fisheye shader they used made by @ddoodm)
+	☆ https://www.shadertoy.com/view/lcyfzm (My buggy fork)
+
+★ Thanks to @4rknova for their example of Hugo Elias's 2D Water shader (I think that's correct ????????) that I then forked.
+	☆ https://web.archive.org/web/20160418004149/http://freespace.virgin.net/hugo.elias/graphics/x_water.htm (Ancient fourm)
+	☆ https://www.shadertoy.com/view/3sB3WW (Interactive Ripples)
+	☆ https://www.shadertoy.com/view/433BzH (My fork)
+
+	☆☆ https://www.shadertoy.com/view/MXtfzr (My failed attempt at using vanilla's ripple shader, please if ANYONE can comprehend this lmk)
 
 Shaders (Other):
 

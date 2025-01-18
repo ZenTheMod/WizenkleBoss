@@ -3,7 +3,7 @@ using Terraria;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WizenkleBoss.Common.Helper;
+using WizenkleBoss.Common.Helpers;
 using WizenkleBoss.Content.Buffs;
 using WizenkleBoss.Content.Dusts;
 using WizenkleBoss.Content.Items.Dyes;

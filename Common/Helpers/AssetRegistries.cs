@@ -8,7 +8,7 @@ using Terraria.GameContent;
 using Terraria.Audio;
 using Steamworks;
 
-namespace WizenkleBoss.Common.Helper
+namespace WizenkleBoss.Common.Helpers
 {
     public class TextureRegistry : ModSystem
     {

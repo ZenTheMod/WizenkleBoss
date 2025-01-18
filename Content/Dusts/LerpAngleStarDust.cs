@@ -7,7 +7,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WizenkleBoss.Common.Helper;
+using WizenkleBoss.Common.Helpers;
 using static WizenkleBoss.Content.Projectiles.Misc.DeepSpaceTransmitterHelper;
 
 namespace WizenkleBoss.Content.Dusts

@@ -51,9 +51,9 @@ namespace WizenkleBoss.Common.Ink
 
                 Shader.Parameters["DrugStrength"]?.SetValue(player.Intoxication);
 
-                Shader.Parameters["contrast"]?.SetValue(ModContent.GetInstance<WizenkleBossConfig>().InkContrast);
+                Shader.Parameters["contrast"]?.SetValue(ModContent.GetInstance<VFXConfig>().InkContrast / 100f);
 
-                Shader.Parameters["embossStrength"]?.SetValue(ModContent.GetInstance<WizenkleBossConfig>().EmbossStrength);
+                Shader.Parameters["embossStrength"]?.SetValue(ModContent.GetInstance<VFXConfig>().EmbossStrength / 100f);
             }
         }
         public override void Apply()

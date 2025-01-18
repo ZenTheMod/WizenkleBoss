@@ -35,7 +35,7 @@ Items: {
 	}
 
 	InterGalacticSludge: {
-		DisplayName: Extra-Dimensional Soup
+		DisplayName: Ink Soup
 		Tooltip:
 			'''
 			'I'm not even going to try to explain what you just did.'
@@ -46,15 +46,15 @@ Items: {
 	}
 
 	InkDye: {
-		DisplayName: Extra-Dimensional Dye
+		DisplayName: Ink Dye
 		Tooltip: 4D DYE WOOOOOOOOOO!!!!
 	}
 
 	ExtraDimensionalArtifact: {
-		DisplayName: Extra-Dimensional Artifact
+		DisplayName: Inky Artifact
 		Tooltip:
 			'''
-			Gives the bearer complete mastery over extra-dimensional spaces.
+			Gives the bearer complete mastery over Extra-Dimensional spaces.
 			LINE THAT GETS REPLACED
 			'It's your funeral.'
 			'''
@@ -253,68 +253,33 @@ Projectiles: {
 }
 
 Configs: {
-	ZDebugConfig: {
+	DebugConfig: {
 		DisplayName: Debug Config
 
 		TelescopeDebugText: {
-			Label: "[i:WizenkleBoss/BarrierTelescopeItem] Telescope Debug Text"
+			Label: "[i:WizenkleBoss/TelescopeItem] Telescope Debug Text"
 			Tooltip: Enables debuging text while using the telescope.
+		}
+
+		DebugColoredRipples: {
+			Label: "[i:WizenkleBoss/InterGalacticSludge] Ink Effect Debug Colors"
+			Tooltip: Enables hideous colors for debugging my ripple shader I spent 3 days on.
 		}
 	}
 
-	WizenkleBossConfig: {
-		DisplayName: Main Config
-
-		Headers: {
-			Effects: Effects
-			Sounds: Sounds
-			UI: UI
-		}
-
-		InkContrast: {
-			Label: "[i:WizenkleBoss/InterGalacticSludge] Shader Contrast"
-			Tooltip:
-				'''
-				Some players may have photosensitivity or find certain visuals iritating.
-				0 Makes the original world very clear, easy to look at.
-				1 Full contrast based, hard to look at.
-				'''
-		}
-
-		EmbossStrength: {
-			Label: "[i:WizenkleBoss/InterGalacticSludge] Shader Strength"
-			Tooltip:
-				'''
-				Some players may have photosensitivity or find certain visuals iritating.
-				0.4 Makes harsh effects much easier to look at.
-				1 Full intended effect, harsher to look at.
-				'''
-		}
-
-		TooltipEffects: {
-			Label: "[i:1875] Tooltip Effects"
-			Tooltip: If this mod's visual effects on item tooltips are enabled or not.
-		}
+	SFXConfig: {
+		DisplayName: SFX Config
+		Headers.Sounds: Sounds
 
 		LaserLoop: {
 			Label: "[i:3541] Laser beam Sounds"
 			Tooltip: If the loud noise of laser beams is audable.
 		}
+	}
 
-		VideoOpacity: {
-			Label: "[i:5061] Video Opacity"
-			Tooltip: The opacity that video based effects are drawn with. (0 being invisible, and 1 being visible)
-		}
-
-		VideoVolume: {
-			Label: "[i:5112] Video Volume"
-			Tooltip: The volume of video based effects.
-		}
-
-		ScreenShake: {
-			Label: "[i:3546] Screenshake"
-			Tooltip: Controls the intensity of screenshaking effects..
-		}
+	UIConfig: {
+		DisplayName: GUI Config
+		Headers.UI: Fullscreen Interfaces
 
 		TelescopeMovementKeyPrompt: {
 			Label: "[i:WizenkleBoss/ObservatoryChartItem] Screen Pan Prompt"
@@ -339,6 +304,51 @@ Configs: {
 		SatelliteMidnightMode: {
 			Label: "[i:WizenkleBoss/TerminalItem] Terminal Midnight Mode"
 			Tooltip: Makes the terminal much darker.
+		}
+	}
+
+	VFXConfig: {
+		DisplayName: VFX Config
+		Headers.Effects: Effects
+
+		InkContrast: {
+			Label: "[i:WizenkleBoss/InterGalacticSludge] Shader Contrast"
+			Tooltip:
+				'''
+				Some players may have photosensitivity or find certain visuals iritating.
+				0 Makes the original world very clear, easy to look at.
+				100 Full contrast based, hard to look at.
+				'''
+		}
+
+		EmbossStrength: {
+			Label: "[i:WizenkleBoss/InterGalacticSludge] Shader Strength"
+			Tooltip:
+				'''
+				Some players may have photosensitivity or find certain visuals iritating.
+				40 Makes harsh effects much easier to look at.
+				100 Full intended effect, harsher to look at.
+				'''
+		}
+
+		TooltipEffects: {
+			Label: "[i:1875] Tooltip Effects"
+			Tooltip: If this mod's visual effects on item tooltips are enabled or not.
+		}
+
+		VideoOpacity: {
+			Label: "[i:5061] Video Opacity"
+			Tooltip: The opacity that video based effects are drawn with. (0 being invisible, and 1 being visible)
+		}
+
+		ScreenShake: {
+			Label: "[i:3546] Screenshake"
+			Tooltip: Controls the intensity of screenshaking effects.
+		}
+
+		TitleScreenHeavyRain: {
+			Label: "[i:WizenkleBoss/InterGalacticSludge] Heavy Rain"
+			Tooltip: Makes the title screen dropplets more frequent as well as enabling an effect on the text.
 		}
 	}
 }
@@ -379,6 +389,7 @@ rant:
 	PS. dm @z_e_n_. on discord if you ACTUALLY got this when loading in and not by looking for it.
 	'''
 rant2: Press escape and then click somewhere in this vauge direction --->
+MenuStyles.InkPond: Ink Pond
 
 StarNames: {
 	Name0: VACS

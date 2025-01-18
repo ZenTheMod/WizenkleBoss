@@ -1,9 +1,13 @@
 ﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WizenkleBoss.Common.Helper;
+using WizenkleBoss.Common.Helpers;
 using WizenkleBoss.Common.Ink;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
+using System.Security.Policy;
+using rail;
+using System.Collections.Generic;
 
 namespace WizenkleBoss.Content.NPCs.InkCreature
 {
@@ -27,12 +31,23 @@ namespace WizenkleBoss.Content.NPCs.InkCreature
             NPC.hide = true;
         }
 
+        public override void AI()
+        {
+
+        }
+
             // i hate contact damage
         public override bool CanHitPlayer(Player target, ref int cooldownSlot) => false;
 
         public void Shape()
         {
-            Main.spriteBatch.Draw(TextureRegistry.Bloom.Value, NPC.Center - Main.screenLastPosition, null, Color.White with { A = 0 }, 0f, TextureRegistry.Bloom.Value.Size() / 2f, 3.6f, SpriteEffects.None, 0f);
+            Vector2 position = NPC.Center - Main.screenPosition;
+
+
+            Main.spriteBatch.Draw(TextureRegistry.Bloom.Value, position, null, (Color.White * 0.22f) with { A = 0 }, 0f, TextureRegistry.Bloom.Value.Size() / 2f, 3.6f, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(InkCreatureAssetRegistry.Eye.Value, position, null, Color.White with { A = 0 }, 0f, InkCreatureAssetRegistry.Eye.Value.Size() / 2f, 0.8f, SpriteEffects.None, 0f);
+
+            Main.spriteBatch.Draw(TextureRegistry.Bloom.Value, position, null, (Color.White * 0.08f) with { A = 0 }, 0f, TextureRegistry.Bloom.Value.Size() / 2f, 5.6f, SpriteEffects.None, 0f);
         }
     }
 }

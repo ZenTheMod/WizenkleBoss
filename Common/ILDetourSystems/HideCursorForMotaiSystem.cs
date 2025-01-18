@@ -31,7 +31,7 @@ namespace WizenkleBoss.Common.ILDetourSystems
 
         private Vector2 HideTHICKCursor(On_Main.orig_DrawThickCursor orig, bool smart)
         {
-            bool cursormode = ModContent.GetInstance<WizenkleBossConfig>().SatelliteUseMousePosition;
+            bool cursormode = ModContent.GetInstance<UIConfig>().SatelliteUseMousePosition;
 
             if (!StarMapUIHelper.inUI || !cursormode)
                 return orig(smart);
@@ -46,7 +46,7 @@ namespace WizenkleBoss.Common.ILDetourSystems
 
         private void HideCursor(On_Main.orig_DrawCursor orig, Vector2 bonus, bool smart)
         {
-            bool cursormode = ModContent.GetInstance<WizenkleBossConfig>().SatelliteUseMousePosition;
+            bool cursormode = ModContent.GetInstance<UIConfig>().SatelliteUseMousePosition;
 
             if (!StarMapUIHelper.inUI || !cursormode)
                 orig(bonus, smart);

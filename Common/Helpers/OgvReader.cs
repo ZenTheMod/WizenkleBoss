@@ -15,7 +15,7 @@ using Terraria;
 using Terraria.ModLoader;
 using static Theorafile;
 
-namespace WizenkleBoss.Common.Helper
+namespace WizenkleBoss.Common.Helpers
 {
     [Autoload(false)]
     public sealed class OgvReader : IAssetReader, ILoadable

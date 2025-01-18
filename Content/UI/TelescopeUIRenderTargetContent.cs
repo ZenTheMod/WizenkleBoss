@@ -6,7 +6,7 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.ModLoader;
 using Terraria.Utilities;
-using WizenkleBoss.Common.Helper;
+using WizenkleBoss.Common.Helpers;
 
 namespace WizenkleBoss.Content.UI
 {

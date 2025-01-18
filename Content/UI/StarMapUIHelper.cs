@@ -7,7 +7,7 @@ using Terraria;
 using Terraria.ModLoader;
 using WizenkleBoss.Common.Config;
 using Terraria.UI;
-using WizenkleBoss.Common.Helper;
+using WizenkleBoss.Common.Helpers;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 using Terraria.Localization;
@@ -81,7 +81,7 @@ namespace WizenkleBoss.Content.UI
             if (satelliteUI.BackPanel == null || satelliteUI.ModConfigButton == null || !MapAccess)
                 return false;
 
-            bool cursormode = ModContent.GetInstance<WizenkleBossConfig>().SatelliteUseMousePosition;
+            bool cursormode = ModContent.GetInstance<UIConfig>().SatelliteUseMousePosition;
             if (!cursormode)
                 return true;
 
@@ -91,7 +91,7 @@ namespace WizenkleBoss.Content.UI
             Rectangle bounds = new((int)-SatelliteUISystem.TargetSize.X / 2, (int)-SatelliteUISystem.TargetSize.Y / 2, (int)SatelliteUISystem.TargetSize.X, (int)SatelliteUISystem.TargetSize.Y);
 
             return bounds.Contains((int)CursorPos.X, (int)CursorPos.Y) &&
-                inUI && ModContent.GetInstance<WizenkleBossConfig>().SatelliteUseMousePosition &&
+                inUI && ModContent.GetInstance<UIConfig>().SatelliteUseMousePosition &&
                 !satelliteUI.BackPanel.IsMouseHovering &&
                 !satelliteUI.ModConfigButton.IsMouseHovering;
         }
@@ -210,7 +210,7 @@ namespace WizenkleBoss.Content.UI
 
             normalized = normalized.SafeNormalize(Vector2.Zero);
 
-            UIVelocity += normalized * 0.7f * Utils.Remap(ModContent.GetInstance<WizenkleBossConfig>().SatelliteMovementVelocity, 0f, 1f, 2.3f, 4.6f); // WOOOO HARD CODED VALUES
+            UIVelocity += normalized * 0.7f * Utils.Remap(ModContent.GetInstance<UIConfig>().SatelliteMovementVelocity / 100, 0f, 1f, 2.3f, 4.6f); // WOOOO HARD CODED VALUES
             UIVelocity *= 0.5f;
             UIPosition += UIVelocity;
             UIPosition = UIPosition.SafeNormalize(Vector2.Zero) * Utils.Clamp(UIPosition.Length(), 0, 550);
@@ -265,7 +265,7 @@ namespace WizenkleBoss.Content.UI
 
             Vector2 centerpos = SatelliteUISystem.TargetSize / 2f;
 
-            if (ModContent.GetInstance<WizenkleBossConfig>().SatelliteUseMousePosition)
+            if (ModContent.GetInstance<UIConfig>().SatelliteUseMousePosition)
                 centerpos += (Main.MouseScreen - new Vector2(Main.screenWidth / 2, Main.screenHeight / 2)) * Main.UIScale / 2;
 
             Vector2 ClosestPosition = Vector2.Zero;
@@ -303,7 +303,7 @@ namespace WizenkleBoss.Content.UI
         }
         public static void UpdatePrompt()
         {
-            if (!ModContent.GetInstance<WizenkleBossConfig>().TelescopeMovementKeyPrompt && Prompt < PromptState.Fire)
+            if (!ModContent.GetInstance<UIConfig>().TelescopeMovementKeyPrompt && Prompt < PromptState.Fire)
             {
                 Prompt = PromptState.None;
                 return;

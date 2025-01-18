@@ -15,7 +15,7 @@ using Terraria.Localization;
 using Terraria.UI;
 using ReLogic.Content;
 using ReLogic.Content.Sources;
-using WizenkleBoss.Common.Helper;
+using WizenkleBoss.Common.Helpers;
 
 namespace WizenkleBoss
 {

@@ -9,7 +9,7 @@ using Terraria.Audio;
 using Terraria.ModLoader;
 using Terraria.ID;
 
-namespace WizenkleBoss.Common.Helper
+namespace WizenkleBoss.Common.Helpers
 {
     [Autoload(Side = ModSide.Client)]
     public class MusicKiller : ModSystem

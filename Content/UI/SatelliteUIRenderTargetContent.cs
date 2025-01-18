@@ -10,7 +10,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI.Chat;
 using WizenkleBoss.Common.Config;
-using WizenkleBoss.Common.Helper;
+using WizenkleBoss.Common.Helpers;
 using static WizenkleBoss.Content.UI.StarMapUIHelper;
 
 namespace WizenkleBoss.Content.UI
@@ -32,7 +32,7 @@ namespace WizenkleBoss.Content.UI
                     // i hate my chud life
                 float overallcolormultiplier = 2 - MathF.Pow(2f, 10 * (ScaleAnim - 1));
 
-                if (!ModContent.GetInstance<WizenkleBossConfig>().SatelliteMidnightMode)
+                if (!ModContent.GetInstance<UIConfig>().SatelliteMidnightMode)
                 {
                     spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
 
@@ -72,7 +72,7 @@ namespace WizenkleBoss.Content.UI
                     DrawLog(spriteBatch, BloomColor, font);
 
 
-                bool cursormode = ModContent.GetInstance<WizenkleBossConfig>().SatelliteUseMousePosition;
+                bool cursormode = ModContent.GetInstance<UIConfig>().SatelliteUseMousePosition;
 
                 if (BootAnim > 0.95f && CanTargetStar(false))
                     spriteBatch.Draw(cursormode ? TextureRegistry.Cursor.Value : TextureRegistry.Circle.Value, cursormode ? (Main.MouseScreen - new Vector2(Main.screenWidth / 2, Main.screenHeight / 2)) / 2 + Center : Center, null, cursormode ? Color.White : Color.Gray with { A = 0 }, 0, cursormode ? Vector2.Zero : TextureRegistry.Circle.Value.Size() / 2, cursormode ? 1f : 0.1f, SpriteEffects.None, 0f);
@@ -142,7 +142,7 @@ namespace WizenkleBoss.Content.UI
             float heightmultiplier = Prompt >= PromptState.Fire ? 1f : 1.2f;
             Rectangle backing = new(-(int)(Center.X * 2f), (int)((Center.Y - (fontSizePrompt.Y * size)) - (17 * PromptAnim)), (int)(Center.X * 6f), (int)((fontSizePrompt.Y * heightmultiplier * size) + (34 * PromptAnim)));
             spriteBatch.Draw(TextureRegistry.Pixel.Value, backing with { Y = (int)((Center.Y - (fontSizePrompt.Y * size)) - (19 * PromptAnim)), Height = (int)((fontSizePrompt.Y * heightmultiplier * size) + (38 * PromptAnim)) }, BloomColor * 10f);
-            Color backingColor = ModContent.GetInstance<WizenkleBossConfig>().SatelliteMidnightMode ? Color.Black : new Color(11, 8, 18);
+            Color backingColor = ModContent.GetInstance<UIConfig>().SatelliteMidnightMode ? Color.Black : new Color(11, 8, 18);
             spriteBatch.Draw(TextureRegistry.Pixel.Value, backing, backingColor);
             spriteBatch.Draw(TextureRegistry.Bloom.Value, backing, BloomColor * 4f);
 

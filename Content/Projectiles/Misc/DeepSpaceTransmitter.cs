@@ -8,7 +8,7 @@ using Terraria.DataStructures;
 using Terraria.ModLoader;
 using Terraria.UI;
 using WizenkleBoss.Common.Config;
-using WizenkleBoss.Common.Helper;
+using WizenkleBoss.Common.Helpers;
 using WizenkleBoss.Content.Dusts;
 using WizenkleBoss.Content.UI;
 using static WizenkleBoss.Content.Projectiles.Misc.DeepSpaceTransmitterHelper;
@@ -218,7 +218,7 @@ namespace WizenkleBoss.Content.Projectiles.Misc
             if (!SoundPlayed && !Main.dedServ)
             {
                     // Don't defean the elderly.
-                if (ModContent.GetInstance<WizenkleBossConfig>().LaserLoop)
+                if (ModContent.GetInstance<SFXConfig>().LaserLoop)
                     SoundEngine.PlaySound(AudioRegistry.SateliteDeathray);
                 SoundPlayed = true;
             }

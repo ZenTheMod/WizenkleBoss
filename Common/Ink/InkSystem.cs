@@ -12,7 +12,8 @@ using Terraria.Graphics.Capture;
 using Terraria.Graphics.Renderers;
 using Terraria.ModLoader;
 using Terraria.Utilities;
-using WizenkleBoss.Common.Helper;
+using WizenkleBoss.Common.Config;
+using WizenkleBoss.Common.Helpers;
 using WizenkleBoss.Content.Buffs;
 using WizenkleBoss.Content.NPCs.InkCreature;
 
@@ -54,6 +55,23 @@ namespace WizenkleBoss.Common.Ink
 
                 device.SetRenderTarget(_target);
                 device.Clear(Color.Transparent);
+
+                InkRippleSystem.requestedThisFrame = true;
+                if (InkRippleSystem.isReady)
+                {
+                    spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, default, default, default, null, Main.GameViewMatrix.ZoomMatrix);
+                    var Ink = Helper.WaterInkColorizer;
+
+                    Ink.Value.Parameters["InkColor"]?.SetValue(new Color(85, 25, 255, 255).ToVector4());
+                    Ink.Value.Parameters["RippleStrength"]?.SetValue(5f * Utils.Remap(ModContent.GetInstance<VFXConfig>().InkContrast / 100f, 0f, 1f, 1f, 2f));
+
+                        // Nerd Shit.
+                    if (!ModContent.GetInstance<DebugConfig>().DebugColoredRipples)
+                        Ink.Value.CurrentTechnique.Passes[1].Apply();
+
+                    spriteBatch.Draw(InkRippleSystem.rippleTarget, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White);
+                    spriteBatch.End();
+                }
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, default, default, default, null, Main.GameViewMatrix.ZoomMatrix);
 
                 DrawInInk();
@@ -105,6 +123,7 @@ namespace WizenkleBoss.Common.Ink
 
             InkShaderData.ToggleActivityIfNecessary();
         }
+
         public static bool AnyActiveInk;
 
         private static bool _AnyActiveInk() =>
@@ -163,26 +182,28 @@ namespace WizenkleBoss.Common.Ink
 
                     rot = MathF.Round(rot / MathHelper.PiOver4) * MathHelper.PiOver4;
 
+                    Vector2 offset = Main.screenPosition - (Main.screenLastPosition - Main.screenPosition);
                     if (player.GetModPlayer<InkPlayer>().InTile)
                     {
                         int count = (int)(Main.GlobalTimeWrappedHourly * 60 % 60 / 4);
                         Rectangle frame = TextureRegistry.InkDash.Value.Frame(1, 15, 0, count, 0, 0);
-                        Main.spriteBatch.Draw(TextureRegistry.InkDash.Value, player.Center - Main.screenLastPosition, frame, Color.White, rot, new Vector2(26), 1f, SpriteEffects.None, 0f);
+                        Main.spriteBatch.Draw(TextureRegistry.InkDash.Value, player.Center - offset, frame, Color.White, rot, new Vector2(26), 1f, SpriteEffects.None, 0f);
 
                         count = (int)((Main.GlobalTimeWrappedHourly + 20) * 60 % 60 / 4);
                         frame = TextureRegistry.InkDash.Value.Frame(1, 15, 0, count, 0, 0);
-                        Main.spriteBatch.Draw(TextureRegistry.InkDash.Value, player.Center - Main.screenLastPosition, frame, Color.White * 0.5f, rot, new Vector2(26), 2f, SpriteEffects.None, 0f);
+                        Main.spriteBatch.Draw(TextureRegistry.InkDash.Value, player.Center - offset, frame, Color.White * 0.5f, rot, new Vector2(26), 2f, SpriteEffects.None, 0f);
                     }
                     else
                     {
-                        Main.spriteBatch.Draw(TextureRegistry.Star.Value, player.Center - Main.screenLastPosition, null, Color.White with { A = 0 }, rot, TextureRegistry.Star.Size() / 2f, 0.8f * MathF.Sin(Main.GlobalTimeWrappedHourly * 10), SpriteEffects.None, 0f);
-                        Main.spriteBatch.Draw(TextureRegistry.Star.Value, player.Center - Main.screenLastPosition, null, Color.White with { A = 0 }, rot + MathHelper.PiOver4, TextureRegistry.Star.Size() / 2f, 1.3f * MathF.Sin(Main.GlobalTimeWrappedHourly * 14), SpriteEffects.None, 0f);
+                        Main.spriteBatch.Draw(TextureRegistry.Star.Value, player.Center - offset, null, Color.White with { A = 0 }, rot, TextureRegistry.Star.Size() / 2f, 0.8f * MathF.Sin(Main.GlobalTimeWrappedHourly * 10), SpriteEffects.None, 0f);
+                        Main.spriteBatch.Draw(TextureRegistry.Star.Value, player.Center - offset, null, Color.White with { A = 0 }, rot + MathHelper.PiOver4, TextureRegistry.Star.Size() / 2f, 1.3f * MathF.Sin(Main.GlobalTimeWrappedHourly * 14), SpriteEffects.None, 0f);
+                        for (int k = player.GetModPlayer<InkPlayer>().dashOldPos.Length - 1; k > 0; k--)
+                        {
+                            float interpolator = (player.GetModPlayer<InkPlayer>().dashOldPos.Length - k) / (float)player.GetModPlayer<InkPlayer>().dashOldPos.Length;
+                            Main.spriteBatch.Draw(TextureRegistry.Star.Value, player.GetModPlayer<InkPlayer>().dashOldPos[k] - offset, null, (Color.White * interpolator) with { A = 0 }, rot + MathHelper.PiOver4 * k, TextureRegistry.Star.Size() / 2f, 0.7f * MathF.Sin(Main.GlobalTimeWrappedHourly * interpolator * 5) * interpolator, SpriteEffects.None, 0f);
+                        }
                     }
-                    for (int k = player.GetModPlayer<InkPlayer>().dashOldPos.Length - 1; k > 0; k--)
-                    {
-                        float interpolator = (player.GetModPlayer<InkPlayer>().dashOldPos.Length - k) / (float)player.GetModPlayer<InkPlayer>().dashOldPos.Length;
-                        Main.spriteBatch.Draw(TextureRegistry.Star.Value, player.GetModPlayer<InkPlayer>().dashOldPos[k] - Main.screenLastPosition, null, (Color.White * interpolator) with { A = 0 }, rot + MathHelper.PiOver4 * k, TextureRegistry.Star.Size() / 2f, 0.7f * MathF.Sin(Main.GlobalTimeWrappedHourly * interpolator * 5) * interpolator, SpriteEffects.None, 0f);
-                    }
+                    
                 }
                 else
                 {

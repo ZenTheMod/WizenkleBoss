@@ -11,7 +11,7 @@ using Terraria.UI;
 using Terraria;
 using WizenkleBoss.Common.Config;
 
-namespace WizenkleBoss.Common.Helper
+namespace WizenkleBoss.Common.Helpers
 {
     public class UIVideoPlayerSystem : ModSystem
     {
@@ -25,7 +25,7 @@ namespace WizenkleBoss.Common.Helper
             VidPlayer ??= new VideoPlayer();
             VidPlayer.IsLooped = false;
             VidPlayer?.Play(video);
-            VidPlayer.Volume = ModContent.GetInstance<WizenkleBossConfig>().VideoVolume;
+            VidPlayer.Volume = Main.soundVolume;
         }
         public override void UpdateUI(GameTime gameTime)
         {
@@ -45,7 +45,7 @@ namespace WizenkleBoss.Common.Helper
                 {
                     Drawing = true;
                     VidTexture = VidPlayer.GetTexture();
-                    VidPlayer.Volume = ModContent.GetInstance<WizenkleBossConfig>().VideoVolume;
+                    VidPlayer.Volume = Main.soundVolume;
                 }
                 else
                 {
@@ -96,9 +96,9 @@ namespace WizenkleBoss.Common.Helper
                         "WizenkleBoss: VideoPlayer",
                         delegate
                         {
-                            if (VidTexture is null || VidPlayer.State == MediaState.Stopped || ModContent.GetInstance<WizenkleBossConfig>().VideoOpacity == 0f)
+                            if (VidTexture is null || VidPlayer.State == MediaState.Stopped || ModContent.GetInstance<VFXConfig>().VideoOpacity == 0)
                                 return true;
-                            Main.spriteBatch.Draw(VidTexture, new Rectangle(Main.screenWidth / 2, Main.screenHeight / 2, Main.screenWidth, Main.screenHeight), new Rectangle(0, 0, VidTexture.Width, VidTexture.Height), Color.White * ModContent.GetInstance<WizenkleBossConfig>().VideoOpacity, 0f, new Vector2(VidTexture.Width / 2f, VidTexture.Height / 2f), SpriteEffects.None, 0f);
+                            Main.spriteBatch.Draw(VidTexture, new Rectangle(Main.screenWidth / 2, Main.screenHeight / 2, Main.screenWidth, Main.screenHeight), new Rectangle(0, 0, VidTexture.Width, VidTexture.Height), Color.White * (ModContent.GetInstance<VFXConfig>().VideoOpacity / 100f), 0f, new Vector2(VidTexture.Width / 2f, VidTexture.Height / 2f), SpriteEffects.None, 0f);
                             return true;
                         },
                         InterfaceScaleType.UI));
