@@ -392,8 +392,8 @@ rant2: Press escape and then click somewhere in this vauge direction --->
 
 MenuStyles: {
 	InkPond: Ink Pond
-	InkPondHeavyRain: "Rain: Heavy"
-	InkPondLightRain: "Rain: Light"
+	InkPondHeavyRain: Rain: Heavy
+	InkPondLightRain: Rain: Light
 }
 
 StarNames: {
