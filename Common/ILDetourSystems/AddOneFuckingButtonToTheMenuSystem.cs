@@ -12,11 +12,14 @@ using System.Threading.Tasks;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI.Chat;
 using WizenkleBoss.Common.Config;
+using WizenkleBoss.Common.Helpers;
+using WizenkleBoss.Common.Ink;
 using WizenkleBoss.Common.MenuStyles;
 
 namespace WizenkleBoss.Common.ILDetourSystems
@@ -63,14 +66,24 @@ namespace WizenkleBoss.Common.ILDetourSystems
                 Vector2 position = new((Main.screenWidth / 2) - textSize.X / 2f, Main.screenHeight - 4 - textSize.Y - switchTextSize.Y);
                 Rectangle switchTextRect = new((int)position.X, (int)position.Y, (int)textSize.X, (int)textSize.Y);
 
+                bool isGay = Main.mouseMiddle;
+
                 bool hovering = switchTextRect.Contains(Main.mouseX, Main.mouseY);
 
                 if (hovering && !Main.alreadyGrabbingSunOrMoon)
                 {
                     if (Main.mouseLeftRelease && Main.mouseLeft)
                     {
-                        SoundEngine.PlaySound(SoundID.MenuTick);
-                        ModContent.GetInstance<VFXConfig>().TitleScreenHeavyRain = !heavyRain;
+                        if (isGay)
+                        {
+                            SoundEngine.PlaySound(AudioRegistry.Fire with { Volume = 0.4f});
+                            InkSystem.PrideMonth = !InkSystem.PrideMonth;
+                        }
+                        else
+                        {
+                            SoundEngine.PlaySound(SoundID.MenuTick);
+                            ModContent.GetInstance<VFXConfig>().TitleScreenHeavyRain = !heavyRain;
+                        }
                     }
                     if (Main.mouseRightRelease && Main.mouseRight)
                     {
@@ -81,7 +94,7 @@ namespace WizenkleBoss.Common.ILDetourSystems
                         }, scrollToOption: nameof(VFXConfig.TitleScreenHeavyRain), centerScrolledOption: true);
                     }
                 }
-                ChatManager.DrawColorCodedStringWithShadow(sb, FontAssets.MouseText.Value, text, position, hovering ? Main.OurFavoriteColor : new Color(120, 120, 120, 76), 0f, Vector2.Zero, Vector2.One);
+                ChatManager.DrawColorCodedStringWithShadow(sb, FontAssets.MouseText.Value, text, position, hovering ? (isGay ? Main.DiscoColor : Main.OurFavoriteColor) : new Color(120, 120, 120, 76), 0f, Vector2.Zero, Vector2.One);
             });
         }
     }

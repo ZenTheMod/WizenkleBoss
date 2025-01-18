@@ -23,7 +23,9 @@ namespace WizenkleBoss.Common.Ink
     {
         public static Color OutlineColor { get; private set; } = new(255, 230, 105); // just so i can change it later
 
-        public static Color InkColor { get; private set; } = new(85, 25, 255, 255);
+        public static bool PrideMonth = false;
+
+        public static Color InkColor => PrideMonth ? Main.DiscoColor : new(85, 25, 255, 255);
 
             // Lame rt setup
         #region RenderTargetSetup
