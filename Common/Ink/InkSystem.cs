@@ -23,6 +23,8 @@ namespace WizenkleBoss.Common.Ink
     {
         public static Color OutlineColor { get; private set; } = new(255, 230, 105); // just so i can change it later
 
+        public static Color InkColor { get; private set; } = new(85, 25, 255, 255);
+
             // Lame rt setup
         #region RenderTargetSetup
 
@@ -62,7 +64,7 @@ namespace WizenkleBoss.Common.Ink
                     spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, default, default, default, null, Main.GameViewMatrix.ZoomMatrix);
                     var Ink = Helper.WaterInkColorizer;
 
-                    Ink.Value.Parameters["InkColor"]?.SetValue(new Color(85, 25, 255, 255).ToVector4());
+                    Ink.Value.Parameters["InkColor"]?.SetValue(InkColor.ToVector4());
                     Ink.Value.Parameters["RippleStrength"]?.SetValue(5f * Utils.Remap(ModContent.GetInstance<VFXConfig>().InkContrast / 100f, 0f, 1f, 1f, 2f));
 
                         // Nerd Shit.

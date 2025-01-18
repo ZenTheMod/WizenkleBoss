@@ -13,6 +13,7 @@ using Terraria.DataStructures;
 using Microsoft.Xna.Framework;
 using WizenkleBoss.Content.Rarities;
 using WizenkleBoss.Common.Helpers;
+using WizenkleBoss.Common.Ink;
 
 namespace WizenkleBoss.Content.Items.Dyes
 {

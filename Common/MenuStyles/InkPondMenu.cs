@@ -29,8 +29,6 @@ namespace WizenkleBoss.Common.MenuStyles
 
         private static Vector2 OldMouseScreen;
 
-        private static bool hovering;
-
         public override void Update(bool isOnTitleScreen)
         {
             bool heavyRain = ModContent.GetInstance<VFXConfig>().TitleScreenHeavyRain;
@@ -39,32 +37,6 @@ namespace WizenkleBoss.Common.MenuStyles
                 Vector2 rain = new(Main.rand.NextFloat(0, Main.screenWidth), Main.rand.NextFloat(0, Main.screenHeight));
                 InkRippleSystem.QueueRipple(rain * Main.UIScale, heavyRain ? 0.3f : 0.02f, Vector2.One * Main.rand.NextFloat(0.05f, heavyRain ? 0.7f : 0.4f));
             }
-            if (isOnTitleScreen)
-            {
-                string text = Language.GetTextValue("Mods.WizenkleBoss.MenuStyles.InkPondRainConfig");
-                Vector2 size = Helper.MeasureString(text, FontAssets.DeathText.Value) * Main.UIScale * 0.4f;
-                Vector2 position = new(Main.screenWidth - size.X - 12, 12);
-                Vector2 mousePosition = Main.MouseScreen;
-
-                bool hovered = hovering;
-                if (new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y).Contains((int)mousePosition.X, (int)mousePosition.Y))
-                    hovering = true;
-                else
-                    hovering = false;
-
-                if (hovered != hovering)
-                    SoundEngine.PlaySound(SoundID.MenuTick);
-
-                if (Main.mouseLeft && hovering)
-                {
-                    ModContent.GetInstance<VFXConfig>().Open(onClose: () =>
-                    {
-                        Main.menuMode = 0;
-                    }, scrollToOption: nameof(VFXConfig.TitleScreenHeavyRain), centerScrolledOption: true);
-                }
-            }
-            else
-                hovering = false;
         }
 
         public override bool PreDrawLogo(SpriteBatch spriteBatch, ref Vector2 logoDrawCenter, ref float logoRotation, ref float logoScale, ref Color drawColor)
@@ -111,22 +83,8 @@ namespace WizenkleBoss.Common.MenuStyles
 
             InkRippleSystem.QueueRipple(logoPosition * Main.UIScale, 0.3f, Vector2.One * logoScale * 5f);
                 
-                // BAD IDEA
-            if (Main.menuMode != 0 || !heavyRain)
-            {
-                spriteBatch.End();
-                spriteBatch.Begin(in snapshit);
-            }
-            if (Main.menuMode == 0)
-            {
-                string text = Language.GetTextValue("Mods.WizenkleBoss.MenuStyles.InkPondRainConfig");
-
-                Color color = hovering ? Main.OurFavoriteColor : Color.Gray;
-
-                Vector2 size = Helper.MeasureString(text, FontAssets.DeathText.Value);
-
-                ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.DeathText.Value, text, new Vector2(Main.screenWidth - 12, 12), color, 0f, new Vector2(size.X, 0), Vector2.One * 0.4f);
-            }
+            spriteBatch.End();
+            spriteBatch.Begin(in snapshit);
             return false;
         }
     }

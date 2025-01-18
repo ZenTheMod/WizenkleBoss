@@ -392,7 +392,8 @@ rant2: Press escape and then click somewhere in this vauge direction --->
 
 MenuStyles: {
 	InkPond: Ink Pond
-	InkPondRainConfig: Rain Config
+	InkPondHeavyRain: "Rain: Heavy"
+	InkPondLightRain: "Rain: Light"
 }
 
 StarNames: {

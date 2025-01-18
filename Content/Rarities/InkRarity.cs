@@ -12,6 +12,7 @@ using Terraria.UI.Chat;
 using Terraria.Utilities;
 using WizenkleBoss.Common.Config;
 using WizenkleBoss.Common.Helpers;
+using WizenkleBoss.Common.Ink;
 
 namespace WizenkleBoss.Content.Rarities
 {

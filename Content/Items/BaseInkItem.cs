@@ -4,6 +4,7 @@ using ReLogic.Content;
 using Terraria;
 using Terraria.ModLoader;
 using WizenkleBoss.Common.Helpers;
+using WizenkleBoss.Common.Ink;
 using WizenkleBoss.Content.Rarities;
 
 namespace WizenkleBoss.Content.Items

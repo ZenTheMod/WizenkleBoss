@@ -3,6 +3,7 @@ using Terraria;
 using Terraria.Graphics.Renderers;
 using Terraria.ID;
 using Terraria.ModLoader;
+using WizenkleBoss.Common.Ink;
 
 namespace WizenkleBoss.Content.Dusts
 {
