@@ -39,7 +39,7 @@ namespace WizenkleBoss.Common.Ink
             {
                 var player = Main.LocalPlayer.GetModPlayer<InkPlayer>();
 
-                Shader.Parameters["embossColor"]?.SetValue(new Color(85, 25, 255, 255).ToVector4());
+                Shader.Parameters["embossColor"]?.SetValue(InkSystem.InkColor.ToVector4());
 
                 Shader.Parameters["outlineColor"]?.SetValue(InkSystem.OutlineColor.ToVector4());
 

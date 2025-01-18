@@ -16,7 +16,7 @@ namespace WizenkleBoss.Content.Items.Consumables
         {
             Item.ResearchUnlockCount = 20;
             ItemID.Sets.DrinkParticleColors[Type] = [
-                new Color(85, 25, 255, 255)
+                InkSystem.InkColor
             ];
         }
         public override void SetDefaults()

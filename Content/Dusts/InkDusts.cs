@@ -14,7 +14,7 @@ namespace WizenkleBoss.Content.Dusts
             dust.noGravity = true;
             dust.noLight = true;
             dust.frame = new Rectangle(0, 0, 74, 74);
-            dust.color = new Color(85, 25, 255, 255) with { A = 0 };
+            dust.color = InkSystem.InkColor with { A = 0 };
         }
 
         public override bool Update(Dust dust)

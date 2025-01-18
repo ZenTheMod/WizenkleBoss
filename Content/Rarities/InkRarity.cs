@@ -17,7 +17,7 @@ namespace WizenkleBoss.Content.Rarities
 {
     public class InkRarity : ModRarity
     {
-        public override Color RarityColor => new Color(85, 25, 255, 255);
+        public override Color RarityColor => InkSystem.InkColor;
         public override int GetPrefixedRarity(int offset, float valueMult)
         {
             return Type;
@@ -48,7 +48,7 @@ namespace WizenkleBoss.Content.Rarities
 
             var barrierShader = Helper.ObjectBarrierShader;
 
-            barrierShader.Value.Parameters["embossColor"]?.SetValue(new Color(85, 25, 255, 255).ToVector4());
+            barrierShader.Value.Parameters["embossColor"]?.SetValue(InkSystem.InkColor.ToVector4());
 
             barrierShader.Value.Parameters["Size"]?.SetValue(fontSize);
 
@@ -59,8 +59,8 @@ namespace WizenkleBoss.Content.Rarities
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, barrierShader.Value, Main.UIScaleMatrix);
 
-            ChatManager.DrawColorCodedStringShadow(Main.spriteBatch, font, line.Text, pos, new Color(85, 25, 255, 255) * 0.3f, rotation, origin, baseScale);
-            ChatManager.DrawColorCodedString(Main.spriteBatch, font, line.Text, pos, new Color(85, 25, 255, 255), rotation, origin, baseScale);
+            ChatManager.DrawColorCodedStringShadow(Main.spriteBatch, font, line.Text, pos, InkSystem.InkColor * 0.3f, rotation, origin, baseScale);
+            ChatManager.DrawColorCodedString(Main.spriteBatch, font, line.Text, pos, InkSystem.InkColor, rotation, origin, baseScale);
 
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(in snapshit);

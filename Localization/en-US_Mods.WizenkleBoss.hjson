@@ -389,7 +389,11 @@ rant:
 	PS. dm @z_e_n_. on discord if you ACTUALLY got this when loading in and not by looking for it.
 	'''
 rant2: Press escape and then click somewhere in this vauge direction --->
-MenuStyles.InkPond: Ink Pond
+
+MenuStyles: {
+	InkPond: Ink Pond
+	InkPondRainConfig: Rain Config
+}
 
 StarNames: {
 	Name0: VACS

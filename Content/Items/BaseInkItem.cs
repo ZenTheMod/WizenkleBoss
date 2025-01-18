@@ -26,7 +26,7 @@ namespace WizenkleBoss.Content.Items
 
             var barrierShader = Helper.ObjectBarrierShader;
 
-            barrierShader.Value.Parameters["embossColor"]?.SetValue(new Color(85, 25, 255, 255).ToVector4());
+            barrierShader.Value.Parameters["embossColor"]?.SetValue(InkSystem.InkColor.ToVector4());
 
             barrierShader.Value.Parameters["Size"]?.SetValue(glowTexture.Size());
 
@@ -52,7 +52,7 @@ namespace WizenkleBoss.Content.Items
 
             var barrierShader = Helper.ObjectBarrierShader;
 
-            barrierShader.Value.Parameters["embossColor"]?.SetValue(new Color(85, 25, 255, 255).ToVector4());
+            barrierShader.Value.Parameters["embossColor"]?.SetValue(InkSystem.InkColor.ToVector4());
 
             barrierShader.Value.Parameters["Size"]?.SetValue(glowTexture.Size());
 

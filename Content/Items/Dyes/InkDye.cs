@@ -53,7 +53,7 @@ namespace WizenkleBoss.Content.Items.Dyes
         }
         public override void Apply(Entity entity, DrawData? drawData = null)
         {
-            Shader.Parameters["embossColor"]?.SetValue(new Color(85, 25, 255, 255).ToVector4());
+            Shader.Parameters["embossColor"]?.SetValue(InkSystem.InkColor.ToVector4());
 
                 // For whatever reason doing it like this doesnt break the dust rendering?
             if (drawData.HasValue)

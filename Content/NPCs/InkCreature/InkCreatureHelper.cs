@@ -73,7 +73,7 @@ namespace WizenkleBoss.Content.NPCs.InkCreature
                 var device = Main.instance.GraphicsDevice;
 
                 Coronaries.Value.Parameters["globalTime"]?.SetValue(Main.GlobalTimeWrappedHourly * 2f);
-                Coronaries.Value.Parameters["baseColor"]?.SetValue(new Color(85, 25, 255, 255).ToVector4());
+                Coronaries.Value.Parameters["baseColor"]?.SetValue(InkSystem.InkColor.ToVector4());
 
                 Coronaries.Value.Parameters["min"]?.SetValue(-0.8f);
                 Coronaries.Value.Parameters["max"]?.SetValue(1.4f);

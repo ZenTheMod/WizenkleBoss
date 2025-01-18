@@ -13,6 +13,11 @@ using Terraria.Utilities;
 using WizenkleBoss.Common.Helpers;
 using WizenkleBoss.Common.Config;
 using WizenkleBoss.Common.Ink;
+using Terraria.UI;
+using Terraria.UI.Chat;
+using Terraria.GameContent;
+using Terraria.Audio;
+using Terraria.ID;
 
 namespace WizenkleBoss.Common.MenuStyles
 {
@@ -24,6 +29,8 @@ namespace WizenkleBoss.Common.MenuStyles
 
         private static Vector2 OldMouseScreen;
 
+        private static bool hovering;
+
         public override void Update(bool isOnTitleScreen)
         {
             bool heavyRain = ModContent.GetInstance<VFXConfig>().TitleScreenHeavyRain;
@@ -32,6 +39,32 @@ namespace WizenkleBoss.Common.MenuStyles
                 Vector2 rain = new(Main.rand.NextFloat(0, Main.screenWidth), Main.rand.NextFloat(0, Main.screenHeight));
                 InkRippleSystem.QueueRipple(rain * Main.UIScale, heavyRain ? 0.3f : 0.02f, Vector2.One * Main.rand.NextFloat(0.05f, heavyRain ? 0.7f : 0.4f));
             }
+            if (isOnTitleScreen)
+            {
+                string text = Language.GetTextValue("Mods.WizenkleBoss.MenuStyles.InkPondRainConfig");
+                Vector2 size = Helper.MeasureString(text, FontAssets.DeathText.Value) * Main.UIScale * 0.4f;
+                Vector2 position = new(Main.screenWidth - size.X - 12, 12);
+                Vector2 mousePosition = Main.MouseScreen;
+
+                bool hovered = hovering;
+                if (new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y).Contains((int)mousePosition.X, (int)mousePosition.Y))
+                    hovering = true;
+                else
+                    hovering = false;
+
+                if (hovered != hovering)
+                    SoundEngine.PlaySound(SoundID.MenuTick);
+
+                if (Main.mouseLeft && hovering)
+                {
+                    ModContent.GetInstance<VFXConfig>().Open(onClose: () =>
+                    {
+                        Main.menuMode = 0;
+                    }, scrollToOption: nameof(VFXConfig.TitleScreenHeavyRain), centerScrolledOption: true);
+                }
+            }
+            else
+                hovering = false;
         }
 
         public override bool PreDrawLogo(SpriteBatch spriteBatch, ref Vector2 logoDrawCenter, ref float logoRotation, ref float logoScale, ref Color drawColor)
@@ -57,7 +90,7 @@ namespace WizenkleBoss.Common.MenuStyles
             {
                 var Ink = Helper.WaterInkColorizer;
 
-                Ink.Value.Parameters["InkColor"]?.SetValue(new Color(85, 25, 255, 255).ToVector4());
+                Ink.Value.Parameters["InkColor"]?.SetValue(InkSystem.InkColor.ToVector4());
                 Ink.Value.Parameters["RippleStrength"]?.SetValue(20f);
 
                 Ink.Value.CurrentTechnique.Passes[1].Apply();
@@ -66,7 +99,7 @@ namespace WizenkleBoss.Common.MenuStyles
 
             var barrierShader = Helper.ObjectBarrierShader;
 
-            barrierShader.Value.Parameters["embossColor"]?.SetValue(new Color(85, 25, 255, 255).ToVector4());
+            barrierShader.Value.Parameters["embossColor"]?.SetValue(InkSystem.InkColor.ToVector4());
             barrierShader.Value.Parameters["Size"]?.SetValue(Logo.Value.Size());
             barrierShader.Value.Parameters["uTime"]?.SetValue(Main.GlobalTimeWrappedHourly);
 
@@ -83,6 +116,16 @@ namespace WizenkleBoss.Common.MenuStyles
             {
                 spriteBatch.End();
                 spriteBatch.Begin(in snapshit);
+            }
+            if (Main.menuMode == 0)
+            {
+                string text = Language.GetTextValue("Mods.WizenkleBoss.MenuStyles.InkPondRainConfig");
+
+                Color color = hovering ? Main.OurFavoriteColor : Color.Gray;
+
+                Vector2 size = Helper.MeasureString(text, FontAssets.DeathText.Value);
+
+                ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.DeathText.Value, text, new Vector2(Main.screenWidth - 12, 12), color, 0f, new Vector2(size.X, 0), Vector2.One * 0.4f);
             }
             return false;
         }

@@ -20,7 +20,7 @@ namespace WizenkleBoss.Content.Buffs
 
             var barrierShader = Helper.ObjectBarrierShader;
 
-            barrierShader.Value.Parameters["embossColor"]?.SetValue(new Color(85, 25, 255, 255).ToVector4());
+            barrierShader.Value.Parameters["embossColor"]?.SetValue(InkSystem.InkColor.ToVector4());
 
             barrierShader.Value.Parameters["Size"]?.SetValue(new Vector2(32));
 
