@@ -368,27 +368,7 @@ Buffs: {
 }
 
 Keybinds.InkDash.DisplayName: Ink Dash
-rant:
-	'''
-	ohhhhhh a-WHOOPS!!! Looks like you have RETRO/TRIPPY LIGHTING! Because the Terraria devs are incompetent idiots I have to type this :D
-
-	If you're wondering that that means allow me to explain:
-	Your bitchass either has a shit pc and can only run on the lowest graphics OR you think it looks cool (invalid opinion).
-	Why is this a problem though? Shouldn't your shaders work regardless?
-	NOPE!
-	For whatever reason that setting disables ALL screen shaders; as well as water ripples, some tile based effects, and any attempt to use the screen to draw itself.
-
-	So I'm requiring YOU to turn it to either WHITE or COLOR, thanks.
-
-	However, to the Terraria devs who may somehow be reading this.
-	Do you hate shaders?
-	When developing the game did you think disabling them would be a neat config despite now in 1.4.4 having n^78 primitives and shaders all at once, and then NEVER remove that function?
-	Does good code make you flacid?
-	Thank you for ruining my day!
-
-	PS. dm @z_e_n_. on discord if you ACTUALLY got this when loading in and not by looking for it.
-	'''
-rant2: Press escape and then click somewhere in this vauge direction --->
+rant: Please click here to disable 'Retro Lighting'.
 
 MenuStyles: {
 	InkPond: Ink Pond

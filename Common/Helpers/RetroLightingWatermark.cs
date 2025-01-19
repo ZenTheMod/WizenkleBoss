@@ -13,6 +13,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using ReLogic.Graphics;
+using Terraria.Audio;
+using Terraria.ID;
+using WizenkleBoss.Common.Config;
+using WizenkleBoss.Common.Ink;
+using Terraria.Graphics.Light;
 
 namespace WizenkleBoss.Common.Helpers
 {
@@ -33,19 +38,30 @@ namespace WizenkleBoss.Common.Helpers
                     {
                         var snapshit = Main.spriteBatch.CaptureSnapshot();
                         Main.spriteBatch.End();
-                        Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
+                        Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.UIScaleMatrix);
 
-                        DynamicSpriteFont font = FontRegistry.Papyrus;
-                        Vector2 center = new(Main.screenWidth / 2f * Main.UIScale, Main.screenHeight / 2f * Main.UIScale);
+                        Main.spriteBatch.Draw(TextureRegistry.Pixel.Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.Black * 0.5f);
+                        Main.spriteBatch.Draw(TextureRegistry.Ball.Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.Black);
+
+                        DynamicSpriteFont font = FontAssets.DeathText.Value;
                         string text = Language.GetTextValue($"Mods.WizenkleBoss.rant");
-                        Vector2 size = font.MeasureString(text);
 
-                        Main.spriteBatch.Draw(TextureRegistry.Pixel.Value, new Rectangle(0, 0, (int)(Main.screenWidth * Main.UIScale), (int)(Main.screenHeight * Main.UIScale)), Color.Black * 0.6f);
-                        ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, font, text, center, Color.White, 0f, size * 0.5f, Vector2.One);
+                        Vector2 center = new(Main.screenWidth / 2f, Main.screenHeight / 2f);
+                        Vector2 textSize = ChatManager.GetStringSize(font, text, Vector2.One * 0.5f);
+                        Vector2 position = new(center.X - textSize.X / 2f, center.Y - textSize.Y / 2f);
+                        Rectangle switchTextRect = new((int)position.X, (int)position.Y, (int)textSize.X, (int)textSize.Y / 2);
 
-                        text = Language.GetTextValue($"Mods.WizenkleBoss.rant2");
-                        size = font.MeasureString(text);
-                        ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, font, text, new Vector2(Main.screenWidth / 2f * Main.UIScale, Main.screenHeight * Main.UIScale - size.Y), Color.White, 0f, size * 0.5f, Vector2.One);
+                        bool hovering = switchTextRect.Contains(Main.mouseX, Main.mouseY);
+
+                        if (hovering)
+                        {
+                            if (Main.mouseLeftRelease && Main.mouseLeft)
+                            {
+                                SoundEngine.PlaySound(SoundID.MenuTick);
+                                Lighting.Mode = LightMode.Color;
+                            }
+                        }
+                        ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, font, text, position, hovering ? Main.OurFavoriteColor : Color.White, 0f, Vector2.Zero, Vector2.One * 0.5f);
 
                         Main.spriteBatch.End();
                         Main.spriteBatch.Begin(in snapshit);
