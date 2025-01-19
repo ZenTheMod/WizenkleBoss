@@ -4,9 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WizenkleBoss.Content.UI
+namespace WizenkleBoss.Common.ILDetourSystems
 {
-    public class NoteUI
-    {
-    }
+    public interface IDontGetRightClicked;
 }
