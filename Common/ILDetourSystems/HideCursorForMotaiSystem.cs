@@ -23,6 +23,7 @@ namespace WizenkleBoss.Common.ILDetourSystems
             On_Main.DrawCursor += HideCursor;
             On_Main.DrawThickCursor += HideTHICKCursor;
         }
+
         public override void OnModUnload()
         {
             On_Main.DrawCursor -= HideCursor;

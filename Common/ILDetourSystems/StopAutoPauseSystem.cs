@@ -23,11 +23,14 @@ namespace WizenkleBoss.Common.ILDetourSystems
         {
             On_Main.CanPauseGame += DisableAutoPause;
         }
+
         public override void OnModUnload()
         {
             On_Main.CanPauseGame -= DisableAutoPause;
         }
+
         public static bool ShouldNotPause() => TelescopeUISystem.inUI || StarMapUIHelper.inUI || DeepSpaceTransmitterHelper.charge > 0.01f;
+
         private bool DisableAutoPause(On_Main.orig_CanPauseGame orig)
         {
             bool pause = orig();
