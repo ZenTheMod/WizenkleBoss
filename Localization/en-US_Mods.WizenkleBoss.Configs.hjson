@@ -1,0 +1,98 @@
+﻿DebugConfig: {
+	DisplayName: Debug Config
+
+	TelescopeDebugText: {
+		Label: "[i:WizenkleBoss/TelescopeItem] Telescope Debug Text"
+		Tooltip: Enables debuging text while using the telescope.
+	}
+
+	DebugColoredRipples: {
+		Label: "[i:WizenkleBoss/InterGalacticSludge] Ink Effect Debug Colors"
+		Tooltip: Enables hideous colors for debugging my ripple shader I spent 3 days on.
+	}
+}
+
+SFXConfig: {
+	DisplayName: SFX Config
+	Headers.Sounds: Sounds
+
+	LaserLoop: {
+		Label: "[i:3541] Laser beam Sounds"
+		Tooltip: If the loud noise of laser beams is audable.
+	}
+}
+
+UIConfig: {
+	DisplayName: GUI Config
+	Headers.UI: Fullscreen Interfaces
+
+	TelescopeMovementKeyPrompt: {
+		Label: "[i:WizenkleBoss/ObservatoryChartItem] Screen Pan Prompt"
+		Tooltip: If a key prompt is shown when opening some UI.
+	}
+
+	TelescopeMovementVelocity: {
+		Label: "[i:WizenkleBoss/TelescopeItem] Telescope Screen Pan Speed"
+		Tooltip: Controls telescope movement speed.
+	}
+
+	SatelliteMovementVelocity: {
+		Label: "[i:WizenkleBoss/TerminalItem] Terminal Pan Speed"
+		Tooltip: Controls satellite dish movement speed.
+	}
+
+	SatelliteUseMousePosition: {
+		Label: "[i:WizenkleBoss/TerminalItem] Terminal Mouse Select"
+		Tooltip: Makes target selection based on mouse position rather than the small crosshair.
+	}
+
+	SatelliteMidnightMode: {
+		Label: "[i:WizenkleBoss/TerminalItem] Terminal Midnight Mode"
+		Tooltip: Makes the terminal much darker.
+	}
+}
+
+VFXConfig: {
+	DisplayName: VFX Config
+	Headers.Effects: Effects
+
+	InkContrast: {
+		Label: "[i:WizenkleBoss/InterGalacticSludge] Shader Contrast"
+		Tooltip:
+			'''
+			Some players may have photosensitivity or find certain visuals iritating.
+			0 Makes the original world very clear, easy to look at.
+			100 Full contrast based, hard to look at.
+			'''
+	}
+
+	EmbossStrength: {
+		Label: "[i:WizenkleBoss/InterGalacticSludge] Shader Strength"
+		Tooltip:
+			'''
+			Some players may have photosensitivity or find certain visuals iritating.
+			40 Makes harsh effects much easier to look at.
+			100 Full intended effect, harsher to look at.
+			'''
+	}
+
+	TooltipEffects: {
+		Label: "[i:1875] Tooltip Effects"
+		Tooltip: If this mod's visual effects on item tooltips are enabled or not.
+	}
+
+	VideoOpacity: {
+		Label: "[i:5061] Video Opacity"
+		Tooltip: The opacity that video based effects are drawn with. (0 being invisible, and 1 being visible)
+	}
+
+	ScreenShake: {
+		Label: "[i:3546] Screenshake"
+		Tooltip: Controls the intensity of screenshaking effects.
+	}
+
+	TitleScreenHeavyRain: {
+		Label: "[i:WizenkleBoss/InterGalacticSludge] Heavy Rain"
+		Tooltip: Makes the title screen dropplets more frequent as well as enabling an effect on the text.
+	}
+}
