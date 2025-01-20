@@ -32,11 +32,11 @@ namespace WizenkleBoss.Content.Rarities
 
             float rotation = line.Rotation;
 
-            DynamicSpriteFont font = FontRegistry.Starlight;
+            SpriteFont font = FontRegistry.Starlight.Value;
 
             Vector2 origin = line.Origin;
             Vector2 baseScale = line.BaseScale;
-            Vector2 fontSize = Helper.MeasureString(line.Text, font);
+            Vector2 fontSize = font.MeasureString(line.Text);
             Vector2 center = fontSize / 2f;
             Vector2 pos = new(X, Y);
             Vector2 starBoxPos = pos - new Vector2(7, 5);
@@ -44,10 +44,10 @@ namespace WizenkleBoss.Content.Rarities
 
             float colmultiplier = MathHelper.Lerp(1.3f, 0.9f, Main.GameUpdateCount % 60 / 60f);
 
-            Main.spriteBatch.Draw(TextureRegistry.TextBoxStars.Value, new Rectangle((int)starBoxPos.X, (int)starBoxPos.Y, (int)(TextureRegistry.TextBoxStars.Value.Width * 1.4f), (int)fontSize.Y + 2), null, (InkSystem.OutlineColor * colmultiplier) with { A = 0 }, line.Rotation, Vector2.Zero, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(TextureRegistry.TextBoxStars.Value, new Rectangle((int)starBoxPos.X, (int)starBoxPos.Y, (int)(TextureRegistry.TextBoxStars.Value.Width * 1.4f), (int)fontSize.Y + 10), null, (InkSystem.OutlineColor * colmultiplier) with { A = 0 }, line.Rotation, Vector2.Zero, SpriteEffects.None, 0f);
 
-            ChatManager.DrawColorCodedStringShadow(Main.spriteBatch, font, line.Text, pos, InkSystem.OutlineColor with { A = 0 }, rotation, origin, baseScale * 1.3f);
-            ChatManager.DrawColorCodedString(Main.spriteBatch, font, line.Text, pos, Color.Black, rotation, origin, baseScale * 1.3f);
+            Helper.DrawColorCodedStringShadow(Main.spriteBatch, font, line.Text, pos + (Vector2.UnitY * 8), InkSystem.OutlineColor with { A = 0 }, rotation, origin, baseScale * 1.3f);
+            Helper.DrawColorCodedString(Main.spriteBatch, font, line.Text, pos + (Vector2.UnitY * 8), Color.Black, rotation, origin, baseScale * 1.3f);
 
             UnifiedRandom rand = new(Main.LocalPlayer.name.GetHashCode() + (int)(center.X + center.Y));
             int sparkleCount = rand.Next((int)fontSize.X / 6, (int)fontSize.X / 4) + 1;

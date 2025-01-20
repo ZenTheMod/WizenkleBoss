@@ -114,26 +114,17 @@ namespace WizenkleBoss.Common.Helpers
     public class FontRegistry : ModSystem
     {
             // TODO: async loading (bitch)
-        public static DynamicSpriteFont Starlight { get; internal set; }
-        public static DynamicSpriteFont SpaceMono { get; internal set; }
-        public static DynamicSpriteFont Microserif { get; internal set; }
+        public static Asset<SpriteFont> Starlight { get; internal set; }
+        public static Asset<SpriteFont> SpaceMono { get; internal set; }
+        public static Asset<SpriteFont> Microserif { get; internal set; }
         public override void OnModLoad()
         {
             if (Main.dedServ)
                 return;
 
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-            {
-                Starlight = ModContent.Request<DynamicSpriteFont>("WizenkleBoss/Assets/Fonts/Starlight", AssetRequestMode.ImmediateLoad).Value;
-                SpaceMono = ModContent.Request<DynamicSpriteFont>("WizenkleBoss/Assets/Fonts/SpaceMono", AssetRequestMode.ImmediateLoad).Value;
-                Microserif = ModContent.Request<DynamicSpriteFont>("WizenkleBoss/Assets/Fonts/Microserif", AssetRequestMode.ImmediateLoad).Value;
-            }
-            else
-            {
-                Starlight = FontAssets.MouseText.Value;
-                SpaceMono = FontAssets.DeathText.Value;
-                Microserif = FontAssets.MouseText.Value;
-            }
+            Starlight = ModContent.Request<SpriteFont>("WizenkleBoss/Assets/Fonts/Starlight");
+            SpaceMono = ModContent.Request<SpriteFont>("WizenkleBoss/Assets/Fonts/SpaceMono");
+            Microserif = ModContent.Request<SpriteFont>("WizenkleBoss/Assets/Fonts/Microserif");
         }
     }
     public class AudioRegistry : ModSystem

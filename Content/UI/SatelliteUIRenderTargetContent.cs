@@ -46,7 +46,7 @@ namespace WizenkleBoss.Content.UI
 
                 Vector2 Center = new(_target.Width / 2f, _target.Height / 2f);
 
-                DynamicSpriteFont font = FontRegistry.SpaceMono;
+                SpriteFont font = FontRegistry.SpaceMono.Value;
 
                 Color BloomColor = new Color(214, 196, 255) * 0.04f * overallcolormultiplier;
                 BloomColor.A = 0;
@@ -86,18 +86,18 @@ namespace WizenkleBoss.Content.UI
                 _wasPrepared = true;
             }
         }
-        public static void DrawFullScreenError(SpriteBatch spriteBatch, DynamicSpriteFont font, Vector2 Center)
+        public static void DrawFullScreenError(SpriteBatch spriteBatch, SpriteFont font, Vector2 Center)
         {
             string error = Language.GetTextValue("Mods.WizenkleBoss.UI.SatelliteDish.NoMap");
-            Vector2 textSize = Helper.MeasureString(error, font);
+            Vector2 textSize = font.MeasureString(error);
 
             spriteBatch.Draw(TextureRegistry.Bloom.Value, Center, null, (Color.Red * 0.1f) with { A = 0 }, 0f, TextureRegistry.Bloom.Size() / 2f, (TextureRegistry.ConsoleError[1].Value.Size() / TextureRegistry.Ball.Size()) * 9f, SpriteEffects.None, 0f);
             if (Main.GlobalTimeWrappedHourly * 60 % 50 < 25)
                 spriteBatch.Draw(TextureRegistry.ConsoleError[1].Value, Center, null, Color.Red, 0, TextureRegistry.ConsoleError[1].Value.Size() / 2, 1, SpriteEffects.None, 0f);
 
-            ChatManager.DrawColorCodedString(spriteBatch, font, error, Center + new Vector2(0, 20 + TextureRegistry.ConsoleError[1].Value.Height / 2), Color.Red, 0, textSize / 2, Vector2.One * 0.4f);
+            Helper.DrawColorCodedString(spriteBatch, font, error, Center + new Vector2(0, 20 + TextureRegistry.ConsoleError[1].Value.Height / 2), Color.Red, 0, textSize / 2, Vector2.One * 0.4f);
         }
-        public static void DrawLog(SpriteBatch spriteBatch, Color BloomColor, DynamicSpriteFont font)
+        public static void DrawLog(SpriteBatch spriteBatch, Color BloomColor, SpriteFont font)
         {
             bool easteregg = Main.LocalPlayer.name == "Jim" || Main.LocalPlayer.name == "Wither";
 
@@ -106,19 +106,19 @@ namespace WizenkleBoss.Content.UI
             {
                 if (i > line)
                     return;
-                Vector2 textSize = Helper.MeasureString(TerminalLines[i], font);
+                Vector2 textSize = font.MeasureString(TerminalLines[i]);
                 Vector2 position = new(30, 30 + (textSize.Y * i * 0.25f));
                 bool error = TerminalState > ContactingState.ContactingHighPower && TerminalLine > 9 && i > 1;
 
-                if (error && easteregg)
-                    font = FontAssets.DeathText.Value;
-
                 spriteBatch.Draw(TextureRegistry.Bloom.Value, position + (textSize / 2f * 0.22f), null, error ? (Color.Red * 0.1f) with { A = 0 } : (BloomColor * 2f), 0f, TextureRegistry.Bloom.Value.Size() / 2f, (textSize / TextureRegistry.Ball.Size()) * 1.4f, SpriteEffects.None, 0f);
 
-                ChatManager.DrawColorCodedString(spriteBatch, font, TerminalLines[i], position, error ? Color.Red : Color.White, 0, Vector2.Zero, Vector2.One * 0.22f);
+                if (error && easteregg)
+                    ChatManager.DrawColorCodedString(spriteBatch, FontAssets.DeathText.Value, TerminalLines[i], position, Color.Red, 0, Vector2.Zero, Vector2.One * 0.22f);
+                else
+                    Helper.DrawColorCodedString(spriteBatch, font, TerminalLines[i], position, error ? Color.Red : Color.White, 0, Vector2.Zero, Vector2.One * 0.22f);
             }
         }
-        public static void DrawTextPrompt(SpriteBatch spriteBatch, Vector2 Center, Color BloomColor, DynamicSpriteFont font)
+        public static void DrawTextPrompt(SpriteBatch spriteBatch, Vector2 Center, Color BloomColor, SpriteFont font)
         {
             if (PromptAnim == 0)
                 return;
@@ -133,13 +133,13 @@ namespace WizenkleBoss.Content.UI
                 _ => " "
             };
 
-            Vector2 fontSizePrompt = Helper.MeasureString(PromptText, font);
+            Vector2 fontSizePrompt = font.MeasureString(PromptText);
 
-            Vector2 fontSizeMovementUnder = Helper.MeasureString(Language.GetTextValue("Mods.WizenkleBoss.UI.Telescope.MovementKeyPromptUnder"), font);
+            Vector2 fontSizeMovementUnder = font.MeasureString(Language.GetTextValue("Mods.WizenkleBoss.UI.Telescope.MovementKeyPromptUnder"));
 
             float size = 0.4f * PromptAnim;
 
-            float heightmultiplier = Prompt >= PromptState.Fire ? 1f : 1.2f;
+            float heightmultiplier = Prompt >= PromptState.Fire ? 1.3f : 1.6f;
             Rectangle backing = new(-(int)(Center.X * 2f), (int)((Center.Y - (fontSizePrompt.Y * size)) - (17 * PromptAnim)), (int)(Center.X * 6f), (int)((fontSizePrompt.Y * heightmultiplier * size) + (34 * PromptAnim)));
             spriteBatch.Draw(TextureRegistry.Pixel.Value, backing with { Y = (int)((Center.Y - (fontSizePrompt.Y * size)) - (19 * PromptAnim)), Height = (int)((fontSizePrompt.Y * heightmultiplier * size) + (38 * PromptAnim)) }, BloomColor * 10f);
             Color backingColor = ModContent.GetInstance<UIConfig>().SatelliteMidnightMode ? Color.Black : new Color(11, 8, 18);
@@ -149,10 +149,10 @@ namespace WizenkleBoss.Content.UI
             if (Prompt == PromptState.None)
                 return;
 
-            ChatManager.DrawColorCodedStringWithShadow(spriteBatch, font, PromptText, Center, Color.White, 0, new(fontSizePrompt.X / 2f, Prompt >= PromptState.Fire ? fontSizePrompt.Y * 0.75f : fontSizePrompt.Y), Vector2.One * size);
+            Helper.DrawColorCodedStringWithShadow(spriteBatch, font, PromptText, Center, Color.White, 0, new(fontSizePrompt.X / 2f, Prompt >= PromptState.Fire ? fontSizePrompt.Y * 0.75f : fontSizePrompt.Y), Vector2.One * size);
 
             if (Prompt < PromptState.Fire)
-                ChatManager.DrawColorCodedString(spriteBatch, font, Language.GetTextValue("Mods.WizenkleBoss.UI.Telescope.MovementKeyPromptUnder"), Center, Color.Gray with { A = 0 }, 0, new(fontSizeMovementUnder.X / 2f, 0), Vector2.One * size / 1.3f);
+                Helper.DrawColorCodedString(spriteBatch, font, Language.GetTextValue("Mods.WizenkleBoss.UI.Telescope.MovementKeyPromptUnder"), Center, Color.Gray with { A = 0 }, 0, new(fontSizeMovementUnder.X / 2f, 0), Vector2.One * size / 1.3f);
         }
         public static void DrawSelection(SpriteBatch spriteBatch, Color color)
         {
@@ -186,7 +186,7 @@ namespace WizenkleBoss.Content.UI
             if (BootAnim > 0.45f)
                 spriteBatch.Draw(TextureRegistry.Bracket.Value, offsetPosition, null, offsetColor * interpolator, 0, TextureRegistry.Bracket.Value.Size() / 2, 0.06f * interpolator, SpriteEffects.None, 0f);
         }
-        public static void DrawStars(SpriteBatch spriteBatch, Color BloomColor, DynamicSpriteFont font)
+        public static void DrawStars(SpriteBatch spriteBatch, Color BloomColor, SpriteFont font)
         {
             float overallcolormultiplier = 2 - MathF.Pow(2f, 10 * (ScaleAnim - 1));
 
@@ -220,20 +220,20 @@ namespace WizenkleBoss.Content.UI
 
                 if (Main.GlobalTimeWrappedHourly * 60 % 50 < 25)
                 {
-                    Vector2 warningPosition = position + (-Vector2.UnitY * 29);
+                    Vector2 warningPosition = position + (-Vector2.UnitY * 40f);
 
-                    Vector2 warningSize = Helper.MeasureString("!", font);
+                    Vector2 warningSize = font.MeasureString("!");
 
                     float textScale = Utils.Remap(position.Length(), 0, 300, 0.4f, 0.5f);
 
                     if (BootAnim > 0.8f)
-                        ChatManager.DrawColorCodedStringShadow(spriteBatch, font, "!", warningPosition, Color.Black, 0, new Vector2(warningSize.X / 2f, 0), Vector2.One * textScale * 1.2f);
+                        Helper.DrawColorCodedStringShadow(spriteBatch, font, "!", warningPosition, Color.Black, 0, new Vector2(warningSize.X / 8f, 0), Vector2.One * textScale * 1.2f);
                     if (BootAnim > 0.7f)
-                        ChatManager.DrawColorCodedString(spriteBatch, font, "!", warningPosition, Color.Red * overallcolormultiplier, 0, new Vector2(warningSize.X / 2f, 0), Vector2.One * textScale * 1.2f);
+                        Helper.DrawColorCodedString(spriteBatch, font, "!", warningPosition, Color.Red * overallcolormultiplier, 0, new Vector2(warningSize.X / 8f, 0), Vector2.One * textScale * 1.2f);
                 }
             }
         }
-        internal static void DrawText(SpriteBatch spriteBatch, BarrierStar star, DynamicSpriteFont font, Color color, bool CurrentStar, float Scale = 1f)
+        internal static void DrawText(SpriteBatch spriteBatch, BarrierStar star, SpriteFont font, Color color, bool CurrentStar, float Scale = 1f)
         {
             Vector2 position = star.Position + UIPosition;
             if (position.Length() > 300)
@@ -250,13 +250,13 @@ namespace WizenkleBoss.Content.UI
             float size = MathF.Max(star.BaseSize * star.SupernovaSize, 0.35f) * 1.3f;
             float textScale = Utils.Remap(position.Length(), 0, 300, 0.3f, 0.2f);
 
-            Vector2 textSize = Helper.MeasureString(star.Name, font);
+            Vector2 textSize = font.MeasureString(star.Name);
 
             if (star.BaseSize > 0.85f || CurrentStar)
-                ChatManager.DrawColorCodedStringShadow(spriteBatch, font, star.Name, textPosition, Color.Black, 0, new Vector2(textSize.X / 2f, 0), Vector2.One * textScale * MathF.Min(size * offset, 2) * Scale);
+                Helper.DrawColorCodedStringShadow(spriteBatch, font, star.Name, textPosition, Color.Black, 0, new Vector2(textSize.X / 2f, 0), Vector2.One * textScale * MathF.Min(size * offset, 2) * Scale);
 
             if (BootAnim > 0.75f)
-                ChatManager.DrawColorCodedString(spriteBatch, font, star.Name, textPosition, color, 0, new Vector2(textSize.X / 2f, 0), Vector2.One * textScale * MathF.Min(size * offset, 2) * Scale);
+                Helper.DrawColorCodedString(spriteBatch, font, star.Name, textPosition, color, 0, new Vector2(textSize.X / 2f, 0), Vector2.One * textScale * MathF.Min(size * offset, 2) * Scale);
         }
         internal static void DrawStar(SpriteBatch spriteBatch, Color BloomColor, BarrierStar star, Color color)
         {

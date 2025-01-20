@@ -24,7 +24,7 @@ namespace WizenkleBoss.Content.UI.Notes
             for (int i = 0; i < Notes; i++)
             {
                 Base[i] = LoadTexture2D("Base" + i);
-                Overlay[i] = LoadTexture2D("Base" + i);
+                Overlay[i] = LoadTexture2D("Overlay" + i);
             }
         }
 
