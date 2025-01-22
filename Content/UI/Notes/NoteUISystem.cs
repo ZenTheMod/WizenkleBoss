@@ -36,6 +36,10 @@ namespace WizenkleBoss.Content.UI.Notes
 
         public static float interpolator = 0f;
 
+        public static bool Magnified;
+
+        public static float Magnify;
+
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
             if (!inUI && interpolator <= 0)
@@ -63,17 +67,19 @@ namespace WizenkleBoss.Content.UI.Notes
                         Texture2D noteOverlay = NoteAssetRegistry.Overlay[CurrentNote.Texture].Value;
 
                         float rotation = Utils.AngleLerp(-MathHelper.PiOver2, 0, ease);
-                        Color color = Color.White * ease;
+                        Color color = Color.Lerp(Color.White, Color.Black, Magnify * 0.5f) * ease;
 
                         float scale = 1.5f;
 
                         Main.spriteBatch.Draw(noteBase, noteCenter, null, color, rotation, noteBase.Size() / 2f, scale, SpriteEffects.None, 0f);
 
-                        DrawText(Main.spriteBatch, new Color(21, 30, 39) * Utils.Remap(interpolator, 0.94f, 1f, 0f, 1f), noteCenter, scale, noteBase.Size());
+                        DrawText(Main.spriteBatch, noteCenter, scale, noteBase.Size());
 
-                        Main.spriteBatch.Draw(noteOverlay, noteCenter, null, color, rotation, noteOverlay.Size() / 2f, scale, SpriteEffects.None, 0f);
+                        Main.spriteBatch.Draw(noteOverlay, noteCenter, null, color * (1 - Magnify), rotation, noteOverlay.Size() / 2f, scale, SpriteEffects.None, 0f);
 
                         Main.spriteBatch.DrawGenericBackButton(FontAssets.DeathText.Value, noteUI.BackPanel, ScreenSize, Language.GetTextValue("UI.Back"));
+
+                        DrawMagnifyButton();
 
                         Main.spriteBatch.End();
                         Main.spriteBatch.Begin(in snapshit);
@@ -84,9 +90,14 @@ namespace WizenkleBoss.Content.UI.Notes
                 );
             }
         }
-        public static void DrawText(SpriteBatch spriteBatch, Color color, Vector2 center, float scale, Vector2 size)
+        public static void DrawText(SpriteBatch spriteBatch, Vector2 center, float scale, Vector2 size)
         {
-            Vector2 margin = new Vector2(10, 24) / scale;
+            Vector2 margin = new Vector2(17, 24) / scale;
+                // Vector2 ScreenSize = new Vector2(Main.screenWidth, Main.screenHeight) * Main.UIScale;
+
+            float lerp = Utils.Remap(interpolator, 0.94f, 1f, 0f, 1f);
+            Color color = new Color(21, 30, 39) * lerp;
+
             SpriteFont font = FontRegistry.Microserif.Value;
             font.LineSpacing = 16;
             string log = Language.GetTextValue(CurrentNote.Text);
@@ -94,7 +105,37 @@ namespace WizenkleBoss.Content.UI.Notes
             TextSnippet[] snippets = [.. ChatManager.ParseMessage(log, color)];
 
             ChatManager.ConvertNormalSnippets(snippets);
-            Helper.DrawColorCodedString(spriteBatch, font, snippets, center, color, 0f, (size / 2f) - margin, Vector2.One * scale, (size.X - 11) * scale);
+
+            if (Magnify < 1f)
+                Helper.DrawColorCodedString(spriteBatch, font, snippets, center, color * (1 - Magnify), 0f, (size / 2f) - margin, Vector2.One * scale, (size.X - 20) * scale, true);
+
+            color *= Magnify;
+
+            if (Magnify > 0f)
+            {
+                    // Main.spriteBatch.Draw(TextureRegistry.Ball.Value, new Rectangle(0, 0, (int)ScreenSize.X, (int)ScreenSize.Y), color * 0.5f);
+
+                Vector2 origin = ((size / 2f) - margin) * scale;
+                ChatManager.DrawColorCodedStringShadow(spriteBatch, FontAssets.MouseText.Value, snippets, center + (Vector2.UnitY * 8), color, 0f, origin / 1.2f, Vector2.One * 1.2f, (size.X - 20) * scale);
+                ChatManager.DrawColorCodedString(spriteBatch, FontAssets.MouseText.Value, snippets, center + (Vector2.UnitY * 8), Color.White * lerp, 0f, origin / 1.2f, Vector2.One * 1.2f, out _, (size.X - 20) * scale, true);
+            }
+        }
+        public static void DrawMagnifyButton()
+        {
+            UIElement magnify = noteUI.MagnifyButton;
+            if (magnify != null)
+            {
+                Vector2 ScreenSize = new Vector2(Main.screenWidth, Main.screenHeight) * Main.UIScale;
+                Vector2 position = new(ScreenSize.X / 2f + (magnify.Left.Pixels * Main.UIScale), (ScreenSize.Y * magnify.VAlign) + (magnify.Top.Pixels * Main.UIScale));
+
+                Color color = magnify.IsMouseHovering ? Color.White : Color.Gray;
+                color *= interpolator;
+
+                Texture2D icon = TextureRegistry.MagnifyIcon.Value;
+
+                Vector2 origin = new(icon.Width / 2f, icon.Height);
+                Main.spriteBatch.Draw(icon, position, null, color, 0f, origin, Vector2.One, SpriteEffects.None, 0f);
+            }
         }
         public override void UpdateUI(GameTime gameTime)
         {
@@ -105,6 +146,11 @@ namespace WizenkleBoss.Content.UI.Notes
             }
             if (!inUI && interpolator > 0)
                 interpolator = MathHelper.Clamp(interpolator - 0.09f, 0f, 1f);
+
+            if (Magnified)
+                Magnify = MathHelper.Clamp(Magnify + 0.2f, 0f, 1f);
+            else
+                Magnify = MathHelper.Clamp(Magnify - 0.2f, 0f, 1f);
         }
     }
 }

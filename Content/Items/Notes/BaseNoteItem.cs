@@ -11,12 +11,14 @@ using Terraria.UI;
 using WizenkleBoss.Common.ILDetourSystems;
 using WizenkleBoss.Content.Rarities;
 using WizenkleBoss.Content.UI.Notes;
+using WizenkleBoss.Common.Ink;
 
 namespace WizenkleBoss.Content.Items.Notes
 {
     public abstract class BaseNoteItem : ModItem, IDontGetRightClicked
     {
-        public virtual Note note => new();
+        public override string Texture => "WizenkleBoss/Content/Items/Notes/NoteStarTexture";
+        public virtual Note Note => new();
         public override void SetDefaults()
         {
             Item.width = 28;
@@ -31,6 +33,7 @@ namespace WizenkleBoss.Content.Items.Notes
             Item.rare = ModContent.RarityType<StarboundRarity>();
             Item.noUseGraphic = true;
         }
+            // This is so the player can open it via a right click similar to a bossbag but NOT decrement the stack.
         public override bool CanRightClick() => true;
         public override void RightClick(Player player) => OpenUI(player);
         public override bool? UseItem(Player player)
@@ -61,8 +64,9 @@ namespace WizenkleBoss.Content.Items.Notes
             Main.chatText = string.Empty;
             Main.inFancyUI = true;
 
-            NoteUISystem.CurrentNote = note;
+            NoteUISystem.CurrentNote = Note;
             Main.InGameUI.SetState(NoteUISystem.noteUI);
         }
+        public override LocalizedText Tooltip => Language.GetText("Mods.WizenkleBoss.Lore.Read");
     }
 }

@@ -17,10 +17,10 @@ using WizenkleBoss.Content.Rarities;
 using WizenkleBoss.Content.UI;
 using WizenkleBoss.Content.UI.Notes;
 
-namespace WizenkleBoss.Content.Items.Notes
+namespace WizenkleBoss.Content.Items.Notes.PreInk
 {
-    public class AstronomyNotes : BaseNoteItem
+    public class One : BaseNoteItem
     {
-        public override Note note => new(0, "Mods.WizenkleBoss.Lore.Log0");
+        public override Note Note => new(0, "Mods.WizenkleBoss.Lore.Log0");
     }
 }

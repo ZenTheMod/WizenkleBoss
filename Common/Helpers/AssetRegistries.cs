@@ -39,6 +39,7 @@ namespace WizenkleBoss.Common.Helpers
         public static Asset<Texture2D> Cursor { get; private set; }
         public static Asset<Texture2D>[] ConsoleError { get; private set; }
         public static Asset<Texture2D> ConfigIcon { get; private set; }
+        public static Asset<Texture2D> MagnifyIcon { get; private set; }
         public static Asset<Texture2D> EnergyBar { get; private set; }
         public override void Load()
         {
@@ -101,6 +102,7 @@ namespace WizenkleBoss.Common.Helpers
             ConsoleError[1] = LoadTexture2D("Icons/NotConnectedToSatelliteDish");
 
             ConfigIcon = LoadTexture2D("Icons/Settings");
+            MagnifyIcon = LoadTexture2D("Icons/Magnify");
 
             EnergyBar = LoadTexture2D("Icons/PowerBar");
         }

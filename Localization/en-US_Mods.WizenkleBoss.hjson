@@ -24,11 +24,6 @@ Items: {
 		Tooltip: "'150% off…'"
 	}
 
-	AstronomyNotes: {
-		DisplayName: Astronomy Notes
-		Tooltip: …
-	}
-
 	ObservatorySatelliteDishItem: {
 		DisplayName: Ancient Satellite Dish
 		Tooltip: "'An old satelite dish crafted out of a desperate attempt to contact instellar beings.'"
@@ -85,6 +80,16 @@ Items: {
 	TerminalItem: {
 		DisplayName: Satellite Dish Terminal
 		Tooltip: "'TARGET LOCATED'"
+	}
+
+	One: {
+		DisplayName: Astronomy Log - Day 1
+		Tooltip: ""
+	}
+
+	Two: {
+		DisplayName: Astronomy Log - Day 2
+		Tooltip: ""
 	}
 }
 

@@ -12,7 +12,7 @@ namespace WizenkleBoss.Content.UI.Notes
         public static Asset<Texture2D>[] Base { get; private set; }
         public static Asset<Texture2D>[] Overlay { get; private set; }
 
-        private const int Notes = 1;
+        private const int Notes = 2;
 
         public override void Load()
         {
@@ -32,7 +32,10 @@ namespace WizenkleBoss.Content.UI.Notes
         {
                 // if (Main.netMode == NetmodeID.Server)
                 //     return default;
-            return ModContent.Request<Texture2D>("WizenkleBoss/Assets/Textures/Notes/" + TexturePath);
+            if (ModContent.RequestIfExists("WizenkleBoss/Assets/Textures/Notes/" + TexturePath, out Asset<Texture2D> text))
+                return text;
+            else
+                return ModContent.Request<Texture2D>("WizenkleBoss/Assets/Textures/MagicPixel");
         }
     }
 }

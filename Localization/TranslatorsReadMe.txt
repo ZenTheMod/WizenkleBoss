@@ -1,0 +1,1 @@
+﻿Multiple systems in this mod require a custom font, if you would like to help provide a similar font in your language please dm '@z_e_n_.' on discord.
