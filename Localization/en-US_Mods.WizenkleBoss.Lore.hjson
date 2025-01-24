@@ -1,4 +1,12 @@
 Read: <right> to open.
+
+Notes: {
+	Note1.DisplayName: Astronomy Log (Day 1)
+	Note2.DisplayName: Astronomy Log (Day 2)
+	Note3.DisplayName: Astronomy Log (Day 3)
+	Note4.DisplayName: Astronomy Log (Day 4)
+}
+
 Log0:
 	'''
 	Day 1: Discovery of Deepspace Anomaly 'ATRAMENTUM'
@@ -21,7 +29,7 @@ Log2:
 	Day 3: Contact
 	Entry 003: Dr. Zoe, Lead Astrophysicist
 
-	    We did it. A breakthrough. We amplified the signal and sent a small, calibrated transmission toward ATRAMENTUM. It took several hours, but it responded. At first, it was just an eerie, low frequency. The kind that sounds like an echo-y cave noise. Dr. Vas seemed grumpier than usual and willing to give up. I guess that makes sense since she spent hours working on this with her team. After waiting half an hour, we... heard a noise? The noise shifted. It wasn’t random static. It was words. In a dialect no human had ever heard before, followed by the sudden switch to English. A simple question:
+	    We did it. A breakthrough. We amplified the signal and sent a small, calibrated transmission toward ATRAMENTUM. It took several hours, but it responded. At first, it was just an eerie, low frequency. The kind that sounds like an echo-y cave noise. Dr. Vas seemed grumpier than usual and willing to give up. I guess that makes sense since she spent hours working on this with her team. After waiting half an hour, we... heard a noise? The noise shifted. It wasn't random static. It was words. In a dialect no human had ever heard before, followed by the sudden switch to English. A simple question:
 
 	    "What are you?"
 
@@ -32,7 +40,7 @@ Log3:
 	Day 5: Communication Attempts
 	Entry 004: Dr. Vas, Quantum Physicist
 
-		After the initial response, we've attempted multiple connections with different frequencies and with our teams working harder than ever. However, the entity is cautious, almost elusive. Every time we try to initiate further contact, the frequency of the signals deletes itself magically, as if it is trying to deter us. Our leading theory was that the entity was some form of dormant intelligence, but wouldn't different life forms want to communicate more? Potentially its a cosmic guardian; all of this theorizing has my mind racing and spinning, but its so confusing to me. Now I’m questioning whether it's testing us. The data we've gathered is starting to suggest something dangerous: this entity might not be alone. There are faint traces of similar anomalies in nearby systems. Could these guardians be interconnected? Could they be watching? Waiting? Fooling with us, like little play toys? Are we their food? Are they fattening us until we are perfect for a fair fight? Are we here for sport? This is emotionally messing with me I might need to see a therapist soon.
+	    After the initial response, we've attempted multiple connections with different frequencies and with our teams working harder than ever. However, the entity is cautious, almost elusive. Every time we try to initiate further contact, the frequency of the signals deletes itself magically, as if it is trying to deter us. Our leading theory was that the entity was some form of dormant intelligence, but wouldn't different life forms want to communicate more? Potentially its a cosmic guardian; all of this theorizing has my mind racing and spinning, but its so confusing to me. Now I’m questioning whether it's testing us. The data we've gathered is starting to suggest something dangerous: this entity might not be alone. There are faint traces of similar anomalies in nearby systems. Could these guardians be interconnected? Could they be watching? Waiting? Fooling with us, like little play toys? Are we their food? Are they fattening us until we are perfect for a fair fight? Are we here for sport? This is emotionally messing with me I might need to see a therapist soon.
 	'''
 Log4:
 	'''

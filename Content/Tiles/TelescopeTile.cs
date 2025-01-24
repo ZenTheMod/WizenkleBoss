@@ -48,32 +48,13 @@ namespace WizenkleBoss.Content.Tiles
             Player player = Main.LocalPlayer;
             if (player.Center.Distance(new Point(i, j).ToWorldCoordinates()) >= 140 || Main.LocalPlayer.Center.Y >= Main.worldSurface * 16)
                 return false;
-                // All of this is what lets the menu be the only thing on screen.
-
-                // Demount to prevent even more movement (bad)
-            if (Main.LocalPlayer.mount.Active)
-            {
-                Main.LocalPlayer.mount.Dismount(Main.LocalPlayer);
-            }
 
             TelescopeUISystem.telescopeTilePosition = new Point(i, j).ToWorldCoordinates();
-                // I HATE FANCY UI
-            IngameFancyUI.CoverNextFrame();
-            Main.ClosePlayerChat();
 
-            Main.ingameOptionsWindow = false;
-            Main.playerInventory = false;
-            Main.editChest = false;
-            Main.npcChatText = string.Empty;
-            Main.chatText = string.Empty;
-            Main.inFancyUI = true;
+            BaseFancyUI.GenericOpenFancyUI(TelescopeUISystem.barrierTelescopeUI, player);
 
-            Main.InGameUI.SetState(TelescopeUISystem.barrierTelescopeUI);
-                // IngameFancyUI.OpenUIState(BarrierTelescopeUISystem.barrierTelescopeUI); wouldnt work because this game is coded perfectly :3
             return true;
         }
-            // Assigning to Main.hoverItemName to make text appear next to the mouse doesn't work in fancy UI
-            // You have to use Main.instance.MouseText(str)
         public override void MouseOver(int i, int j)
         {
             Player player = Main.LocalPlayer;

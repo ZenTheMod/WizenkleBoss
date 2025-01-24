@@ -12,11 +12,13 @@ using WizenkleBoss.Common.ILDetourSystems;
 using WizenkleBoss.Content.Rarities;
 using WizenkleBoss.Content.UI.Notes;
 using WizenkleBoss.Common.Ink;
+using WizenkleBoss.Content.UI;
 
 namespace WizenkleBoss.Content.Items.Notes
 {
     public abstract class BaseNoteItem : ModItem, IDontGetRightClicked
     {
+        public override string LocalizationCategory => "Lore.Notes";
         public override string Texture => "WizenkleBoss/Content/Items/Notes/NoteStarTexture";
         public virtual Note Note => new();
         public override void SetDefaults()
@@ -46,26 +48,9 @@ namespace WizenkleBoss.Content.Items.Notes
             if (player.whoAmI != Main.myPlayer)
                 return;
 
-            if (player.mount.Active)
-            {
-                player.mount.Dismount(player);
-            }
-
-            IngameFancyUI.CoverNextFrame();
-            Main.ClosePlayerChat();
-
-            Main.mouseRightRelease = false;
-
-                // I HATE FANCY UI
-            Main.ingameOptionsWindow = false;
-            Main.playerInventory = false;
-            Main.editChest = false;
-            Main.npcChatText = string.Empty;
-            Main.chatText = string.Empty;
-            Main.inFancyUI = true;
-
             NoteUISystem.CurrentNote = Note;
-            Main.InGameUI.SetState(NoteUISystem.noteUI);
+
+            BaseFancyUI.GenericOpenFancyUI(NoteUISystem.noteUI, player);
         }
         public override LocalizedText Tooltip => Language.GetText("Mods.WizenkleBoss.Lore.Read");
     }

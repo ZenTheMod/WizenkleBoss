@@ -12,7 +12,7 @@ namespace WizenkleBoss.Content.UI.Notes
         public static Asset<Texture2D>[] Base { get; private set; }
         public static Asset<Texture2D>[] Overlay { get; private set; }
 
-        private const int Notes = 2;
+        private const int Notes = 4;
 
         public override void Load()
         {

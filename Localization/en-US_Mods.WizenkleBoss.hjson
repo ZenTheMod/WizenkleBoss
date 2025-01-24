@@ -81,16 +81,6 @@ Items: {
 		DisplayName: Satellite Dish Terminal
 		Tooltip: "'TARGET LOCATED'"
 	}
-
-	One: {
-		DisplayName: Astronomy Log - Day 1
-		Tooltip: ""
-	}
-
-	Two: {
-		DisplayName: Astronomy Log - Day 2
-		Tooltip: ""
-	}
 }
 
 Tiles: {

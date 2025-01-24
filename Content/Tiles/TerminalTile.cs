@@ -15,6 +15,7 @@ using Terraria.UI;
 using WizenkleBoss.Content.Projectiles.Misc;
 using ReLogic.Content;
 using Microsoft.Xna.Framework.Graphics;
+using WizenkleBoss.Content.UI.Notes;
 
 namespace WizenkleBoss.Content.Tiles
 {
@@ -86,16 +87,6 @@ namespace WizenkleBoss.Content.Tiles
 
             SoundEngine.PlaySound(SoundID.Mech, player.Center);
 
-            if (player.mount.Active)
-            {
-                player.mount.Dismount(player);
-            }
-
-            IngameFancyUI.CoverNextFrame();
-            Main.ClosePlayerChat();
-
-            Main.mouseRightRelease = false;
-
             Point16 point = (Point16)satelliteDish;
             StarMapUIHelper.CurrentTileWorldPosition = Helper.GetTopLeftTileInMultitile(point.X, point.Y).ToWorldCoordinates();
             StarMapUIHelper.CurrentTerminalWorldPosition = pos16.ToWorldCoordinates();
@@ -103,15 +94,7 @@ namespace WizenkleBoss.Content.Tiles
             StarMapUIHelper.TerminalAnim = 0f;
             StarMapUIHelper.TerminalState = ContactingState.None;
 
-                // I HATE FANCY UI
-            Main.ingameOptionsWindow = false;
-            Main.playerInventory = false;
-            Main.editChest = false;
-            Main.npcChatText = string.Empty;
-            Main.chatText = string.Empty;
-            Main.inFancyUI = true;
-
-            Main.InGameUI.SetState(StarMapUIHelper.satelliteUI);
+            BaseFancyUI.GenericOpenFancyUI(StarMapUIHelper.satelliteUI, player);
 
             return true;
         }

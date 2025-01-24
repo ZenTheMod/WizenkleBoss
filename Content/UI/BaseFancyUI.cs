@@ -6,6 +6,7 @@ using Terraria.ID;
 using Terraria.UI;
 using Terraria.UI.Gamepad;
 using WizenkleBoss.Common.Helpers;
+using WizenkleBoss.Content.UI.Notes;
 
 namespace WizenkleBoss.Content.UI
 {
@@ -81,5 +82,44 @@ namespace WizenkleBoss.Content.UI
                 IngameFancyUI.Close();
             }
         }
+
+        /// <summary>
+        /// Runs the generic vanilla method as well as demounting, and a few smaller fixes.
+        /// <code>
+        /// if (player.mount.Active)
+        ///     player.mount.Dismount(player);
+        /// Main.ClosePlayerChat();
+        /// Main.mouseRightRelease = false;
+        /// Main.ingameOptionsWindow = false;
+        /// Main.chatText = string.Empty;
+        /// IngameFancyUI.CoverNextFrame();
+		/// Main.playerInventory = false;
+		/// Main.editChest = false;
+		/// Main.npcChatText = "";
+		/// Main.inFancyUI = true;
+		/// IngameFancyUI.ClearChat();
+        /// Main.InGameUI.SetState(uiState);
+        /// </code>
+        /// </summary>
+        /// <param name="state">you'd think i'd abstract this method sooner lmao</param>
+        /// <param name="player">you bitch</param>
+        public static void GenericOpenFancyUI(BaseFancyUI state, Player player)
+        {
+            if (player.mount.Active)
+                player.mount.Dismount(player);
+
+            Main.ClosePlayerChat();
+
+                // Fixes some bugs with menus opened via right click.
+            Main.mouseRightRelease = false;
+
+            Main.ingameOptionsWindow = false;
+            Main.chatText = string.Empty;
+
+                // WOOOO ABSTRACTION TO VANILLA CLASS
+            IngameFancyUI.OpenUIState(state);
+        }
+            // Assigning to Main.hoverItemName to make text appear next to the mouse doesn't work in fancy UI
+            // You have to use Main.instance.MouseText(str)
     }
 }
