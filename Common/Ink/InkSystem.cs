@@ -67,7 +67,7 @@ namespace WizenkleBoss.Common.Ink
                     var Ink = Helper.WaterInkColorizer;
 
                     Ink.Value.Parameters["InkColor"]?.SetValue(InkColor.ToVector4());
-                    Ink.Value.Parameters["RippleStrength"]?.SetValue(5f * Utils.Remap(ModContent.GetInstance<VFXConfig>().InkContrast / 100f, 0f, 1f, 1f, 2f));
+                    Ink.Value.Parameters["RippleStrength"]?.SetValue(5f * Utils.Remap(ModContent.GetInstance<VFXConfig>().InkContrast / 100f, 0f, 1f, 1f, 3f));
 
                         // Nerd Shit.
                     if (!ModContent.GetInstance<DebugConfig>().DebugColoredRipples)

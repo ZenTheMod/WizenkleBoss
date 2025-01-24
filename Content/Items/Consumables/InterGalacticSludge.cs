@@ -48,9 +48,9 @@ namespace WizenkleBoss.Content.Items.Consumables
         public override bool? UseItem(Player player)
         {
             ArmorShaderData shader = GameShaders.Armor.GetShaderFromItemId(ModContent.ItemType<InkDye>());
-            for (int i = 0; i < 40; i++)
+            for (int i = 0; i < 20; i++)
             {
-                int dust = Dust.NewDust(player.position, player.width, player.height, ModContent.DustType<InkDust>(), 0, -5, 0, Color.White, 2);
+                int dust = Dust.NewDust(player.position, player.width, player.height, ModContent.DustType<InkDust>(), 0, -5, 0, Color.White, 1);
                 Main.dust[dust].shader = shader;
             }
             return true;

@@ -9,11 +9,13 @@ using WizenkleBoss.Common.Helpers;
 
 namespace WizenkleBoss.Common.Ink
 {
-    public readonly struct Ripple(Vector2 position, float intensity, Vector2 size)
+    public readonly struct Ripple(Vector2 position, float intensity, float bloomIntensity, Vector2 size)
     {
         public readonly Vector2 Position = position;
 
         public readonly float Intensity = intensity;
+
+        public readonly float BloomIntensity = bloomIntensity;
 
         public readonly Vector2 Size = size;
     }
@@ -136,7 +138,7 @@ namespace WizenkleBoss.Common.Ink
                 Vector2 size = ripple.Size;
 
                 Texture2D value = TextureRegistry.Bloom.Value;
-                spriteBatch.Draw(value, position * scale, null, new Color(0f, 0f, ripple.Intensity * 0.4f) with { A = 0 }, 0f, value.Size() / 2, size * scale * 1.2f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(value, position * scale, null, new Color(0f, 0f, ripple.Intensity * ripple.BloomIntensity) with { A = 0 }, 0f, value.Size() / 2, size * scale * 1.2f, SpriteEffects.None, 0f);
 
                 Texture2D circle = TextureRegistry.Circle.Value;
                 spriteBatch.Draw(circle, position * scale, null, new Color(0f, 0f, ripple.Intensity), 0f, circle.Size() / 2, size * scale, SpriteEffects.None, 0f);
@@ -171,12 +173,12 @@ namespace WizenkleBoss.Common.Ink
             }
         }
 
-        public static void QueueRipple(Vector2 position, float intensity, Vector2 size)
+        public static void QueueRipple(Vector2 position, float intensity, Vector2 size, float bloom = 0.4f)
         {
             if (Main.drawToScreen)
                 rippleCount = 0;
             else if (rippleCount < ripples.Length)
-                ripples[rippleCount++] = new Ripple(position, intensity, size);
+                ripples[rippleCount++] = new Ripple(position, intensity, bloom, size);
         }
 
         public override void OnWorldLoad()

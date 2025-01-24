@@ -42,10 +42,10 @@ namespace WizenkleBoss.Common.Ink
                     this.CameraShakeSimple(Player.position, Vector2.Zero, 10f, 19, 11, 0);
                     SoundEngine.PlaySound(value ? AudioRegistry.InkEnterTile : AudioRegistry.InkExitTile, null);
                     ArmorShaderData shader = GameShaders.Armor.GetShaderFromItemId(ModContent.ItemType<InkDye>());
-                    for (int i = 0; i < 13; i++)
+                    for (int i = 0; i < 25; i++)
                     {
-                        Vector2 vel = value ? -Vector2.Normalize(DashVelocity).RotatedByRandom(MathHelper.Pi) : Vector2.Normalize(DashVelocity).RotatedByRandom(MathHelper.PiOver2);
-                        Dust dust = Dust.NewDustPerfect(Player.Center + new Vector2(Main.rand.NextFloat(-16f, 17f), Main.rand.NextFloat(-16f, 17f)), ModContent.DustType<InkDust>(), vel * 5f, 0, Color.White, 3.2f);
+                        Vector2 vel = value ? -Vector2.Normalize(DashVelocity).RotatedByRandom(0.6f) : Vector2.Normalize(DashVelocity).RotatedByRandom(0.6f);
+                        Dust dust = Dust.NewDustPerfect(Player.Center + new Vector2(Main.rand.NextFloat(-16f, 17f), Main.rand.NextFloat(-16f, 17f)), ModContent.DustType<InkDust>(), vel * Main.rand.NextFloat(1f, 10f), 0, Color.White, 1f);
                         dust.shader = shader;
                     }
                 }
@@ -101,7 +101,7 @@ namespace WizenkleBoss.Common.Ink
                 for (int i = 0; i < 15; i++)
                 {
                     Vector2 vel = Main.rand.NextVector2Circular(4f, 4f);
-                    Dust dust = Dust.NewDustPerfect(Player.Center + new Vector2(Main.rand.NextFloat(-16f, 17f), Main.rand.NextFloat(-16f, 17f)), ModContent.DustType<InkDust>(), vel * 5f, 0, Color.White, 3.2f);
+                    Dust dust = Dust.NewDustPerfect(Player.Center + new Vector2(Main.rand.NextFloat(-16f, 17f), Main.rand.NextFloat(-16f, 17f)), ModContent.DustType<InkDust>(), vel * 7f, 0, Color.White, 1f);
                     dust.shader = shader;
                 }
                 if (Main.netMode == NetmodeID.MultiplayerClient)
@@ -173,8 +173,8 @@ namespace WizenkleBoss.Common.Ink
                     SoundEngine.PlaySound(AudioRegistry.InkDashEnd, null);
                     for (int i = 0; i < 15; i++)
                     {
-                        Vector2 vel = Main.rand.NextVector2Circular(3f, 3f);
-                        Dust dust = Dust.NewDustPerfect(Player.Center + new Vector2(Main.rand.NextFloat(-16f, 17f), Main.rand.NextFloat(-16f, 17f)), ModContent.DustType<InkDust>(), vel * 5f, 0, Color.White, 2.2f);
+                        Vector2 vel = Vector2.Normalize(DashVelocity).RotatedByRandom(0.6f);
+                        Dust dust = Dust.NewDustPerfect(Player.Center + new Vector2(Main.rand.NextFloat(-16f, 17f), Main.rand.NextFloat(-16f, 17f)), ModContent.DustType<InkDust>(), vel * Main.rand.NextFloat(3f, 13f), 0, Color.White, 1f);
                         dust.shader = shader;
                     }
                 }
@@ -183,7 +183,7 @@ namespace WizenkleBoss.Common.Ink
                     for (int i = 0; i < 6; i++)
                     {
                         Vector2 vel = Main.rand.NextVector2Circular(2f, 2f);
-                        Dust dust = Dust.NewDustPerfect(Player.Center + new Vector2(Main.rand.NextFloat(-16f, 17f), Main.rand.NextFloat(-16f, 17f)), ModContent.DustType<InkDust>(), vel * 5f, 0, Color.White, 3.5f);
+                        Dust dust = Dust.NewDustPerfect(Player.Center + new Vector2(Main.rand.NextFloat(-16f, 17f), Main.rand.NextFloat(-16f, 17f)), ModContent.DustType<InkDust>(), vel * 8f, 0, Color.White, 1f);
                         dust.shader = shader;
                     }
                 }
@@ -228,12 +228,10 @@ namespace WizenkleBoss.Common.Ink
                                 timer = 0;
                             }
                             this.CameraShakeSimple(Player.position, Vector2.Zero, 2.4f, 11, 2, 0);
-                            Dust dust = Dust.NewDustPerfect(Player.Center + new Vector2(Main.rand.NextFloat(-16f, 17f), Main.rand.NextFloat(-16f, 17f)), ModContent.DustType<InkDust>(), null, 0, Color.White, 2.2f);
-                            dust.shader = shader;
                         }
                         if (!InTile && Main.rand.NextBool(5) && InkDashCooldown > 0)
                         {
-                            Dust dust = Dust.NewDustPerfect(Player.Center + new Vector2(Main.rand.NextFloat(-4f, 5f), Main.rand.NextFloat(-4f, 5f)), ModContent.DustType<InkDust>(), null, 0, Color.White, 1.5f);
+                            Dust dust = Dust.NewDustPerfect(Player.Center + new Vector2(Main.rand.NextFloat(-4f, 5f), Main.rand.NextFloat(-4f, 5f)), ModContent.DustType<InkDust>(), null, 0, Color.White, 1f);
                             dust.shader = shader;
                         }
                     }
@@ -252,7 +250,8 @@ namespace WizenkleBoss.Common.Ink
         }
         private void ProduceInkRipples()
         {
-            InkRippleSystem.QueueRipple(Player.Center, 0.95f, Vector2.One * 0.7f);
+            InkRippleSystem.QueueRipple(Vector2.Lerp(Player.Center, dashOldPos[1], 0.5f), 0.95f, Vector2.One * 0.7f, 0.16f);
+            InkRippleSystem.QueueRipple(Player.Center, 0.8f, Vector2.One * 0.65f, 0.16f);
         }
         public override void HideDrawLayers(PlayerDrawSet drawInfo)
         {
