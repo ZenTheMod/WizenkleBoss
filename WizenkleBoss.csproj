@@ -6,6 +6,7 @@
 	<!-- General -->
 	<PropertyGroup>
 	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	  <NoWarn>MSB3270</NoWarn>
 	</PropertyGroup>
 
 	<!-- References -->
