@@ -71,7 +71,7 @@ namespace WizenkleBoss.Content.UI
 
                         DrawMap();
 
-                        Main.spriteBatch.DrawGenericBackButton(FontAssets.DeathText.Value, satelliteUI.BackPanel, ScreenSize, Language.GetTextValue("UI.Back"), 0.8f);
+                        BaseFancyUI.DrawGenericBackButton(Main.spriteBatch, FontAssets.DeathText.Value, satelliteUI.BackPanel, ScreenSize, Language.GetTextValue("UI.Back"), 0.8f);
 
                         DrawConfigButton();
 

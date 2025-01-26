@@ -43,7 +43,7 @@ namespace WizenkleBoss.Content.Rarities
 
             Vector2 pos = new(X, Y);
 
-            Vector2 fontSize = Helper.MeasureString(line.Text, font);
+            Vector2 fontSize = ChatManager.GetStringSize(font, line.Text, Vector2.One);
 
             var snapshit = Main.spriteBatch.CaptureSnapshot();
 

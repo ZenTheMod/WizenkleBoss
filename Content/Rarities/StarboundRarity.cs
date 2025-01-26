@@ -36,7 +36,7 @@ namespace WizenkleBoss.Content.Rarities
 
             Vector2 origin = line.Origin;
             Vector2 baseScale = line.BaseScale;
-            Vector2 fontSize = font.MeasureString(line.Text);
+            Vector2 fontSize = Helper.GetStringSize(font, line.Text, Vector2.One);
             Vector2 center = fontSize / 2f;
             Vector2 pos = new(X, Y);
             Vector2 starBoxPos = pos - new Vector2(7, 5);

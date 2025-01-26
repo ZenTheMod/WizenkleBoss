@@ -77,7 +77,7 @@ namespace WizenkleBoss.Content.UI.Notes
 
                         Main.spriteBatch.Draw(noteOverlay, noteCenter, null, color * (1 - Magnify), rotation, noteOverlay.Size() / 2f, scale, SpriteEffects.None, 0f);
 
-                        Main.spriteBatch.DrawGenericBackButton(FontAssets.DeathText.Value, noteUI.BackPanel, ScreenSize, Language.GetTextValue("UI.Back"));
+                        BaseFancyUI.DrawGenericBackButton(Main.spriteBatch, FontAssets.DeathText.Value, noteUI.BackPanel, ScreenSize, Language.GetTextValue("UI.Back"));
 
                         DrawMagnifyButton();
 

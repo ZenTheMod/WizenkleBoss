@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Graphics;
 using Terraria;
 using Terraria.Chat;
+using Terraria.GameContent;
 using Terraria.GameContent.UI.Chat;
 using Terraria.UI.Chat;
 
@@ -29,9 +30,8 @@ namespace WizenkleBoss.Common.Helpers
 
         public static Vector2 GetStringSize(SpriteFont font, TextSnippet[] snippets, Vector2 baseScale, float maxWidth = -1f)
         {
-            Vector2 zero = Vector2.Zero;
-            Vector2 vector = zero;
-            Vector2 result = vector;
+            Vector2 vector = Vector2.Zero;
+            Vector2 result = Vector2.Zero;
             float x = font.MeasureString(" ").X;
             float num2 = 0f;
             foreach (TextSnippet textSnippet in snippets)
@@ -60,9 +60,9 @@ namespace WizenkleBoss.Common.Helpers
                         if (maxWidth > 0f)
                         {
                             float num3 = font.MeasureString(array3[k]).X * baseScale.X * num;
-                            if (vector.X - zero.X + num3 > maxWidth)
+                            if (vector.X + num3 > maxWidth)
                             {
-                                vector.X = zero.X;
+                                vector.X = 0;
                                 vector.Y += font.LineSpacing * num2 * baseScale.Y;
                                 result.Y = Math.Max(result.Y, vector.Y);
                                 num2 = 0f;
@@ -80,7 +80,7 @@ namespace WizenkleBoss.Common.Helpers
 
                     if (array.Length > 1 && j < array2.Length - 1)
                     {
-                        vector.X = zero.X;
+                        vector.X = 0;
                         vector.Y += font.LineSpacing * num2 * baseScale.Y;
                         result.Y = Math.Max(result.Y, vector.Y);
                         num2 = 0f;

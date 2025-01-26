@@ -12,32 +12,12 @@ using Terraria.GameContent;
 using Terraria.UI.Chat;
 using Terraria.DataStructures;
 using Terraria.ObjectData;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace WizenkleBoss.Common.Helpers
 {
     public static partial class Helper
     {
-        /// <summary>
-        /// Measures the text <paramref name="text"/> with the font <paramref name="font"/>.
-        /// </summary>
-        /// <param name="text"></param>
-        /// <param name="font"></param>
-        /// <returns></returns>
-        public static Vector2 MeasureString(this string text, DynamicSpriteFont font = null)
-        {
-            if (font == null) { font = FontAssets.MouseText.Value; }
-            TextSnippet[] snippets = ChatManager.ParseMessage(text, Color.White).ToArray();
-            return ChatManager.GetStringSize(font, snippets, Vector2.One);
-        }
-        /// <summary>
-        /// A simple utility that gets an <see cref="Projectile"/>'s <see cref="Projectile.ModProjectile"/> instance as a specific type without having to do clunky casting.
-        /// </summary>
-        /// <typeparam name="T">The ModProjectile type to convert to.</typeparam>
-        /// <param name="p">The Projectile to access the ModProjectile from.</param>
-        public static T As<T>(this Projectile p) where T : ModProjectile
-        {
-            return p.ModProjectile as T;
-        }
         /// <summary>
         /// Hides <paramref name="n"/> from the bestiary, useful for Projectile NPCs.
         /// </summary>
@@ -50,54 +30,6 @@ namespace WizenkleBoss.Common.Helpers
             };
             NPCID.Sets.NPCBestiaryDrawOffset.Add(n.Type, value);
         }
-        /// <summary>
-        /// Swaps <paramref name="itemToReplace"/> with <paramref name="itemtoReplaceWith"/>.
-        /// </summary>
-        /// <param name="player">The player swapping items. Don't run this server side.</param>
-        /// <param name="itemToReplace">The item to replace</param>
-        /// <param name="itemtoReplaceWith">The item to replace with</param>
-        public static void SwapItems(this Player player, Item itemToReplace, int itemtoReplaceWith)
-        {
-            bool foundSlot = false;
-            for (int i = 0; i < player.inventory.Length; i++)
-            {
-                if (player.inventory[i] == itemToReplace)
-                {
-                    Item newItem = new(itemtoReplaceWith, itemToReplace.stack, itemToReplace.prefix);
-                    newItem.active = true;
-                    newItem.favorited = itemToReplace.favorited;
-                    player.inventory[i] = newItem;
-                    itemToReplace.active = false;
-                    foundSlot = true;
-                    break;
-                }
-            }
-            if (!foundSlot) //inventory array was full, drop it on the ground instead
-            {
-                Item.NewItem(player.GetSource_ItemUse(itemToReplace), player.Center, itemtoReplaceWith, prefixGiven: itemToReplace.prefix);
-            }
-        }
-        /// <summary>
-        /// Shorthand of necessary code to kill an NPC properly.
-        /// <para>Does the following:</para>
-        /// <code>npc.life = 0;
-        /// npc.HitEffect(0, 10.0);
-        /// npc.checkDead();
-        /// npc.active = false;</code>
-        /// </summary>
-        /// <param name="npc">Target</param>
-        public static void KillNPC(this NPC npc)
-        {
-            npc.life = 0;
-            npc.HitEffect(0, 10.0);
-            npc.checkDead();
-            npc.active = false;
-        }
-        /// <summary>
-        /// </summary>
-        /// <param name="player"></param>
-        /// <returns>The <paramref name="player"/>'s held item.</returns>
-        public static Item GetActiveItem(this Player player) => player.HeldItem;
         /// <summary>
         /// Checks for any active boss.
         /// <para>Use <paramref name="type"/> to check for that NPC as a boss.</para>
@@ -161,20 +93,6 @@ namespace WizenkleBoss.Common.Helpers
             return value;
         }
         /// <summary>
-        /// UI panel setup shorthand.
-        /// </summary>
-        /// <param name="button"></param>
-        /// <param name="size"></param>
-        /// <param name="offset"></param>
-        public static void SimpleSetupButton(this UIPanel button, Vector2 size, Vector2 offset)
-        {
-            button.Width.Set(size.X, 0);
-            button.Height.Set(size.Y, 0);
-            //button3.HAlign = 0.5f;
-            button.Top.Set(offset.Y, 0);
-            button.Left.Set(offset.X, 0f);
-        }
-        /// <summary>
         /// </summary>
         /// <param name="projectileID"></param>
         /// <returns>True if any projectile of type <paramref name="projectileID"/> are active.</returns>
@@ -186,57 +104,6 @@ namespace WizenkleBoss.Common.Helpers
                     return true;
             }
             return false;
-        }
-        /// <summary>
-        /// Detects nearby hostile NPCs from a given point
-        /// </summary>
-        /// <param name="origin">The position where we wish to check for nearby NPCs</param>
-        /// <param name="maxDistanceToCheck">Maximum amount of pixels to check around the origin</param>
-        /// <param name="ignoreTiles">Whether to ignore tiles when finding a target or not</param>
-        /// <param name="bossPriority">Whether bosses should be prioritized in targetting or not</param>
-        public static NPC ClosestNPCAt(this Vector2 origin, float maxDistanceToCheck)
-        {
-            NPC closestTarget = null;
-            float distance = maxDistanceToCheck;
-            bool bossFound = false;
-            foreach (NPC npc in Main.ActiveNPCs)
-            {
-                    // If we've found a valid boss target, ignore ALL targets which aren't bosses.
-                if (bossFound && !(npc.boss || npc.type == NPCID.WallofFleshEye))
-                    continue;
-
-                if (npc.CanBeChasedBy(null, false))
-                {
-                    if (Vector2.Distance(origin, npc.Center) < distance)
-                    {
-                        if (npc.boss || npc.type == NPCID.WallofFleshEye)
-                            bossFound = true;
-
-                        distance = Vector2.Distance(origin, npc.Center);
-                        closestTarget = npc;
-                    }
-                }
-            }
-            return closestTarget;
-        }
-        /// <summary>
-        /// Detects nearby hostile NPCs from a given point with minion support
-        /// </summary>
-        /// <param name="origin">The position where we wish to check for nearby NPCs</param>
-        /// <param name="maxDistanceToCheck">Maximum amount of pixels to check around the origin</param>
-        /// <param name="owner">Owner of the minion</param>
-        public static NPC MinionHoming(this Vector2 origin, float maxDistanceToCheck, Player owner, bool checksRange = false)
-        {
-            if (owner is null || owner.whoAmI !<= Main.maxPlayers || owner.MinionAttackTargetNPC !<= Main.maxNPCs)
-                return ClosestNPCAt(origin, maxDistanceToCheck);
-            NPC npc = Main.npc[owner.MinionAttackTargetNPC];
-            float extraDistance = (npc.width / 2) + (npc.height / 2);
-            bool distCheck = Vector2.Distance(origin, npc.Center) < (maxDistanceToCheck + extraDistance) || !checksRange;
-            if (owner.HasMinionAttackTargetNPC && distCheck)
-            {
-                return npc;
-            }
-            return ClosestNPCAt(origin, maxDistanceToCheck);
         }
         /// <summary>
 		/// Atttempts to find the top-left corner of a multitile at location (<paramref name="x"/>, <paramref name="y"/>)

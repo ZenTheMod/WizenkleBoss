@@ -79,6 +79,7 @@ Code:
 ★ Rhoenicx, and pure_epic (Primitives help)
 ★ Jupiter (Code review and stuff)
 ★ June (Wiring)
+★ Azathoth (Cool minable npc)
 
 Special Thanks:
 ★ Inspiration - dr4t

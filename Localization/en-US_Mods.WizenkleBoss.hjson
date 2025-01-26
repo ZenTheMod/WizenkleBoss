@@ -116,4 +116,7 @@ MenuStyles: {
 	InkPondLightRain: Rain: Light
 }
 
-NPCs.InkCreature.DisplayName: Ink Creature
+NPCs: {
+	InkCreature.DisplayName: Ink Creature
+	Crashed.DisplayName: Crashed
+}

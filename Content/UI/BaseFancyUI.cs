@@ -1,9 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.UI;
+using Terraria.UI.Chat;
 using Terraria.UI.Gamepad;
 using WizenkleBoss.Common.Helpers;
 using WizenkleBoss.Content.UI.Notes;
@@ -119,7 +122,42 @@ namespace WizenkleBoss.Content.UI
                 // WOOOO ABSTRACTION TO VANILLA CLASS
             IngameFancyUI.OpenUIState(state);
         }
-            // Assigning to Main.hoverItemName to make text appear next to the mouse doesn't work in fancy UI
-            // You have to use Main.instance.MouseText(str)
+
+        /// <summary>
+        /// Draws a slightly imperfect back button for fancy ui based on <see cref="Matrix.Identity"/> rather than a uiscale based system, useful for my various fancy ui systems.
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        /// <param name="font"></param>
+        /// <param name="panel"></param>
+        /// <param name="ScreenSize"></param>
+        /// <param name="text"></param>
+        /// <param name="scale"></param>
+        public static void DrawGenericBackButton(SpriteBatch spriteBatch, DynamicSpriteFont font, UIElement panel, Vector2 ScreenSize, string text, float scale = 0.7f)
+        {
+            if (panel != null)
+            {
+                Vector2 position = new(ScreenSize.X / 2f, (ScreenSize.Y * panel.VAlign) + (panel.Top.Pixels * Main.UIScale));
+
+                Vector2 textSize = ChatManager.GetStringSize(font, text, Vector2.One);
+
+                Color StringShadowCol = panel.IsMouseHovering && Main.mouseLeft ? Color.White : Color.Black;
+                Color StringCol = panel.IsMouseHovering && Main.mouseLeft ? Color.Black : (panel.IsMouseHovering ? Color.White : Color.Gray);
+
+                if (!Main.inFancyUI)
+                {
+                    StringShadowCol = Color.Black * 0.5f;
+                    StringCol = Color.White * 0.5f;
+                }
+
+                Vector2 origin = new(textSize.X / 2f, textSize.Y * 0.75f);
+                spriteBatch.Draw(TextureRegistry.Ball.Value, position - new Vector2(0, (textSize.Y / 2f) - 20), null, Color.Black * 0.5f, 0f, TextureRegistry.Ball.Size() / 2f, (textSize / TextureRegistry.Ball.Size()) * 1.2f, SpriteEffects.None, 0f);
+                ChatManager.DrawColorCodedStringShadow(spriteBatch, font, text, position, StringShadowCol, 0, origin, Vector2.One * scale);
+                ChatManager.DrawColorCodedString(spriteBatch, font, text, position, StringCol, 0, origin, Vector2.One * scale);
+            }
+        }
+
+            // Random shit I wanna remember:
+                // Assigning to Main.hoverItemName to make text appear next to the mouse doesn't work in fancy UI
+                // You have to use Main.instance.MouseText(str)
     }
 }

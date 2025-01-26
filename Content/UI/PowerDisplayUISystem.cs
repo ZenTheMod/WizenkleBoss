@@ -72,7 +72,7 @@ namespace WizenkleBoss.Content.UI
 
                         string display = ((int)(DisplayValue * 500)).ToString() + " / 500";
 
-                        Vector2 textSize = Helper.MeasureString(display, FontAssets.DeathText.Value);
+                        Vector2 textSize = ChatManager.GetStringSize(FontAssets.DeathText.Value, display, Vector2.One);
 
                         ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, FontAssets.DeathText.Value, display, position + (Vector2.UnitY * 4), Color.White * Timer, 0, textSize / 2, Vector2.One * 0.3f, spread: 1.5f);
 

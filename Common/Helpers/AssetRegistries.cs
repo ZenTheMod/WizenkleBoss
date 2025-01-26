@@ -12,104 +12,38 @@ namespace WizenkleBoss.Common.Helpers
 {
     public class TextureRegistry : ModSystem
     {
-        public static Asset<Texture2D> Invis { get; private set; }
-        public static Asset<Texture2D> Pixel { get; private set; }
-        public static Asset<Texture2D>[] Cosmos { get; private set; }
-        public static Asset<Texture2D> Bloat { get; private set; }
-        public static Asset<Texture2D> Roar { get; private set; }
-        public static Asset<Texture2D> Shockwave { get; private set; }
-        public static Asset<Texture2D>[] Space { get; private set; }
-        public static Asset<Texture2D> Star { get; private set; }
-        public static Asset<Texture2D>[] Stars { get; private set; }
-        public static Asset<Texture2D> Bloom { get; private set; }
-        public static Asset<Texture2D> Ball { get; private set; }
-        public static Asset<Texture2D> Circle { get; private set; }
-        public static Asset<Texture2D> Bracket { get; private set; }
-        public static Asset<Texture2D> Tech { get; private set; }
-        public static Asset<Texture2D> WavyNoise { get; private set; }
-        public static Asset<Texture2D> Lichen { get; private set; }
-        public static Asset<Texture2D> Dither { get; private set; }
-        public static Asset<Texture2D> Wood { get; private set; }
-        public static Asset<Texture2D> Rainbow { get; private set; }
-        public static Asset<Texture2D> Blink { get; private set; }
-        public static Asset<Texture2D> BlinkOuter { get; private set; }
-        public static Asset<Texture2D> InkDash { get; private set; }
-        public static Asset<Texture2D> TextBoxStars { get; private set; }
-        public static Asset<Texture2D> TelescopeMap { get; private set; }
-        public static Asset<Texture2D> Cursor { get; private set; }
-        public static Asset<Texture2D>[] ConsoleError { get; private set; }
-        public static Asset<Texture2D> ConfigIcon { get; private set; }
-        public static Asset<Texture2D> MagnifyIcon { get; private set; }
-        public static Asset<Texture2D> EnergyBar { get; private set; }
-        public override void Load()
-        {
-            if (Main.dedServ)
-                return;
-
-            Invis = LoadTexture2D("MagicPixel");
-
-            Pixel = LoadTexture2D("NotSoMagicPixel");
-
-            Cosmos = new Asset<Texture2D>[2];
-            Cosmos[0] = LoadTexture2D("Cosmos");
-            Cosmos[1] = LoadTexture2D("Cosmos2");
-
-            Bloat = LoadTexture2D("Noise/Bloat");
-            Roar = LoadTexture2D("Roar");
-            Shockwave = LoadTexture2D("Shockwave");
-
-            Space = new Asset<Texture2D>[3];
-            Space[0] = LoadTexture2D("Space");
-            Space[1] = LoadTexture2D("Space2");
-            Space[2] = LoadTexture2D("Space3");
-
-            Star = LoadTexture2D("Stars/Star");
-
-            Stars = new Asset<Texture2D>[5];
-            Stars[0] = LoadTexture2D("Stars/Star_0");
-            Stars[1] = LoadTexture2D("Stars/Star_1");
-            Stars[2] = LoadTexture2D("Stars/Star_2");
-            Stars[3] = LoadTexture2D("Stars/Star_3");
-            Stars[4] = LoadTexture2D("Stars/Star_4");
-
-            Bloom = LoadTexture2D("Bloom");
-            Ball = LoadTexture2D("Ball");
-
-            Circle = LoadTexture2D("Circle");
-            Bracket = LoadTexture2D("Bracket");
-
-            Tech = LoadTexture2D("Noise/Tech");
-            WavyNoise = LoadTexture2D("Noise/WavyNoise");
-            Lichen = LoadTexture2D("Noise/Lichen");
-            Dither = LoadTexture2D("Noise/Dither");
-
-            Wood = LoadTexture2D("Noise/Wood");
-            Rainbow = LoadTexture2D("Noise/PRIDEMONTH");
-
-            Blink = LoadTexture2D("Telescope/Blink");
-            BlinkOuter = LoadTexture2D("Telescope/BlinkOuter");
-
-            InkDash = LoadTexture2D("InkDash");
-
-            TextBoxStars = LoadTexture2D("Telescope/TextBoxStars");
-
-            TelescopeMap = LoadTexture2D("Telescope/Map");
-
-            Cursor = LoadTexture2D("Cursor");
-
-            ConsoleError = new Asset<Texture2D>[2];
-            ConsoleError[0] = LoadTexture2D("Icons/NotConnectedToPower");
-            ConsoleError[1] = LoadTexture2D("Icons/NotConnectedToSatelliteDish");
-
-            ConfigIcon = LoadTexture2D("Icons/Settings");
-            MagnifyIcon = LoadTexture2D("Icons/Magnify");
-
-            EnergyBar = LoadTexture2D("Icons/PowerBar");
-        }
+        public static readonly Asset<Texture2D> Invis = LoadTexture2D("MagicPixel");
+        public static readonly Asset<Texture2D> Pixel = LoadTexture2D("NotSoMagicPixel");
+        public static readonly Asset<Texture2D>[] Cosmos = [LoadTexture2D("Cosmos"), LoadTexture2D("Cosmos2")];
+        public static readonly Asset<Texture2D> Bloat = LoadTexture2D("Noise/Bloat");
+        public static readonly Asset<Texture2D> Roar = LoadTexture2D("Roar");
+        public static readonly Asset<Texture2D> Shockwave = LoadTexture2D("Shockwave");
+        public static readonly Asset<Texture2D>[] Space = [LoadTexture2D("Space"), LoadTexture2D("Space2"), LoadTexture2D("Space3")];
+        public static readonly Asset<Texture2D> Star = LoadTexture2D("Stars/Star");
+        public static readonly Asset<Texture2D> Bloom = LoadTexture2D("Bloom");
+        public static readonly Asset<Texture2D> Ball = LoadTexture2D("Ball");
+        public static readonly Asset<Texture2D> Circle = LoadTexture2D("Circle");
+        public static readonly Asset<Texture2D> Bracket = LoadTexture2D("Bracket");
+        public static readonly Asset<Texture2D> Tech = LoadTexture2D("Noise/Tech");
+        public static readonly Asset<Texture2D> WavyNoise = LoadTexture2D("Noise/WavyNoise");
+        public static readonly Asset<Texture2D> Lichen = LoadTexture2D("Noise/Lichen");
+        public static readonly Asset<Texture2D> Dither = LoadTexture2D("Noise/Dither");
+        public static readonly Asset<Texture2D> Wood = LoadTexture2D("Noise/Wood");
+        public static readonly Asset<Texture2D> Rainbow = LoadTexture2D("Noise/PRIDEMONTH");
+        public static readonly Asset<Texture2D> Blink = LoadTexture2D("Telescope/Blink");
+        public static readonly Asset<Texture2D> BlinkOuter = LoadTexture2D("Telescope/BlinkOuter");
+        public static readonly Asset<Texture2D> InkDash = LoadTexture2D("InkDash");
+        public static readonly Asset<Texture2D> TextBoxStars = LoadTexture2D("Telescope/TextBoxStars");
+        public static readonly Asset<Texture2D> TelescopeMap = LoadTexture2D("Telescope/Map");
+        public static readonly Asset<Texture2D> Cursor = LoadTexture2D("Cursor");
+        public static readonly Asset<Texture2D>[] ConsoleError = [LoadTexture2D("Icons/NotConnectedToPower"), LoadTexture2D("Icons/NotConnectedToSatelliteDish")];
+        public static readonly Asset<Texture2D> ConfigIcon = LoadTexture2D("Icons/Settings");
+        public static readonly Asset<Texture2D> MagnifyIcon = LoadTexture2D("Icons/Magnify");
+        public static readonly Asset<Texture2D> EnergyBar = LoadTexture2D("Icons/PowerBar");
         private static Asset<Texture2D> LoadTexture2D(string TexturePath)
         {
-                // if (Main.netMode == NetmodeID.Server)
-                //     return default;
+            if (Main.dedServ)
+                return null; // uuuuuuuuuhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
             return ModContent.Request<Texture2D>("WizenkleBoss/Assets/Textures/" + TexturePath);
         }
     }

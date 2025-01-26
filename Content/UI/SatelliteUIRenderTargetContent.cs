@@ -89,7 +89,7 @@ namespace WizenkleBoss.Content.UI
         public static void DrawFullScreenError(SpriteBatch spriteBatch, SpriteFont font, Vector2 Center)
         {
             string error = Language.GetTextValue("Mods.WizenkleBoss.UI.SatelliteDish.NoMap");
-            Vector2 textSize = font.MeasureString(error);
+            Vector2 textSize = Helper.GetStringSize(font, error, Vector2.One);
 
             spriteBatch.Draw(TextureRegistry.Bloom.Value, Center, null, (Color.Red * 0.1f) with { A = 0 }, 0f, TextureRegistry.Bloom.Size() / 2f, (TextureRegistry.ConsoleError[1].Value.Size() / TextureRegistry.Ball.Size()) * 9f, SpriteEffects.None, 0f);
             if (Main.GlobalTimeWrappedHourly * 60 % 50 < 25)
@@ -106,7 +106,7 @@ namespace WizenkleBoss.Content.UI
             {
                 if (i > line)
                     return;
-                Vector2 textSize = font.MeasureString(TerminalLines[i]);
+                Vector2 textSize = Helper.GetStringSize(font, TerminalLines[i], Vector2.One);
                 Vector2 position = new(30, 30 + (textSize.Y * i * 0.25f));
                 bool error = TerminalState > ContactingState.ContactingHighPower && TerminalLine > 9 && i > 1;
 
@@ -133,9 +133,9 @@ namespace WizenkleBoss.Content.UI
                 _ => " "
             };
 
-            Vector2 fontSizePrompt = font.MeasureString(PromptText);
+            Vector2 fontSizePrompt = Helper.GetStringSize(font, PromptText, Vector2.One);
 
-            Vector2 fontSizeMovementUnder = font.MeasureString(Language.GetTextValue("Mods.WizenkleBoss.UI.Telescope.MovementKeyPromptUnder"));
+            Vector2 fontSizeMovementUnder = Helper.GetStringSize(font, Language.GetTextValue("Mods.WizenkleBoss.UI.Telescope.MovementKeyPromptUnder"), Vector2.One);
 
             float size = 0.4f * PromptAnim;
 
@@ -222,7 +222,7 @@ namespace WizenkleBoss.Content.UI
                 {
                     Vector2 warningPosition = position + (-Vector2.UnitY * 40f);
 
-                    Vector2 warningSize = font.MeasureString("!");
+                    Vector2 warningSize = Helper.GetStringSize(font, "!", Vector2.One);
 
                     float textScale = Utils.Remap(position.Length(), 0, 300, 0.4f, 0.5f);
 
@@ -250,7 +250,7 @@ namespace WizenkleBoss.Content.UI
             float size = MathF.Max(star.BaseSize * star.SupernovaSize, 0.35f) * 1.3f;
             float textScale = Utils.Remap(position.Length(), 0, 300, 0.3f, 0.2f);
 
-            Vector2 textSize = font.MeasureString(star.Name);
+            Vector2 textSize = Helper.GetStringSize(font, star.Name, Vector2.One);
 
             if (star.BaseSize > 0.85f || CurrentStar)
                 Helper.DrawColorCodedStringShadow(spriteBatch, font, star.Name, textPosition, Color.Black, 0, new Vector2(textSize.X / 2f, 0), Vector2.One * textScale * MathF.Min(size * offset, 2) * Scale);

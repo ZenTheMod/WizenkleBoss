@@ -106,7 +106,7 @@ namespace WizenkleBoss.Content.UI
 
                         Vector2 starPosition = Center + telescopeUIOffset + star.Position;
 
-                        Texture2D starTexture = TextureRegistry.Stars[star.Texture].Value;
+                        Texture2D starTexture = TextureAssets.Star[star.Texture].Value;
                         Vector2 starOrigin = starTexture.Size() / 2;
 
                         spriteBatch.Draw(starTexture, starPosition, null, starColor, starRotation, starOrigin, starSize * 0.4f, SpriteEffects.None, 0f);
@@ -195,7 +195,7 @@ namespace WizenkleBoss.Content.UI
                 for (int i = positions.Length - 1; i > 0; i--)
                 {
                     Color color = Color.OrangeRed * (((float)positions.Length - i) / (float)positions.Length);
-                    spriteBatch.Draw(TextureRegistry.Stars[1].Value, positions[i] + telescopeUIOffset, null, color with { A = 0 }, Main.GlobalTimeWrappedHourly / 2f, TextureRegistry.Stars[1].Value.Size() / 2, (0.1f + (BarrierStarSystem.BigStar.SupernovaSize * 4)) * (((float)positions.Length - i) / (float)positions.Length) + 0.02f, SpriteEffects.None, 0);
+                    spriteBatch.Draw(TextureAssets.Star[1].Value, positions[i] + telescopeUIOffset, null, color with { A = 0 }, Main.GlobalTimeWrappedHourly / 2f, TextureAssets.Star[1].Value.Size() / 2, (0.1f + (BarrierStarSystem.BigStar.SupernovaSize * 4)) * (((float)positions.Length - i) / (float)positions.Length) + 0.02f, SpriteEffects.None, 0);
                 }
             }
         }

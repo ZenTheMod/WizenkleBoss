@@ -108,10 +108,10 @@ namespace WizenkleBoss.Content.UI
                         }
 
                         DynamicSpriteFont font = FontAssets.DeathText.Value;
-                        Main.spriteBatch.DrawGenericBackButton(font, barrierTelescopeUI.BackPanel, ScreenSize, Language.GetTextValue("UI.Back"));
+                        BaseFancyUI.DrawGenericBackButton(Main.spriteBatch, font, barrierTelescopeUI.BackPanel, ScreenSize, Language.GetTextValue("UI.Back"));
 
-                        Vector2 fontSizeMovement = Helper.MeasureString(Language.GetTextValue("Mods.WizenkleBoss.UI.Telescope.MovementKeyPrompt"), font);
-                        Vector2 fontSizeMovementUnder = Helper.MeasureString(Language.GetTextValue("Mods.WizenkleBoss.UI.Telescope.MovementKeyPromptUnder"), font);
+                        Vector2 fontSizeMovement = ChatManager.GetStringSize(font, Language.GetTextValue("Mods.WizenkleBoss.UI.Telescope.MovementKeyPrompt"), Vector2.One);
+                        Vector2 fontSizeMovementUnder = ChatManager.GetStringSize(font, Language.GetTextValue("Mods.WizenkleBoss.UI.Telescope.MovementKeyPromptUnder"), Vector2.One);
 
                         if (ModContent.GetInstance<UIConfig>().TelescopeMovementKeyPrompt && prompt && blinkFrame >= 0)
                         {
