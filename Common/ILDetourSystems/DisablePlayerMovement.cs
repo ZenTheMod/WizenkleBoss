@@ -19,6 +19,7 @@ namespace WizenkleBoss.Common.ILDetourSystems
     /// </summary>
     public class DisableMovementPlayer : ModPlayer
     {
+            // TODO: put all this shit in ProcessTriggers.
         public override void UpdateEquips()
         {
             if (StopAutoPauseSystem.ShouldNotPause())
@@ -27,6 +28,7 @@ namespace WizenkleBoss.Common.ILDetourSystems
                 Player.releaseMount = false;
             }
         }
+
         public override void PostUpdateBuffs()
         {
             if (StopAutoPauseSystem.ShouldNotPause())
