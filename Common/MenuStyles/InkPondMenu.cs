@@ -35,7 +35,7 @@ namespace WizenkleBoss.Common.MenuStyles
             if (Main.rand.NextBool(19) || heavyRain)
             {
                 Vector2 rain = new(Main.rand.NextFloat(0, Main.screenWidth), Main.rand.NextFloat(0, Main.screenHeight));
-                InkRippleSystem.QueueRipple(rain * Main.UIScale, heavyRain ? 0.3f : 0.02f, Vector2.One * Main.rand.NextFloat(0.05f, heavyRain ? 0.7f : 0.4f));
+                InkRippleSystem.QueueRipple(rain, heavyRain ? 0.3f : 0.02f, Vector2.One * Main.rand.NextFloat(0.05f, heavyRain ? 0.7f : 0.4f));
             }
         }
 
@@ -50,10 +50,11 @@ namespace WizenkleBoss.Common.MenuStyles
 
             spriteBatch.Draw(TextureRegistry.Pixel.Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.Black * (heavyRain ? 1f : 0.9f));
 
-            InkRippleSystem.QueueRipple(Main.MouseScreen * Main.UIScale, 0.8f, Vector2.One * 0.4f);
+            Vector2 MouseScale = Vector2.One * 0.4f * Main.UIScale;
+            InkRippleSystem.QueueRipple(Main.MouseScreen, 0.8f, MouseScale);
 
             if (OldMouseScreen.Distance(Main.MouseScreen) > 100)
-                InkRippleSystem.QueueRipple(Vector2.Lerp(Main.MouseScreen, OldMouseScreen, 0.5f) * Main.UIScale, 0.8f, Vector2.One * 0.4f);
+                InkRippleSystem.QueueRipple(Vector2.Lerp(Main.MouseScreen, OldMouseScreen, 0.5f), 0.8f, MouseScale);
 
             OldMouseScreen = Main.MouseScreen;
 
@@ -81,7 +82,7 @@ namespace WizenkleBoss.Common.MenuStyles
             Vector2 logoPosition = logoDrawCenter + logoOffset;
             spriteBatch.Draw(Logo.Value, logoPosition, null, Color.White, 0f, new Vector2(Logo.Value.Width / 2f, Logo.Value.Height / 2f), logoScale, SpriteEffects.None, 0f);
 
-            InkRippleSystem.QueueRipple(logoPosition * Main.UIScale, 0.3f, Vector2.One * logoScale * 5f);
+            InkRippleSystem.QueueRipple(logoPosition, 0.3f, Vector2.One * logoScale * 5f);
                 
             spriteBatch.End();
             spriteBatch.Begin(in snapshit);

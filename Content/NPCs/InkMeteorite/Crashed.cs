@@ -21,10 +21,10 @@ using WizenkleBoss.Content.Items.Dyes;
 
 namespace WizenkleBoss.Content.NPCs.InkMeteorite
 {
-    public class Crashed : ModNPC, IMinableNPC
+    public class Crashed : ModNPC, IMinableNPC, IDrawInInk, ITakeDamageViaInkDash
     {
+        #region generics
         public static Asset<Texture2D> outline;
-        public float shake = 0f;
         public override void Load()
         {
             outline = ModContent.Request<Texture2D>(Texture + "Outline");
@@ -55,6 +55,8 @@ namespace WizenkleBoss.Content.NPCs.InkMeteorite
         public override bool? CanBeHitByProjectile(Projectile projectile) => false;
         public override bool CanHitPlayer(Player target, ref int cooldownSlot) => false;
 
+        #endregion
+
         public override void FindFrame(int frameHeight)
         {
             NPC.frame.Y = 0;
@@ -66,15 +68,57 @@ namespace WizenkleBoss.Content.NPCs.InkMeteorite
                 NPC.frame.Y = 3 * frameHeight;
         }
 
+        public bool hovering;
+
+        public float shake = 0f;
+
+        public override void AI()
+        {
+            shake = Math.Clamp(shake - 0.1f, 0f, 1f);
+            hovering = NPC.Hitbox.Contains((int)Main.MouseWorld.X, (int)Main.MouseWorld.Y)
+                && (Main.LocalPlayer.Center - Main.MouseWorld).LengthSquared() <= Math.Pow((Main.LocalPlayer.blockRange + Main.LocalPlayer.HeldItem.tileBoost) * 16, 2);
+        }
+
+        #region particles
+        public void OnMined(int damageDone, Player player)
+        {
+            shake = 1f;
+            ArmorShaderData shader = GameShaders.Armor.GetShaderFromItemId(ModContent.ItemType<InkDye>());
+            for (int i = 0; i < 3; i++)
+            {
+                Vector2 vel = Main.rand.NextVector2Circular(2f, 2f);
+                Dust dust = Dust.NewDustPerfect(NPC.Center + new Vector2(Main.rand.NextFloat(-16f, 17f), Main.rand.NextFloat(-30f, 31f)), ModContent.DustType<InkDust>(), vel * 5f, 0, Color.White, 1f);
+                dust.shader = shader;
+            }
+            if (Main.rand.NextBool(3))
+            {
+                for (int i = 0; i < 2; i++)
+                {
+                    Vector2 vel = Main.rand.NextVector2Circular(17f, 17f);
+
+                    Dust dust = Dust.NewDustPerfect(NPC.Center + new Vector2(Main.rand.NextFloat(-16f, 17f), Main.rand.NextFloat(-16f, 17f)), ModContent.DustType<InkRubble>(), vel, 0, Color.White, 1f);
+                    dust.shader = shader;
+                }
+            }
+        }
+
+        public void OnDashedInto(int damageDone, Vector2 incomingVelocity, Player player)
+        {
+        }
+        #endregion
+
+        #region draw
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             Vector2 position = NPC.Center - screenPos;
-            position.X += MathF.Sin(Main.GlobalTimeWrappedHourly * 120) * 3 * shake;
+            position.X += MathF.Sin(Main.GlobalTimeWrappedHourly * 120) * 4.5f * shake;
 
             Main.spriteBatch.Draw(TextureAssets.Npc[Type].Value, position, NPC.frame, Color.White, 0f, NPC.frame.Size() / 2f, NPC.scale, SpriteEffects.None, 0f);
 
             var snapshit = Main.spriteBatch.CaptureSnapshot();
 
+
+                // idfc theres only one on screen anyway, fuck you <3
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, snapshit.transformationMatrix);
 
@@ -87,7 +131,7 @@ namespace WizenkleBoss.Content.NPCs.InkMeteorite
 
             Main.spriteBatch.Draw(TextureAssets.Npc[Type].Value, position, NPC.frame, Color.White, 0f, NPC.frame.Size() / 2f, NPC.scale, SpriteEffects.None, 0f);
 
-            if (NPC.Hitbox.Contains((int)Main.MouseWorld.X, (int)Main.MouseWorld.Y) && (Main.LocalPlayer.Center - Main.MouseWorld).LengthSquared() <= Math.Pow((Main.LocalPlayer.blockRange + Main.LocalPlayer.HeldItem.tileBoost) * 16, 2))
+            if (hovering)
                 Main.spriteBatch.Draw(outline.Value, position, NPC.frame, Main.OurFavoriteColor, 0f, NPC.frame.Size() / 2f, NPC.scale, SpriteEffects.None, 0f);
 
             Main.spriteBatch.End();
@@ -95,47 +139,15 @@ namespace WizenkleBoss.Content.NPCs.InkMeteorite
 
             return false;
         }
-        public override void AI()
+
+        public void Shape(Vector2 screenPosition)
         {
-            shake = Math.Clamp(shake - 0.1f, 0f, 1f);
+            Vector2 position = NPC.Center - screenPosition;
+            position.X += MathF.Sin(Main.GlobalTimeWrappedHourly * 120) * 3 * shake;
+
+            Main.spriteBatch.Draw(TextureAssets.Npc[Type].Value, position, NPC.frame, Color.White, 0f, NPC.frame.Size() / 2f, NPC.scale, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(outline.Value, position, NPC.frame, Main.OurFavoriteColor, 0f, NPC.frame.Size() / 2f, NPC.scale, SpriteEffects.None, 0f);
         }
-        public void OnMined(int damageDone, Player player)
-        {
-            shake = 1f;
-            ArmorShaderData shader = GameShaders.Armor.GetShaderFromItemId(ModContent.ItemType<InkDye>());
-            for (int i = 0; i < 3; i++)
-            {
-                Vector2 vel = Main.rand.NextVector2Circular(2f, 2f);
-                Dust dust = Dust.NewDustPerfect(NPC.Center + new Vector2(Main.rand.NextFloat(-16f, 17f), Main.rand.NextFloat(-16f, 17f)), ModContent.DustType<InkDust>(), vel * 5f, 0, Color.White, 1f);
-                dust.shader = shader;
-            }
-            if (Main.rand.NextBool(2))
-            {
-                Vector2 vel = Main.rand.NextVector2Circular(8f, 8f);
-                int rand = Main.rand.Next(3);
-                int type = rand switch
-                {
-                    1 => ModContent.GoreType<Rubble0>(),
-                    2 => ModContent.GoreType<Rubble1>(),
-                    _ => ModContent.GoreType<Rubble2>()
-                };
-                Gore.NewGorePerfect(NPC.GetSource_OnHurt(player), NPC.position + Main.rand.NextVector2Circular(4f, 4f), vel, type);
-            }
-        }
-    }
-    public class Rubble0 : ModGore 
-    {
-        public override string Texture => "WizenkleBoss/Content/Gores/MeteoriteShard0";
-        public override void OnSpawn(Gore gore, IEntitySource source) => ChildSafety.SafeGore[gore.type] = true;
-    }
-    public class Rubble1 : ModGore
-    {
-        public override string Texture => "WizenkleBoss/Content/Gores/MeteoriteShard1";
-        public override void OnSpawn(Gore gore, IEntitySource source) => ChildSafety.SafeGore[gore.type] = true;
-    }
-    public class Rubble2 : ModGore
-    {
-        public override string Texture => "WizenkleBoss/Content/Gores/MeteoriteShard2";
-        public override void OnSpawn(Gore gore, IEntitySource source) => ChildSafety.SafeGore[gore.type] = true;
+        #endregion
     }
 }

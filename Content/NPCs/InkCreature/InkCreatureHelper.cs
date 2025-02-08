@@ -57,7 +57,7 @@ namespace WizenkleBoss.Content.NPCs.InkCreature
         }
 
             // Draw it ONLY draw in ink.
-        public void Shape()
+        public void Shape(Vector2 screenPosition)
         {
             if (!Main.npc.Where(npc => npc.active && npc.ModNPC is IDrawWiggly).Any())
                 return;

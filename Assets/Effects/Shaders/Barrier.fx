@@ -34,7 +34,7 @@ float4 PixelShaderFunction(float4 sampleColor : COLOR0, float2 coords : TEXCOORD
     float3 contrastCol = ((col - 0.75) * max(3, 0)) + 1;
     
         // If this pixel is an outline then just skip everything
-    if (distance(tex2D(maskedTexture, coords) * mask, outlineColor) < 0.05)
+    if (distance(maskcol * mask, outlineColor) < 0.05)
         return outlineColor;
     
         // Correct aspect ratio

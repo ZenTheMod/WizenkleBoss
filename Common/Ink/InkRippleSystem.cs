@@ -42,12 +42,12 @@ namespace WizenkleBoss.Common.Ink
 
         public override void Load()
         {
-            Main.OnPreDraw += CheckRippleTarget;
+            Main.OnPostDraw += CheckRippleTarget;
         }
 
         public override void Unload()
         {
-            Main.OnPreDraw -= CheckRippleTarget;
+            Main.OnPostDraw -= CheckRippleTarget;
         }
 
         private void CheckRippleTarget(GameTime obj)

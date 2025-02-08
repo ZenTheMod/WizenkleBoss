@@ -15,6 +15,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using WizenkleBoss.Common.Config;
 using WizenkleBoss.Common.Helpers;
+using WizenkleBoss.Common.ILDetourSystems;
 using WizenkleBoss.Common.Packets;
 using WizenkleBoss.Content.Buffs;
 using WizenkleBoss.Content.Dusts;
@@ -215,12 +216,13 @@ namespace WizenkleBoss.Common.Ink
                     MusicKiller.MuffleFactor = 0.0f;
                     if (InkDashCooldown > 0)
                     {
+                        CrashIntoNPCs();
                         if (Main.netMode == NetmodeID.MultiplayerClient)
                         {
                             var SendDash = new DashUpdate(Player.whoAmI, InkDashCooldown, DashVelocity);
                             SendDash.Send(ignoreClient: Main.myPlayer, runLocally: false);
                         }
-                        if (InTile && InkDashCooldown > 0)
+                        if (InTile)
                         {
                             if (timer++ >= 20)
                             {
@@ -242,6 +244,24 @@ namespace WizenkleBoss.Common.Ink
             else
             {
                 InTile = false;
+            }
+        }
+        public void CrashIntoNPCs()
+        {
+            if (DashVelocity.Length() < 8f)
+                return;
+            foreach (NPC n in Main.ActiveNPCs)
+            {
+                if (n.ModNPC is not ITakeDamageViaInkDash dash)
+                    continue;
+                if (n.Hitbox.Contains((int)Player.Center.X, (int)Player.Center.Y))
+                {
+                    int dashDamage = (int)(DashVelocity.Length() * 30);
+                    int damage = n.SimpleStrikeNPC(dashDamage, 0, noPlayerInteraction: false);
+                    dash.OnDashedInto(damage, Player.velocity, Player);
+                    DashVelocity = -DashVelocity * 0.95f;
+                    return;
+                }
             }
         }
         public void DrawGoo()

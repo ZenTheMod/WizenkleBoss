@@ -9,7 +9,7 @@ using WizenkleBoss.Content.Rarities;
 
 namespace WizenkleBoss.Content.Items
 {
-    // This is just the free copypaste work :3
+        // This is just the free copypaste work :3
     public abstract class BaseInkItem : ModItem
     {
         public Asset<Texture2D> GlowTexture;

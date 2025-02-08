@@ -30,8 +30,7 @@ namespace WizenkleBoss.Content.Dusts
             {
                 dust.frame.Y = 48;
                 dust.rotation = 0;
-                dust.velocity.Y = 0;
-                dust.velocity.X = 0;
+                dust.velocity = Vector2.Zero;
                 return false;
             }
 

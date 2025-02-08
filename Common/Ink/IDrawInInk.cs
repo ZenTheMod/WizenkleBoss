@@ -2,6 +2,6 @@
 {
     public interface IDrawInInk
     {
-        public void Shape();
+        public void Shape(Vector2 screenPosition);
     }
 }

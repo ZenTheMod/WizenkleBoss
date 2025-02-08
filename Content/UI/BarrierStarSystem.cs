@@ -99,7 +99,7 @@ namespace WizenkleBoss.Content.UI
                         SupernovaSize = 1f,
                         Position = new(rand.NextFloat(-700, 700), rand.NextFloat(-700, 700)),
                         Color = Color.Lerp(Color.White, Color.Lerp(Color.PaleVioletRed, Color.Purple, rand.NextFloat()), rand.NextFloat()),
-                        Texture = rand.Next(0, 5),
+                        Texture = rand.Next(0, 4),
                         State = 0,
                         Name = Language.GetTextValue("Mods.WizenkleBoss.StarNames.Name" + rand.Next(235)) + " - " + rand.Next(100)
                     };

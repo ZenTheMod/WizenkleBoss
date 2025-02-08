@@ -21,7 +21,7 @@ namespace WizenkleBoss.Common.Ink
 {
     public class InkSystem : ModSystem
     {
-        public static Color OutlineColor { get; private set; } = new(255, 230, 105); // just so i can change it later
+        public static Color OutlineColor { get; private set; } = Main.OurFavoriteColor; // just so i can change it later
 
         public static bool PrideMonth = false;
 
@@ -67,7 +67,7 @@ namespace WizenkleBoss.Common.Ink
                     var Ink = Helper.WaterInkColorizer;
 
                     Ink.Value.Parameters["InkColor"]?.SetValue(InkColor.ToVector4());
-                    Ink.Value.Parameters["RippleStrength"]?.SetValue(5f * Utils.Remap(ModContent.GetInstance<VFXConfig>().InkContrast / 100f, 0f, 1f, 1f, 3f));
+                    Ink.Value.Parameters["RippleStrength"]?.SetValue(5f * Utils.Remap(ModContent.GetInstance<VFXConfig>().InkContrast / 100f, 0f, 1f, 1f, 4f));
 
                         // Nerd Shit.
                     if (!ModContent.GetInstance<DebugConfig>().DebugColoredRipples)
@@ -155,24 +155,26 @@ namespace WizenkleBoss.Common.Ink
 
         public static void DrawInInk()
         {
+                // jank prediction
+            Vector2 screenPosition = Main.screenPosition - (Main.screenLastPosition - Main.screenPosition);
             foreach (var p in Main.ActiveProjectiles)
             {
                 if (!p.active || p.ModProjectile is not IDrawInInk drawer)
                     continue;
-                drawer.Shape();
+                drawer.Shape(screenPosition);
             }
             foreach (var npc in Main.ActiveNPCs)
             {
                 if (!npc.active || npc.ModNPC is not IDrawInInk drawer)
                     continue;
-                drawer.Shape();
+                drawer.Shape(screenPosition);
             }
 
             DrawVanishedPlayers();
 
             InkCreatureHelper bh = ModContent.GetInstance<InkCreatureHelper>();
             if (bh is IDrawInInk bhdrawer)
-                bhdrawer.Shape();
+                bhdrawer.Shape(screenPosition);
         }
 
         public static void DrawVanishedPlayers()
