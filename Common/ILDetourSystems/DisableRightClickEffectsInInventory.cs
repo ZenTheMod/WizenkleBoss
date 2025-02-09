@@ -11,7 +11,7 @@ using Terraria.UI;
 
 namespace WizenkleBoss.Common.ILDetourSystems
 {
-    public class TheDumbestILEditEverSystem : ModSystem
+    public class DisableRightClickEffectsInInventory : ModSystem
     {
         public static ILHook NoImNotLettingYouConsumeMyItemAndHaveTheAUDACITYToPlayASFXOnTopOfIt;
 

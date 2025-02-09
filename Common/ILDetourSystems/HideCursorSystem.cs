@@ -16,15 +16,15 @@ using WizenkleBoss.Content.UI;
 
 namespace WizenkleBoss.Common.ILDetourSystems
 {
-    public class HideCursorForMotaiSystem : ModSystem
+    public class HideCursorSystem : ModSystem
     {
-        public override void OnModLoad()
+        public override void Load()
         {
             On_Main.DrawCursor += HideCursor;
             On_Main.DrawThickCursor += HideTHICKCursor;
         }
 
-        public override void OnModUnload()
+        public override void Unload()
         {
             On_Main.DrawCursor -= HideCursor;
             On_Main.DrawThickCursor -= HideTHICKCursor;

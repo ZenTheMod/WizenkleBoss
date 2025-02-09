@@ -13,11 +13,11 @@ namespace WizenkleBoss.Common.ILDetourSystems
     public class TileFallDamageSystem : ModSystem
     {
             // Huge thanks to lion8cake/Kittenbun.
-        public override void OnModLoad()
+        public override void Load()
         {
             IL_Player.Update += TileFallDamage;
         }
-        public override void OnModUnload()
+        public override void Unload()
         {
             IL_Player.Update -= TileFallDamage;
         }

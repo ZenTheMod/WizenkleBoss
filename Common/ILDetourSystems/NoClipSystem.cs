@@ -12,9 +12,9 @@ using WizenkleBoss.Common.Ink;
 
 namespace WizenkleBoss.Common.ILDetourSystems
 {
-    public class GatekeepSystem : ModSystem
+    public class NoClipSystem : ModSystem
     {
-        public override void OnModLoad()
+        public override void Load()
         {
             IL_Player.Update += StopTheFloorBecauseDanteSkyblockCanceledYouToo;
 
@@ -25,7 +25,7 @@ namespace WizenkleBoss.Common.ILDetourSystems
             On_Player.ShimmerCollision += StopShimmerCollisionForGhostsWhileDashing;
         }
 
-        public override void OnModUnload()
+        public override void Unload()
         {
             IL_Player.Update -= StopTheFloorBecauseDanteSkyblockCanceledYouToo;
 
@@ -57,7 +57,7 @@ namespace WizenkleBoss.Common.ILDetourSystems
 
         private void StopShimmerCollisionForGhostsWhileDashing(On_Player.orig_ShimmerCollision orig, Player self, bool fallThrough, bool ignorePlats, bool noCollision)
         {
-            if (self.HasBuff<InkDrugStatBuff>() && self.GetModPlayer<InkPlayer>().InkyArtifact && self.GetModPlayer<InkPlayer>().InkDashCooldown > 0)
+            if (self.GetModPlayer<InkPlayer>().InGhostInk && self.GetModPlayer<InkPlayer>().InkDashCooldown > 0)
             {
                 self.position += self.GetModPlayer<InkPlayer>().DashVelocity;
                 return;
@@ -67,7 +67,7 @@ namespace WizenkleBoss.Common.ILDetourSystems
 
         private void StopHoneyCollisionForGhostsWhileDashing(On_Player.orig_HoneyCollision orig, Player self, bool fallThrough, bool ignorePlats)
         {
-            if (self.HasBuff<InkDrugStatBuff>() && self.GetModPlayer<InkPlayer>().InkyArtifact && self.GetModPlayer<InkPlayer>().InkDashCooldown > 0)
+            if (self.GetModPlayer<InkPlayer>().InGhostInk && self.GetModPlayer<InkPlayer>().InkDashCooldown > 0)
             {
                 self.position += self.GetModPlayer<InkPlayer>().DashVelocity;
                 return;
@@ -77,7 +77,7 @@ namespace WizenkleBoss.Common.ILDetourSystems
 
         private void StopSlopingCollisionForGhostsWhileDashing(On_Player.orig_SlopingCollision orig, Player self, bool fallThrough, bool ignorePlats)
         {
-            if (self.HasBuff<InkDrugStatBuff>() && self.GetModPlayer<InkPlayer>().InkyArtifact && self.GetModPlayer<InkPlayer>().InkDashCooldown > 0)
+            if (self.GetModPlayer<InkPlayer>().InGhostInk && self.GetModPlayer<InkPlayer>().InkDashCooldown > 0)
             {
                 self.position += self.GetModPlayer<InkPlayer>().DashVelocity;
                 return;
@@ -87,7 +87,7 @@ namespace WizenkleBoss.Common.ILDetourSystems
 
         private void StopWaterCollisionForGhostsWhileDashing(On_Player.orig_WaterCollision orig, Player self, bool fallThrough, bool ignorePlats)
         {
-            if (self.HasBuff<InkDrugStatBuff>() && self.GetModPlayer<InkPlayer>().InkyArtifact && self.GetModPlayer<InkPlayer>().InkDashCooldown > 0)
+            if (self.GetModPlayer<InkPlayer>().InGhostInk && self.GetModPlayer<InkPlayer>().InkDashCooldown > 0)
             {
                 self.position += self.GetModPlayer<InkPlayer>().DashVelocity;
                 return;
@@ -97,7 +97,7 @@ namespace WizenkleBoss.Common.ILDetourSystems
 
         private void StopCollisionForGhostsWhileDashing(On_Player.orig_DryCollision orig, Player self, bool fallThrough, bool ignorePlats)
         {
-            if (self.HasBuff<InkDrugStatBuff>() && self.GetModPlayer<InkPlayer>().InkyArtifact && self.GetModPlayer<InkPlayer>().InkDashCooldown > 0)
+            if (self.GetModPlayer<InkPlayer>().InGhostInk && self.GetModPlayer<InkPlayer>().InkDashCooldown > 0)
             {
                 self.position += self.GetModPlayer<InkPlayer>().DashVelocity;
                 return;

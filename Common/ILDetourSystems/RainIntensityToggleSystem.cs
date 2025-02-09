@@ -24,7 +24,7 @@ using WizenkleBoss.Common.MenuStyles;
 
 namespace WizenkleBoss.Common.ILDetourSystems
 {
-    public class AddOneFuckingButtonToTheMenuSystem : ModSystem
+    public class RainIntensityToggleSystem : ModSystem
     {
         public static ILHook ImGonnaEMITDELEGATEFromTheChandelier;
 
@@ -56,7 +56,7 @@ namespace WizenkleBoss.Common.ILDetourSystems
                 // Draw text but gay
             c.EmitDelegate((SpriteBatch sb, Vector2 switchTextSize) =>
             {
-                if (MenuLoader.CurrentMenu != ModContent.GetInstance<InkPondMenu>())
+                if (!InkPondMenu.InMenu)
                     return;
 
                 bool heavyRain = ModContent.GetInstance<VFXConfig>().TitleScreenHeavyRain;

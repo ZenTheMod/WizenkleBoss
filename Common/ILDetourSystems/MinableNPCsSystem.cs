@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 namespace WizenkleBoss.Common.ILDetourSystems
 {
         // Thanks to Azathoth for letting me use this system - https://github.com/Twilight-Egress/TwilightEgress/commit/6d8c50c47ae4a42a293cb43eb5b74196351bf318
-    public class TinkTinkTinkAAAAAAASystem : ModSystem
+    public class MinableNPCsSystem : ModSystem
     {
         public override void Load()
         {

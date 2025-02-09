@@ -19,12 +19,12 @@ namespace WizenkleBoss.Common.ILDetourSystems
     /// </summary>
     public class StopAutoPauseSystem : ModSystem
     {
-        public override void OnModLoad()
+        public override void Load()
         {
             On_Main.CanPauseGame += DisableAutoPause;
         }
 
-        public override void OnModUnload()
+        public override void Unload()
         {
             On_Main.CanPauseGame -= DisableAutoPause;
         }

@@ -11,6 +11,11 @@ using WizenkleBoss.Content.Projectiles.Misc;
 namespace WizenkleBoss.Common.ILDetourSystems
 {
     /// <summary>
+    /// 
+    /// 
+    /// shut up i know this isnt a detour or il edit
+    /// 
+    /// 
     /// <para>Some things to note:</para>
     /// 1. How does one disable opening the map?? YOU DONT, <see cref="Player.controlMap">controlMap</see> doesn't do shit because useless bools are hip with the kids. :fire:<br />
     /// 2. Use <see cref="ModPlayer.PostUpdateBuffs">PostUpdateBuffs</see> to disable movement (other hooks prolly work but this one is the safest).<br />

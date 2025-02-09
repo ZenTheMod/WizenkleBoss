@@ -8,15 +8,15 @@ using WizenkleBoss.Content.UI;
 
 namespace WizenkleBoss.Common.ILDetourSystems
 {
-    public class DanteCancelledTheSunSystem : ModSystem
+    public class SunColorizerSystem : ModSystem
     {
-        public override void OnModLoad()
+        public override void Load()
         {
             On_Main.DrawSunAndMoon += IAteTheFuckingMoonWatchaGonnaDoNowBitch;
             IL_Main.DrawSunAndMoon += IAteTheFuckingSunWithILEdits;
         }
 
-        public override void OnModUnload()
+        public override void Unload()
         {
             On_Main.DrawSunAndMoon -= IAteTheFuckingMoonWatchaGonnaDoNowBitch;
             IL_Main.DrawSunAndMoon -= IAteTheFuckingSunWithILEdits;

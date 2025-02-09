@@ -14,14 +14,14 @@ using WizenkleBoss.Content.Buffs;
 
 namespace WizenkleBoss.Common.ILDetourSystems
 {
-    public class GaslightSystem : ModSystem
+    public class HidePlayersFromMinimapSystem : ModSystem
     {
-        public override void OnModLoad()
+        public override void Load()
         {
             On_PlayerHeadDrawRenderTargetContent.UsePlayer += HideGhosts;
             IL_NewMultiplayerClosePlayersOverlay.Draw += HideGhosts;
         }
-        public override void OnModUnload()
+        public override void Unload()
         {
             On_PlayerHeadDrawRenderTargetContent.UsePlayer -= HideGhosts;
             IL_NewMultiplayerClosePlayersOverlay.Draw -= HideGhosts;
