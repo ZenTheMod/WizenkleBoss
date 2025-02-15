@@ -27,53 +27,39 @@ namespace WizenkleBoss.Common.Helpers
         internal static Asset<Effect> WaterProcessor;
         internal static Asset<Effect> WaterInkColorizer;
 
+        internal static Filter InkShader;
+
         private const string ShaderPath = "WizenkleBoss/Assets/Effects/";
-        private static void RegisterMiscShader(Asset<Effect> shader, string passName, string registrationName)
-        {
-            Asset<Effect> shaderPointer = shader;
-            MiscShaderData passParamRegistration = new(shaderPointer, passName);
-            GameShaders.Misc[$"WizenkleBoss:{registrationName}"] = passParamRegistration;
-        }
+
         public static void LoadShaders()
         {
-            static Asset<Effect> LoadShader(string path) => ModContent.Request<Effect>($"{ShaderPath}{path}", AssetRequestMode.ImmediateLoad);
+            static Asset<Effect> LoadShader(string path) => ModContent.Request<Effect>($"{ShaderPath}{path}"); // wooooo async loadinggg !! (lolxd would be proud)
             string pass = "AutoloadPass";
 
             RotationShader = LoadShader("Shaders/Rotation");
-            RegisterMiscShader(RotationShader, pass, "Rotation");
             PixelationShader = LoadShader("Shaders/PixelationShader");
-            RegisterMiscShader(PixelationShader, pass, "Pixelation");
 
             ObjectBarrierShader = LoadShader("Shaders/BarrierButSingleLayer");
-            RegisterMiscShader(ObjectBarrierShader, pass, "BarrierShader");
 
             CoronariesShader = LoadShader("Shaders/Coronaries");
-            RegisterMiscShader(CoronariesShader, pass, "CoronariesShader");
 
             GlitchyShader = LoadShader("Shaders/Glitchy");
-            RegisterMiscShader(GlitchyShader, pass, "GlitchyShader");
 
             PlanetShader = LoadShader("Shaders/Planet");
-            RegisterMiscShader(PlanetShader, pass, "PlanetShader");
 
             FrostyLensShader = LoadShader("Shaders/FrostyLens");
-            RegisterMiscShader(FrostyLensShader, pass, "FrostyLensShader");
 
             TransmitShader = LoadShader("Shaders/Deathray");
-            RegisterMiscShader(TransmitShader, pass, "TransmitShader");
 
             OldMonitorShader = LoadShader("Shaders/OldMonitor");
-            RegisterMiscShader(OldMonitorShader, pass, "OldMonitor");
 
             WaterProcessor = LoadShader("Water/WaterProcesser");
-            RegisterMiscShader(WaterProcessor, "Processer", "WaterProcessor");
 
             WaterInkColorizer = LoadShader("Water/WaterProcesser");
-            RegisterMiscShader(WaterInkColorizer, "InkColorizer", "WaterInkColorizer");
 
             Asset<Effect> BarrierShader = LoadShader("Shaders/Barrier");
-            Filters.Scene[$"WizenkleBoss:{InkShaderData.ShaderKey}"] = new Filter(new InkShaderData(BarrierShader, pass), EffectPriority.VeryHigh);
-            Filters.Scene[$"WizenkleBoss:{InkShaderData.ShaderKey}"].Load();
+            InkShader = new(new InkShaderData(BarrierShader, pass)); // EffectPriority is completely irrelevant (I am forcefully applying my filter after normal filters are applied).
+            InkShader.Load(); // not necessary ?
         }
     }
 }

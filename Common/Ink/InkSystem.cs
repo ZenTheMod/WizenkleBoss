@@ -123,7 +123,7 @@ namespace WizenkleBoss.Common.Ink
             // This is so that the effect actually ends when youre not drugged asf
         public override void PostUpdateEverything()
         {
-            AnyActiveInk = _AnyActiveInk();
+            AnyActiveInk = _AnyActiveInk() && !Main.gameMenu;
 
             InkShaderData.ToggleActivityIfNecessary();
         }

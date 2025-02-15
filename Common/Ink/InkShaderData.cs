@@ -7,13 +7,13 @@ using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WizenkleBoss.Common.Config;
+using WizenkleBoss.Common.Helpers;
 using WizenkleBoss.Content.NPCs.InkCreature;
 
 namespace WizenkleBoss.Common.Ink
 {
     public class InkShaderData : ScreenShaderData
     {
-        public const string ShaderKey = "InkScreen";
         public InkShaderData(Asset<Effect> shader, string passName)
             : base(shader, passName)
         {
@@ -25,11 +25,11 @@ namespace WizenkleBoss.Common.Ink
 
             bool shouldBeActive = InkSystem.AnyActiveInk;
 
-            if (shouldBeActive && !Filters.Scene[$"WizenkleBoss:{ShaderKey}"].IsActive())
-                Filters.Scene.Activate($"WizenkleBoss:{ShaderKey}");
+            if (shouldBeActive && !Helper.InkShader.Active)
+                Helper.InkShader.Active = true;
 
-            if (!shouldBeActive && Filters.Scene[$"WizenkleBoss:{ShaderKey}"].IsActive())
-                Filters.Scene.Deactivate($"WizenkleBoss:{ShaderKey}");
+            if (!shouldBeActive && Helper.InkShader.Active)
+                Helper.InkShader.Active = false;
         }
         public override void Update(GameTime gameTime)
         {
@@ -40,19 +40,12 @@ namespace WizenkleBoss.Common.Ink
                 var player = Main.LocalPlayer.GetModPlayer<InkPlayer>();
 
                 Shader.Parameters["embossColor"]?.SetValue(InkSystem.InkColor.ToVector4());
-
                 Shader.Parameters["outlineColor"]?.SetValue(InkSystem.OutlineColor.ToVector4());
-
                 Shader.Parameters["ScreenSize"]?.SetValue(new Vector2(Main.screenWidth, Main.screenHeight));
-
                 Shader.Parameters["MaskThreshold"]?.SetValue(0.4f);
-
                 Shader.Parameters["uTime"]?.SetValue(Main.GlobalTimeWrappedHourly);
-
                 Shader.Parameters["DrugStrength"]?.SetValue(player.Intoxication);
-
                 Shader.Parameters["contrast"]?.SetValue(ModContent.GetInstance<VFXConfig>().InkContrast / 100f);
-
                 Shader.Parameters["embossStrength"]?.SetValue(ModContent.GetInstance<VFXConfig>().EmbossStrength / 100f);
             }
         }
