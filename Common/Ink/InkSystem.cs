@@ -41,7 +41,11 @@ namespace WizenkleBoss.Common.Ink
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, default, default, default, null, Main.GameViewMatrix.ZoomMatrix);
 
                 DrawInk();
-                Main.LocalPlayer.GetModPlayer<InkPlayer>().DrawGoo();
+                float overlay = Main.LocalPlayer.GetModPlayer<InkPlayer>().Intoxication;
+                spriteBatch.Draw(TextureRegistry.Bloom.Value, new Rectangle(Main.screenWidth / 2, Main.screenHeight / 2, (int)(Main.screenWidth * overlay * 4.3f), (int)(Main.screenHeight * overlay * 3.3f)), null, Color.White * overlay, 0, TextureRegistry.Bloom.Size() / 2f, SpriteEffects.None, 0f);
+
+                if (ConfigStrength > 0f)
+                    spriteBatch.Draw(TextureRegistry.Pixel.Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White * ConfigStrength);
 
                 spriteBatch.End();
                 device.SetRenderTarget(null);
@@ -123,14 +127,33 @@ namespace WizenkleBoss.Common.Ink
             // This is so that the effect actually ends when youre not drugged asf
         public override void PostUpdateEverything()
         {
-            AnyActiveInk = _AnyActiveInk() && !Main.gameMenu;
+            AnyActiveInk = GetActiveInk() && !Main.gameMenu;
 
             InkShaderData.ToggleActivityIfNecessary();
         }
 
+        public override void UpdateUI(GameTime gameTime)
+        {
+            if (ConfigInk)
+            {
+                ConfigStrength = MathF.Min(ConfigStrength + 0.07f, 1f);
+                ConfigInk = false;
+            }
+            else
+                ConfigStrength = MathF.Max(ConfigStrength - 0.04f, 0f);
+            if (ConfigStrength > 0f)
+            {
+                AnyActiveInk = true;
+                InkShaderData.ToggleActivityIfNecessary();
+            }
+        }
+
+        public static float ConfigStrength = 0f;
+        public static bool ConfigInk;
+
         public static bool AnyActiveInk;
 
-        private static bool _AnyActiveInk() =>
+        private static bool GetActiveInk() =>
             Main.projectile.Where(p => p.active && (p.ModProjectile is IDrawInk || p.ModProjectile is IDrawInInk)).Any() ||
             Main.npc.Where(npc => npc.active && (npc.ModNPC is IDrawInk || npc.ModNPC is IDrawInInk)).Any() ||
             Main.LocalPlayer.GetModPlayer<InkPlayer>().InkBuffActive ||

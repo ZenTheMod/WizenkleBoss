@@ -32,7 +32,9 @@ namespace WizenkleBoss.Common.Ink
         public Vector2[] dashOldPos = new Vector2[15];
 
         private int timer = 0;
+
         private bool _InTile;
+
         public bool InTile
         {
             get { return _InTile; }
@@ -53,7 +55,9 @@ namespace WizenkleBoss.Common.Ink
                 _InTile = value;
             }
         }
+
         private bool _InkBuffActive;
+
         public bool InkBuffActive
         {
             get { return _InkBuffActive; }
@@ -66,6 +70,7 @@ namespace WizenkleBoss.Common.Ink
                 _InkBuffActive = value;
             }
         }
+
         public bool InGhostInk => Player.HasBuff<InkDrugStatBuff>() && InkyArtifact;
 
         public override void ProcessTriggers(TriggersSet triggersSet)
@@ -112,14 +117,17 @@ namespace WizenkleBoss.Common.Ink
                 }
             }
         }
+
         public override void ResetEffects()
         {
             InkyArtifact = false;
         }
+
         public override void UpdateDead()
         {
             InkyArtifact = false;
         }
+
         public override void OnEnterWorld()
         {
             if (Player.HasBuff<InkDrugBuff>() || Player.HasBuff<InkDrugStatBuff>())
@@ -128,6 +136,7 @@ namespace WizenkleBoss.Common.Ink
                 Player.ClearBuff(ModContent.BuffType<InkDrugStatBuff>());
             }
         }
+
         public override void PreUpdateMovement()
         {
             if (InTile && InGhostInk && InkDashCooldown > 0)
@@ -163,6 +172,7 @@ namespace WizenkleBoss.Common.Ink
                 }
             }
         }
+
         public override void PostUpdate()
         {
             InkDashCooldown = Math.Max(-60, InkDashCooldown - 1);
@@ -246,6 +256,7 @@ namespace WizenkleBoss.Common.Ink
                 InTile = false;
             }
         }
+
         public void CrashIntoNPCs()
         {
             if (DashVelocity.Length() < 8f)
@@ -264,15 +275,13 @@ namespace WizenkleBoss.Common.Ink
                 }
             }
         }
-        public void DrawGoo()
-        {
-            Main.spriteBatch.Draw(TextureRegistry.Bloom.Value, new Rectangle(Main.screenWidth / 2, Main.screenHeight / 2, (int)(Main.screenWidth * Intoxication * 4.3f), (int)(Main.screenHeight * Intoxication * 3.3f)), null, Color.White * Intoxication, 0, TextureRegistry.Bloom.Size() / 2f, SpriteEffects.None, 0f);
-        }
+
         private void ProduceInkRipples()
         {
             InkRippleSystem.QueueRipple(Vector2.Lerp(Player.Center, dashOldPos[1], 0.5f), 0.95f, Vector2.One * 0.7f, 0.16f);
             InkRippleSystem.QueueRipple(Player.Center, 0.8f, Vector2.One * 0.65f, 0.16f);
         }
+
         public override void HideDrawLayers(PlayerDrawSet drawInfo)
         {
             if (InkBuffActive && InkSystem.InsideInkTargetDrawnToThisFrame && Player.Center.Distance(Main.screenPosition + new Vector2(Main.screenWidth / 2, Main.screenHeight / 2)) < 900)
@@ -283,6 +292,7 @@ namespace WizenkleBoss.Common.Ink
                 }
             }
         }
+
         public override void OnHurt(Player.HurtInfo info)
         {
             if (Player.HasBuff<InkDrugStatBuff>())

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
+using System;
 using Terraria;
 using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
@@ -38,13 +39,15 @@ namespace WizenkleBoss.Common.Ink
             if (InkSystem.inkTargetByRequest.IsReady && InkSystem.insideInkTargetByRequest.IsReady)
             {
                 var player = Main.LocalPlayer.GetModPlayer<InkPlayer>();
-
                 Shader.Parameters["embossColor"]?.SetValue(InkSystem.InkColor.ToVector4());
                 Shader.Parameters["outlineColor"]?.SetValue(InkSystem.OutlineColor.ToVector4());
                 Shader.Parameters["ScreenSize"]?.SetValue(new Vector2(Main.screenWidth, Main.screenHeight));
-                Shader.Parameters["MaskThreshold"]?.SetValue(0.4f);
+                Shader.Parameters["MaskThreshold"]?.SetValue(0.05f);
                 Shader.Parameters["uTime"]?.SetValue(Main.GlobalTimeWrappedHourly);
-                Shader.Parameters["DrugStrength"]?.SetValue(player.Intoxication);
+
+                float strength = MathF.Max(InkSystem.ConfigStrength, player.Intoxication);
+                Shader.Parameters["DrugStrength"]?.SetValue(strength);
+
                 Shader.Parameters["contrast"]?.SetValue(ModContent.GetInstance<VFXConfig>().InkContrast / 100f);
                 Shader.Parameters["embossStrength"]?.SetValue(ModContent.GetInstance<VFXConfig>().EmbossStrength / 100f);
             }

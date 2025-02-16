@@ -79,6 +79,7 @@ VFXConfig: {
 	TooltipEffects: {
 		Label: "[i:1875] Tooltip Effects"
 		Tooltip: If this mod's visual effects on item tooltips are enabled or not.
+		ExampleText: Example Item
 	}
 
 	VideoOpacity: {
@@ -93,6 +94,6 @@ VFXConfig: {
 
 	TitleScreenHeavyRain: {
 		Label: "[i:WizenkleBoss/InterGalacticSludge] Heavy Rain"
-		Tooltip: Makes the title screen dropplets more frequent as well as enabling an effect on the text.
+		Tooltip: Makes the title screen dropplets more frequent.
 	}
 }

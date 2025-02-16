@@ -48,6 +48,8 @@ namespace WizenkleBoss.Common.MenuStyles
             }
         }
 
+        public override void OnSelected() => OldMouseScreen = Main.MouseScreen;
+
         public override bool PreDrawLogo(SpriteBatch spriteBatch, ref Vector2 logoDrawCenter, ref float logoRotation, ref float logoScale, ref Color drawColor)
         {
                 // no i will not rename snapshit to snapshot <3
