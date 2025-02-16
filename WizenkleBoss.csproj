@@ -24,6 +24,10 @@
 	    <HintPath>lib\StructureHelper.dll</HintPath>
 	  </Reference>
 	</ItemGroup>
+	<ItemGroup>
+      <PackageReference Include="Krafs.Publicizer" PrivateAssets="true" Version="2.2.1" />
+	  <Publicize Include="tModLoader" IncludeVirtualMembers="false" IncludeCompilerGeneratedMembers="false" />
+	</ItemGroup>
 
 	<!-- Compilation -->
 	<Target Name="BuildEffects" BeforeTargets="Build">

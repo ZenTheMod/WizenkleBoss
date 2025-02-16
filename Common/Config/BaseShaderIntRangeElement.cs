@@ -15,6 +15,7 @@ using Terraria.GameInput;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 using Terraria.ModLoader.Config.UI;
+using Terraria.ModLoader.UI;
 using Terraria.UI.Chat;
 using WizenkleBoss.Common.Ink;
 using WizenkleBoss.Content.UI;
@@ -68,9 +69,9 @@ namespace WizenkleBoss.Common.Config
         {
             base.Update(gameTime);
 
-            FieldInfo rightLockInfo = typeof(RangeElement).GetField("rightLock", BindingFlags.NonPublic | BindingFlags.Static);
+                // FieldInfo rightLockInfo = typeof(RangeElement).GetField("rightLock", BindingFlags.NonPublic | BindingFlags.Static);
 
-            RangeElement rightLock = (RangeElement)rightLockInfo.GetValue(null);
+                // RangeElement rightLock = (RangeElement)rightLockInfo.GetValue(null);
             bool inBar = rightLock == this;
             InkSystem.ConfigInk |= inBar;
         }
@@ -78,22 +79,23 @@ namespace WizenkleBoss.Common.Config
             // I do hate that I have to do this in a draw hook, rip highfpssupport players, you were never loved or missed <3
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
-                // Bassically just autosave. ( I was too lazy to make it revert the one in memory. )
-            FieldInfo rightLockInfo = typeof(RangeElement).GetField("rightLock", BindingFlags.NonPublic | BindingFlags.Static);
+                    // Bassically just autosave. ( I was too lazy to make it revert the one in memory. )
+                // FieldInfo rightLockInfo = typeof(RangeElement).GetField("rightLock", BindingFlags.NonPublic | BindingFlags.Static);
 
-            RangeElement oldRightLock = (RangeElement)rightLockInfo.GetValue(null);
+            RangeElement oldRightLock = rightLock;
             base.DrawSelf(spriteBatch);
-            RangeElement newRightLock = (RangeElement)rightLockInfo.GetValue(null);
+            RangeElement newRightLock = rightLock;
 
             if (oldRightLock != newRightLock && newRightLock == null && oldRightLock is BaseShaderIntRangeElement)
             {
-                var Interface = typeof(Mod).Assembly.GetType("Terraria.ModLoader.UI.Interface");
-                object UIModConfigInstance = Interface.GetField("modConfig", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null); // SaveConfig
+                Interface.modConfig.SaveConfig(null, null);
+                    // var Interface = typeof(Mod).Assembly.GetType("Terraria.ModLoader.UI.Interface");
+                    // object UIModConfigInstance = Interface.GetField("modConfig", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null); // SaveConfig
 
-                var UIModConfig = typeof(Mod).Assembly.GetType("Terraria.ModLoader.Config.UI.UIModConfig");
+                    // var UIModConfig = typeof(Mod).Assembly.GetType("Terraria.ModLoader.Config.UI.UIModConfig");
 
-                MethodInfo SaveConfig = UIModConfig.GetMethod("SaveConfig", BindingFlags.NonPublic | BindingFlags.Instance);
-                SaveConfig.Invoke(UIModConfigInstance, [null, null]);
+                    // MethodInfo SaveConfig = UIModConfig.GetMethod("SaveConfig", BindingFlags.NonPublic | BindingFlags.Instance);
+                    // SaveConfig.Invoke(UIModConfigInstance, [null, null]);
             }
         }
     }
