@@ -25,9 +25,9 @@ namespace WizenkleBoss.Common.ILDetourSystems
 
         private void LetsBeHonestHereYouWereNOTGainingANYPreformanceFromThisFuckYou(On_Lighting.orig_NextLightMode orig)
         {
-            if (!Lighting.NotRetro)
-                Lighting.Mode = LightMode.White;
             orig();
+            if (!Lighting.NotRetro)
+                Lighting.Mode = LightMode.Color;
         }
     }
 }
