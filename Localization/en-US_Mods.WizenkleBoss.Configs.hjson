@@ -54,7 +54,12 @@ UIConfig: {
 
 VFXConfig: {
 	DisplayName: VFX Config
-	Headers.Effects: Effects
+
+	Headers: {
+		Shaders: Shaders
+		Sky: Sky
+		Misc: Miscellaneous
+	}
 
 	InkContrast: {
 		Label: "[i:WizenkleBoss/InterGalacticSludge] Shader Contrast"
@@ -76,6 +81,49 @@ VFXConfig: {
 			'''
 	}
 
+	SunAndMoonRework: {
+		Label: "[i:237] Sun And Moon Overhaul"
+		Tooltip: If the visual overhaul of the sun and moon is enabled or not.
+	}
+
+	PixelatedSunAndMoon: {
+		Label: "[i:75] Pixelated Sun and Moon"
+		Tooltip:
+			'''
+			If the sun/moon is pixelated when drawn. 
+			[c/FF0000:Requires 'Sun And Moon Overhaul' to be enabled]
+			'''
+	}
+
+	TransparentMoonShadow: {
+		Label: "[i:485] Transparent Moon Shadow"
+		Tooltip:
+			'''
+			If the moons shadow is transparent to replicate the look of the current terraria moon sprites. 
+			(sorry if you've just learnt about this now) 
+			[c/FF0000:Requires 'Sun And Moon Overhaul' to be enabled]
+			'''
+	}
+
+	PixelatedStars: {
+		Label: "[i:184] Pixelated Stars"
+		Tooltip: If the stars are pixelated when drawn.
+	}
+
+	DrawRealisticStars: {
+		Label: "[i:184] Draw Realistic Stars"
+		Tooltip:
+			'''
+			If the stars from Realistic Sky are drawn alongside the stars in this mod. - [c/FF0000:Requires the 'Realistic Sky' mod to be enabled]
+			This also fixes the issue where the Realistic Sky's stars would draw above the moon.
+			'''
+	}
+
+	ScreenShake: {
+		Label: "[i:3546] Screenshake"
+		Tooltip: Controls the intensity of screenshaking effects.
+	}
+
 	TooltipEffects: {
 		Label: "[i:1875] Tooltip Effects"
 		Tooltip: If this mod's visual effects on item tooltips are enabled or not.
@@ -87,13 +135,10 @@ VFXConfig: {
 		Tooltip: The opacity that video based effects are drawn with. (0 being invisible, and 1 being visible)
 	}
 
-	ScreenShake: {
-		Label: "[i:3546] Screenshake"
-		Tooltip: Controls the intensity of screenshaking effects.
-	}
-
 	TitleScreenHeavyRain: {
 		Label: "[i:WizenkleBoss/InterGalacticSludge] Heavy Rain"
 		Tooltip: Makes the title screen dropplets more frequent.
 	}
 }
+
+Locked: - Locked

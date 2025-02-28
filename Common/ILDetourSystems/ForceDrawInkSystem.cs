@@ -7,6 +7,7 @@ using WizenkleBoss.Common.MenuStyles;
 using WizenkleBoss.Common.Helpers;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using WizenkleBoss.Common.Registries;
 
 namespace WizenkleBoss.Common.ILDetourSystems
 {
@@ -27,10 +28,10 @@ namespace WizenkleBoss.Common.ILDetourSystems
         private void UpdateInkEffect(On_FilterManager.orig_Update orig, FilterManager self, GameTime gameTime)
         {
             orig(self, gameTime);
-            if (Helper.InkShader == null)
+            if (Shaders.InkShader == null)
                 return;
-            if (Helper.InkShader.Active)
-                Helper.InkShader.Update(gameTime);
+            if (Shaders.InkShader.Active)
+                Shaders.InkShader.Update(gameTime);
         }
 
         private void ApplyInkEffect(ILContext il)
@@ -50,9 +51,9 @@ namespace WizenkleBoss.Common.ILDetourSystems
             c.EmitLdarg3();
             c.EmitLdarg(4);
             c.EmitDelegate((GraphicsDevice graphicsDevice, ref RenderTarget2D renderTarget2D, ref RenderTarget2D renderTarget2D2, RenderTarget2D screenTarget1, RenderTarget2D screenTarget2, Color clearColor) => {
-                if (Helper.InkShader == null)
+                if (Shaders.InkShader == null)
                     return;
-                if (!Helper.InkShader.Active)
+                if (!Shaders.InkShader.Active)
                     return;
 
                     // idk if i need to even do this...
@@ -65,7 +66,7 @@ namespace WizenkleBoss.Common.ILDetourSystems
 
                 Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 
-                Helper.InkShader.Apply();
+                Shaders.InkShader.Apply();
                 Main.spriteBatch.Draw(renderTarget2D2, Vector2.Zero, Main.ColorOfTheSkies);
 
                 Main.spriteBatch.End();

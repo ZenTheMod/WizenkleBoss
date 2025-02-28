@@ -11,6 +11,7 @@ using WizenkleBoss.Common.Helpers;
 using WizenkleBoss.Content.Dusts;
 using MonoMod.Cil;
 using WizenkleBoss.Content.UI;
+using WizenkleBoss.Common.Registries;
 
 namespace WizenkleBoss.Content.Projectiles.Misc
 {
@@ -28,7 +29,7 @@ namespace WizenkleBoss.Content.Projectiles.Misc
 
                 device.SetRenderTarget(_target);
                 device.Clear(Color.Transparent);
-                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
+                spriteBatch.BeginHalfScale(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 
                 Color color = Color.Lerp(new Color(255, 196, 255), new Color(255, 197, 147), charge) * darkness * 0.5f;
                 color.A = 0;
@@ -37,9 +38,9 @@ namespace WizenkleBoss.Content.Projectiles.Misc
                     // spriteBatch.Draw(ObservatorySatelliteDishTile.GlowTexture.Value, (Center - new Vector2(8) - Main.screenPosition) / 2f, null, color, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0f);
 
                     // Draw an even brighter bloom at the start of the laser.
-                spriteBatch.Draw(TextureRegistry.Bloom.Value, (Center - Main.screenPosition) / 2f, null, color, 0f, TextureRegistry.Bloom.Value.Size() / 2, 0.6f * darkness + 0.01f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(Textures.Bloom.Value, (Center - Main.screenPosition) / 2f, null, color, 0f, Textures.Bloom.Value.Size() / 2, 0.6f * darkness + 0.01f, SpriteEffects.None, 0f);
 
-                var Laser = Helper.TransmitShader;
+                var Laser = Shaders.TransmitShader;
 
                     // Param setup.
                 Laser.Value.Parameters["globalTime"]?.SetValue(Main.GlobalTimeWrappedHourly);
@@ -53,18 +54,18 @@ namespace WizenkleBoss.Content.Projectiles.Misc
                 Laser.Value.Parameters["centerIntensity"].SetValue(Utils.Remap(MathF.Pow(2, 10 * (charge - 1)), 0f, 1f, 500f, 100000f));
                 Laser.Value.Parameters["laserStartPercentage"].SetValue(MathHelper.Lerp(0.012f, 0.065f, charge));
 
-                device.Textures[0] = TextureRegistry.Pixel.Value;
+                device.Textures[0] = Textures.Pixel.Value;
 
                     // I was fucking around in shadertoy for like an hour with custom textures and found that these two look the best.
                     // Also, for you bitchass theives who arent going to credit me, heres the shader :3 https://www.shadertoy.com/view/4fKyzt, or you can just ya-know, take it straight from the decomp you already have.
-                device.Textures[1] = TextureRegistry.Space[1].Value;
+                device.Textures[1] = Textures.Space[1].Value;
                 device.SamplerStates[1] = SamplerState.LinearWrap;
 
-                device.Textures[2] = TextureRegistry.Wood.Value;
+                device.Textures[2] = Textures.Wood.Value;
                 if (StarMapUIHelper.TargetedStar != int.MaxValue && StarMapUIHelper.TargetedStar > -1)
                 {
                     if (BarrierStarSystem.Stars[StarMapUIHelper.TargetedStar].Name.Contains("QUEER"))
-                        device.Textures[2] = TextureRegistry.Rainbow.Value;
+                        device.Textures[2] = Textures.Rainbow.Value;
                 }
                 device.SamplerStates[2] = SamplerState.LinearWrap;
 
@@ -127,14 +128,10 @@ namespace WizenkleBoss.Content.Projectiles.Misc
                 Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
                     // Darken the screen to make the laser really POP.
-                Main.spriteBatch.Draw(TextureRegistry.Pixel.Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.Black * (darkness - 0.1f));
+                Main.spriteBatch.Draw(Textures.Pixel.Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.Black * (darkness - 0.1f));
 
                     // Draw the laser rt.
-                deepSpaceTransmitterTargetByRequest.Request();
-                if (deepSpaceTransmitterTargetByRequest.IsReady)
-                {
-                    Main.spriteBatch.Draw(deepSpaceTransmitterTargetByRequest.GetTarget(), new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), null, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0f);
-                }
+                Main.spriteBatch.RequestAndDrawRenderTarget(deepSpaceTransmitterTargetByRequest);
 
                 Main.spriteBatch.End();
                 Main.spriteBatch.Begin(in snapshit);

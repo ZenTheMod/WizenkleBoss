@@ -3,3 +3,5 @@ author = Zen
 version = 0.002
 includeSource = true
 dllReferences = StructureHelper, NetEasy_v0.1.8, NetSerializer
+weakReferences = RealisticSky
+sortBefore = RealisticSky

@@ -13,6 +13,7 @@ using ReLogic.Utilities;
 using Terraria.UI;
 using Terraria.ModLoader;
 using WizenkleBoss.Common.Config;
+using WizenkleBoss.Common.Registries;
 
 namespace WizenkleBoss.Content.UI.Notes
 {
@@ -68,7 +69,7 @@ namespace WizenkleBoss.Content.UI.Notes
         {
             InitializeUI();
 
-            SoundEngine.PlaySound(AudioRegistry.NoteOpen);
+            SoundEngine.PlaySound(Sounds.NoteOpen);
             if (PlayerInput.UsingGamepadUI)
                 UILinkPointNavigator.ChangePoint(3002);
         }

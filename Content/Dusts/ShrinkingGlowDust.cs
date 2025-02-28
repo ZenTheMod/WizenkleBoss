@@ -9,6 +9,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WizenkleBoss.Common.Helpers;
+using WizenkleBoss.Common.Registries;
 using static WizenkleBoss.Content.Projectiles.Misc.DeepSpaceTransmitterHelper;
 
 namespace WizenkleBoss.Content.Dusts
@@ -36,7 +37,7 @@ namespace WizenkleBoss.Content.Dusts
 
         public void DrawAbove(SpriteBatch spriteBatch, GraphicsDevice device, Dust dust)
         {
-            spriteBatch.Draw(TextureRegistry.Bloom.Value, (dust.position - Main.screenPosition) / 2f, null, dust.color * dust.scale, 0f, TextureRegistry.Bloom.Size() / 2, dust.scale * 0.4f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(Textures.Bloom.Value, dust.position - Main.screenPosition, null, dust.color * dust.scale, 0f, Textures.Bloom.Size() / 2, dust.scale * 0.4f, SpriteEffects.None, 0f);
         }
     }
 }

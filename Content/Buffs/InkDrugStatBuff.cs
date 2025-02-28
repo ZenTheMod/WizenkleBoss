@@ -6,11 +6,15 @@ using Terraria.DataStructures;
 using Terraria.ModLoader;
 using WizenkleBoss.Common.Helpers;
 using WizenkleBoss.Common.Ink;
+using WizenkleBoss.Common.Registries;
 
 namespace WizenkleBoss.Content.Buffs
 {
     public class InkDrugStatBuff : ModBuff
     {
+            // Prevent exiting early while in a tile.
+        public override bool RightClick(int buffIndex) => !Main.LocalPlayer.GetModPlayer<InkPlayer>().InTile;
+
         public override bool PreDraw(SpriteBatch spriteBatch, int buffIndex, ref BuffDrawParams drawParams)
         {
             var snapshit = Main.spriteBatch.CaptureSnapshot();
@@ -18,15 +22,15 @@ namespace WizenkleBoss.Content.Buffs
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.UIScaleMatrix);
 
-            var barrierShader = Helper.ObjectBarrierShader;
+            var inkShader = Shaders.ObjectInkShader;
 
-            barrierShader.Value.Parameters["embossColor"]?.SetValue(InkSystem.InkColor.ToVector4());
+            inkShader.Value.Parameters["embossColor"]?.SetValue(InkSystem.InkColor.ToVector4());
 
-            barrierShader.Value.Parameters["Size"]?.SetValue(new Vector2(32));
+            inkShader.Value.Parameters["Size"]?.SetValue(new Vector2(32));
 
-            barrierShader.Value.Parameters["uTime"]?.SetValue(Main.GlobalTimeWrappedHourly);
+            inkShader.Value.Parameters["uTime"]?.SetValue(Main.GlobalTimeWrappedHourly);
 
-            barrierShader.Value.CurrentTechnique.Passes[0].Apply();
+            inkShader.Value.CurrentTechnique.Passes[0].Apply();
 
             Main.spriteBatch.Draw(drawParams.Texture, drawParams.Position, drawParams.SourceRectangle, drawParams.DrawColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 

@@ -16,6 +16,7 @@ using Terraria.ModLoader;
 using WizenkleBoss.Common.Helpers;
 using WizenkleBoss.Common.ILDetourSystems;
 using WizenkleBoss.Common.Ink;
+using WizenkleBoss.Common.Registries;
 using WizenkleBoss.Content.Dusts;
 using WizenkleBoss.Content.Items.Dyes;
 
@@ -122,12 +123,12 @@ namespace WizenkleBoss.Content.NPCs.InkMeteorite
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, snapshit.transformationMatrix);
 
-            var barrierShader = Helper.ObjectBarrierShader;
-            barrierShader.Value.Parameters["embossColor"]?.SetValue(InkSystem.InkColor.ToVector4());
-            barrierShader.Value.Parameters["Size"]?.SetValue(TextureAssets.Npc[Type].Value.Size());
-            barrierShader.Value.Parameters["uTime"]?.SetValue(Main.GlobalTimeWrappedHourly);
+            var inkShader = Shaders.ObjectInkShader;
+            inkShader.Value.Parameters["embossColor"]?.SetValue(InkSystem.InkColor.ToVector4());
+            inkShader.Value.Parameters["Size"]?.SetValue(TextureAssets.Npc[Type].Value.Size());
+            inkShader.Value.Parameters["uTime"]?.SetValue(Main.GlobalTimeWrappedHourly);
 
-            barrierShader.Value.CurrentTechnique.Passes[0].Apply();
+            inkShader.Value.CurrentTechnique.Passes[0].Apply();
 
             Main.spriteBatch.Draw(TextureAssets.Npc[Type].Value, position, NPC.frame, Color.White, 0f, NPC.frame.Size() / 2f, NPC.scale, SpriteEffects.None, 0f);
 

@@ -12,6 +12,7 @@ using WizenkleBoss.Content.Dusts;
 using MonoMod.Cil;
 using WizenkleBoss.Content.UI;
 using WizenkleBoss.Common.Ink;
+using WizenkleBoss.Common.Registries;
 
 namespace WizenkleBoss.Content.NPCs.InkCreature
 {
@@ -27,7 +28,7 @@ namespace WizenkleBoss.Content.NPCs.InkCreature
                 device.Clear(Color.Black);
 
                     // Deferred because of the lack of shaders.
-                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
 
                 foreach (var p in Main.ActiveNPCs)
                 {
@@ -61,6 +62,7 @@ namespace WizenkleBoss.Content.NPCs.InkCreature
         {
             if (!Main.npc.Where(npc => npc.active && npc.ModNPC is IDrawWiggly).Any())
                 return;
+
             beastTargetByRequest.Request();
             if (beastTargetByRequest.IsReady)
             {
@@ -69,7 +71,7 @@ namespace WizenkleBoss.Content.NPCs.InkCreature
                 Main.spriteBatch.End();
                 Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
 
-                var Coronaries = Helper.CoronariesShader;
+                var Coronaries = Shaders.CoronariesShader;
                 var device = Main.instance.GraphicsDevice;
 
                 Coronaries.Value.Parameters["globalTime"]?.SetValue(Main.GlobalTimeWrappedHourly * 2f);
@@ -80,7 +82,7 @@ namespace WizenkleBoss.Content.NPCs.InkCreature
 
                 Coronaries.Value.Parameters["screenPosition"]?.SetValue(Main.screenPosition / new Vector2(Main.screenWidth, Main.screenHeight));
 
-                device.Textures[1] = TextureRegistry.Space[1].Value;
+                device.Textures[1] = Textures.Space[1].Value;
                 device.SamplerStates[1] = SamplerState.LinearWrap;
 
                 Coronaries.Value.CurrentTechnique.Passes[0].Apply();

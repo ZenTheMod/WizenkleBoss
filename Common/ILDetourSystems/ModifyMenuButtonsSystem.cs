@@ -21,7 +21,6 @@ namespace WizenkleBoss.Common.ILDetourSystems
         private void ModifyButtons(ILContext il)
         {
             ILCursor c = new(il);
-            ILLabel target = c.DefineLabel();
 
                 // uhhhh lets be EXTRA safe okay ?
             c.GotoNext(MoveType.After,

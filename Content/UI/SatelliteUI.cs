@@ -9,6 +9,7 @@ using Terraria.UI;
 using Terraria.UI.Gamepad;
 using WizenkleBoss.Common.Config;
 using WizenkleBoss.Common.Helpers;
+using WizenkleBoss.Common.Registries;
 using static WizenkleBoss.Content.UI.StarMapUIHelper;
 
 namespace WizenkleBoss.Content.UI
@@ -65,8 +66,8 @@ namespace WizenkleBoss.Content.UI
         public override bool DistanceCheck => Main.LocalPlayer.Center.Distance(CurrentTerminalWorldPosition) >= 200;
         public override void OnActivate()
         {
-            SoundEngine.PlaySound(AudioRegistry.HumStart);
-            slot = SoundEngine.PlaySound(AudioRegistry.HumLoop, null, (ActiveSound _) => inUI);
+            SoundEngine.PlaySound(Sounds.HumStart);
+            slot = SoundEngine.PlaySound(Sounds.HumLoop, null, (ActiveSound _) => inUI);
             InitializeUI();
 
             if (TargetedStar > -1)
@@ -84,7 +85,7 @@ namespace WizenkleBoss.Content.UI
                 MusicKiller.MuffleFactor = 0.1f;
 
             if (!SoundEngine.TryGetActiveSound(slot, out _) && Main.hasFocus)
-                slot = SoundEngine.PlaySound(AudioRegistry.HumLoop, null, (ActiveSound _) => inUI);
+                slot = SoundEngine.PlaySound(Sounds.HumLoop, null, (ActiveSound _) => inUI);
 
             Player player = Main.LocalPlayer;
 
@@ -102,12 +103,12 @@ namespace WizenkleBoss.Content.UI
             DIE?.Stop();
 
                 // stop my own sounds too
-            DIE = SoundEngine.FindActiveSound(AudioRegistry.HumStart);
+            DIE = SoundEngine.FindActiveSound(Sounds.HumStart);
             DIE?.Stop();
-            DIE = SoundEngine.FindActiveSound(AudioRegistry.HumLoop);
+            DIE = SoundEngine.FindActiveSound(Sounds.HumLoop);
             DIE?.Stop();
 
-            SoundEngine.PlaySound(AudioRegistry.HumEnd);
+            SoundEngine.PlaySound(Sounds.HumEnd);
 
             Main.playerInventory = false;
         }

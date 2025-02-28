@@ -22,34 +22,20 @@ namespace WizenkleBoss
 {
 	public class WizenkleBoss : Mod
 	{
-        public override void PostSetupContent()
-        {
-            NetEasy.NetEasy.Register(this);
-        }
-            // ...And to handle any incoming packets.
-        public override void HandlePacket(BinaryReader reader, int whoAmI)
-        {
-            NetEasy.NetEasy.HandleModule(reader, whoAmI);
-        }
+        public override void PostSetupContent() => NetEasy.NetEasy.Register(this);
+        public override void HandlePacket(BinaryReader reader, int whoAmI) => NetEasy.NetEasy.HandleModule(reader, whoAmI);
+
         public WizenkleBoss()
         {
                 // Fuck you
             CloudAutoloadingEnabled = false;
             GoreAutoloadingEnabled = false;
         }
-        public override void Load()
-        {
-            if (!Main.dedServ)
-            {
-                Helper.LoadShaders();
-            }
-        }
+
         public override IContentSource CreateDefaultContentSource()
         {
             if (!Main.dedServ)
-            {
                 AddContent(new OgvReader()); // This manual ILoadable adds readers to AssetReaderCollections.
-            }
 
             return base.CreateDefaultContentSource();
         }

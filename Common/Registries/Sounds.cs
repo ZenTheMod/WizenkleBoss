@@ -1,97 +1,23 @@
-﻿using Terraria;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using ReLogic.Graphics;
-using System;
-using Terraria.GameContent;
+﻿using System;
+using Terraria;
 using Terraria.Audio;
-using Steamworks;
+using Terraria.ModLoader;
 
-namespace WizenkleBoss.Common.Helpers
+namespace WizenkleBoss.Common.Registries
 {
-    public class TextureRegistry : ModSystem
-    {
-        public static readonly Asset<Texture2D> Invis = LoadTexture2D("MagicPixel");
-        public static readonly Asset<Texture2D> Pixel = LoadTexture2D("NotSoMagicPixel");
-        public static readonly Asset<Texture2D>[] Cosmos = [LoadTexture2D("Cosmos"), LoadTexture2D("Cosmos2")];
-        public static readonly Asset<Texture2D> Bloat = LoadTexture2D("Noise/Bloat");
-        public static readonly Asset<Texture2D> Roar = LoadTexture2D("Roar");
-        public static readonly Asset<Texture2D> Shockwave = LoadTexture2D("Shockwave");
-        public static readonly Asset<Texture2D>[] Space = [LoadTexture2D("Space"), LoadTexture2D("Space2"), LoadTexture2D("Space3")];
-        public static readonly Asset<Texture2D> Star = LoadTexture2D("Stars/Star");
-        public static readonly Asset<Texture2D> Bloom = LoadTexture2D("Bloom");
-        public static readonly Asset<Texture2D> Ball = LoadTexture2D("Ball");
-        public static readonly Asset<Texture2D> Circle = LoadTexture2D("Circle");
-        public static readonly Asset<Texture2D> Bracket = LoadTexture2D("Bracket");
-        public static readonly Asset<Texture2D> Tech = LoadTexture2D("Noise/Tech");
-        public static readonly Asset<Texture2D> WavyNoise = LoadTexture2D("Noise/WavyNoise");
-        public static readonly Asset<Texture2D> Lichen = LoadTexture2D("Noise/Lichen");
-        public static readonly Asset<Texture2D> Dither = LoadTexture2D("Noise/Dither");
-        public static readonly Asset<Texture2D> Wood = LoadTexture2D("Noise/Wood");
-        public static readonly Asset<Texture2D> Rainbow = LoadTexture2D("Noise/PRIDEMONTH");
-        public static readonly Asset<Texture2D> Blink = LoadTexture2D("Telescope/Blink");
-        public static readonly Asset<Texture2D> BlinkOuter = LoadTexture2D("Telescope/BlinkOuter");
-        public static readonly Asset<Texture2D> InkDash = LoadTexture2D("InkDash");
-        public static readonly Asset<Texture2D> TextBoxStars = LoadTexture2D("Telescope/TextBoxStars");
-        public static readonly Asset<Texture2D> TelescopeMap = LoadTexture2D("Telescope/Map");
-        public static readonly Asset<Texture2D> Cursor = LoadTexture2D("Cursor");
-        public static readonly Asset<Texture2D>[] ConsoleError = [LoadTexture2D("Icons/NotConnectedToPower"), LoadTexture2D("Icons/NotConnectedToSatelliteDish")];
-        public static readonly Asset<Texture2D> ConfigIcon = LoadTexture2D("Icons/Settings");
-        public static readonly Asset<Texture2D> MagnifyIcon = LoadTexture2D("Icons/Magnify");
-        public static readonly Asset<Texture2D> EnergyBar = LoadTexture2D("Icons/PowerBar");
-        private static Asset<Texture2D> LoadTexture2D(string TexturePath)
-        {
-            if (Main.dedServ)
-                return null; // uuuuuuuuuhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
-            return ModContent.Request<Texture2D>("WizenkleBoss/Assets/Textures/" + TexturePath);
-        }
-    }
-    public class FontRegistry : ModSystem
-    {
-            // Now you may be asking, ZEN (zoe)!, WHAT THE FUCK IS A 'SpriteFont' ?!??!?!/111!!?!?1/?one!!!1!1
-            // Well I decided that I LOVE fonts (my note system looked stupid on mac) so; I decided to be INFINITLY better than those low life SCUMS (calamity mod) who use DynamicFontGenerator.exe.
-            // I found this guide (https://stackoverflow.com/questions/55045066/how-do-i-convert-a-ttf-or-other-font-to-a-xnb-xna-game-studio-font);
-            // Which gives DIRECT AND OBVIOUS steps on generating these files; (AND THEY WORK ON ALL PLATFORMS (prolly))
-            // My interpretation of said steps are: 
-
-                // Step 1: Know what font you're using. (dumbass tModlet)
-                // Step 2: Install MonoGame for Visual Studio Community. (easy part)
-                // Step 3: Create a new test project under the multiplatform game project preset.
-                // Step 4: 'Open the MonoGame Pipeline Tool by double-clicking on the Content.mgcb file.'
-                // Step 5: Press Edit > Add > New Item > SpriteFont Description.
-                // Step 6: Edit it in notepad (or open it in vs if you're a based giga-pilled CHAD BRAD GIRLIEPOP) (It's like the same thing that DynamicFontGenerator.exe uses)
-                // Step 7: In the 'MonoGame Pipeline Tool' Right Click > Rebuild, then you can find in in your 'Project/Content/bin/DesktopGL/' folder. (prolly)
-                // Step 8: Load it asynchronously you won't.
-        public static Asset<SpriteFont> Starlight { get; internal set; }
-
-        public static Asset<SpriteFont> SpaceMono { get; internal set; }
-
-        public static Asset<SpriteFont> Microserif { get; internal set; }
-
-        public override void OnModLoad()
-        {
-            if (Main.dedServ)
-                return;
-
-            Starlight = ModContent.Request<SpriteFont>("WizenkleBoss/Assets/Fonts/Starlight");
-            SpaceMono = ModContent.Request<SpriteFont>("WizenkleBoss/Assets/Fonts/SpaceMono");
-            Microserif = ModContent.Request<SpriteFont>("WizenkleBoss/Assets/Fonts/Microserif");
-        }
-    }
-    public class AudioRegistry : ModSystem
+    public class Sounds : ModSystem
     {
             // Completely unrelated but...
             // Ear destruction count: 8
             // To the many, many people who have worked on most popular 'freesound' websites (e.g. freesound, pixabay, or soundcloud)...
-            // I would like to wish a fate worse than death opon each and every one of you, my reasons include:
+            // I would like to wish a fate worse than death upon each and every one of you, my reasons include:
 
                 // 1. Let me tell you a story, t'was november 23rd 2024, a young trans girl wanted to find the perfect sound for her star destroying laser cannon;
                 // She googled "free cosmic deathray sound effects" and clicked the first result, scrolling down she wanted to listen to the first one that caught her eye;
                 // But then miliseconds after clicking, she realised the horrible mistake she'd made, as her ears were permanently deafened by the resulting sound that filled her headphones she screamed...
                 // "FUCK YOU FREESOUND.ORG !!!!!!!!!!!!!!!!!"
-                // But you see, *she* wasnt the one who made that horrible mistake, it was the dumbass mother fucking website developers, who forgot a key feature, a feature so simple.
-                // Legends say that this one feature could cure cancer, and solve world hunger as well as cure aids and stop suicide aroung the globe.
+                // But you see, *she* wasn't the one who made that horrible mistake, it was the dumbass mother fucking website developers, who forgot a key feature, a feature so simple.
+                // Legends say that this one feature could cure cancer, and solve world hunger as well as cure aids and stop suicide around the globe.
                 // The feature they spoke of was...
                 // A MOTHER FUCKING VOLUME SLIDER
                 // HOW CAN THIS BE THAT GOD DAMN DIFFICULT??!?!?
@@ -125,7 +51,7 @@ namespace WizenkleBoss.Common.Helpers
                 // Do you listen to EAS alarms while studying?
                 // When you play music at an old folks home do the deaf cover their ears?
 
-            // For these reasons I'm sueing every company that has committed these acts for: battery causing great bodily injury, sexual assult, giving me aids, and other reasons.
+            // For these reasons I'm suing every company that has committed these acts for: battery causing great bodily injury, sexual assult, giving me aids, and other reasons.
             // I am requesting at least: $467,589,489,634,896,754,986,756,758,936,793,465,975 in compensation.
             // You have until tommorow to comply.
         public static SoundStyle SateliteDeathray { get; internal set; }

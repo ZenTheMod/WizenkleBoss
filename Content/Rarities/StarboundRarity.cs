@@ -9,6 +9,7 @@ using Terraria.Utilities;
 using WizenkleBoss.Common.Config;
 using WizenkleBoss.Common.Helpers;
 using WizenkleBoss.Common.Ink;
+using WizenkleBoss.Common.Registries;
 
 namespace WizenkleBoss.Content.Rarities
 {
@@ -32,7 +33,7 @@ namespace WizenkleBoss.Content.Rarities
 
             float rotation = line.Rotation;
 
-            SpriteFont font = FontRegistry.Starlight.Value;
+            SpriteFont font = Fonts.Starlight.Value;
 
             Vector2 origin = line.Origin;
             Vector2 baseScale = line.BaseScale;
@@ -40,11 +41,11 @@ namespace WizenkleBoss.Content.Rarities
             Vector2 center = fontSize / 2f;
             Vector2 pos = new(X, Y);
             Vector2 starBoxPos = pos - new Vector2(7, 5);
-            Vector2 starOrigin = TextureRegistry.Star.Value.Size() / 2;
+            Vector2 starOrigin = Textures.Star.Value.Size() / 2;
 
             float colmultiplier = MathHelper.Lerp(1.3f, 0.9f, Main.GameUpdateCount % 60 / 60f);
 
-            Main.spriteBatch.Draw(TextureRegistry.TextBoxStars.Value, new Rectangle((int)starBoxPos.X, (int)starBoxPos.Y, (int)(TextureRegistry.TextBoxStars.Value.Width * 1.4f), (int)fontSize.Y + 10), null, (InkSystem.OutlineColor * colmultiplier) with { A = 0 }, line.Rotation, Vector2.Zero, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(Textures.TextBoxStars.Value, new Rectangle((int)starBoxPos.X, (int)starBoxPos.Y, (int)(Textures.TextBoxStars.Value.Width * 1.4f), (int)fontSize.Y + 10), null, (InkSystem.OutlineColor * colmultiplier) with { A = 0 }, line.Rotation, Vector2.Zero, SpriteEffects.None, 0f);
 
             Helper.DrawColorCodedStringShadow(Main.spriteBatch, font, line.Text, pos + (Vector2.UnitY * 8), InkSystem.OutlineColor with { A = 0 }, rotation, origin, baseScale * 1.3f);
             Helper.DrawColorCodedString(Main.spriteBatch, font, line.Text, pos + (Vector2.UnitY * 8), Color.Black, rotation, origin, baseScale * 1.3f);
@@ -68,16 +69,16 @@ namespace WizenkleBoss.Content.Rarities
                     Color white = (new Color(200 + color.R / 20, 200 + color.G / 20, 200 + color.B / 20, 255) * sinValue) with { A = 0 };
 
                     Vector2 starPosition = new Vector2(X, Y - lifeTime * 1f + 2f) + v;
-                    Main.spriteBatch.Draw(TextureRegistry.Star.Value, starPosition, null, white, starRotation, starOrigin, lifeTime / MathHelper.Pi * 0.66f, SpriteEffects.None, 0f);
-                    Main.spriteBatch.Draw(TextureRegistry.Star.Value, starPosition, null, white * 0.5f, starRotation, starOrigin, lifeTime / MathHelper.Pi, SpriteEffects.None, 0f);
+                    Main.spriteBatch.Draw(Textures.Star.Value, starPosition, null, white, starRotation, starOrigin, lifeTime / MathHelper.Pi * 0.66f, SpriteEffects.None, 0f);
+                    Main.spriteBatch.Draw(Textures.Star.Value, starPosition, null, white * 0.5f, starRotation, starOrigin, lifeTime / MathHelper.Pi, SpriteEffects.None, 0f);
 
                     float scale3 = lifeTime / MathHelper.TwoPi * 1.5f;
                     Color col2 = (color2 * sinValue) with { A = 0 };
 
                     starPosition = pos + v;
-                    Main.spriteBatch.Draw(TextureRegistry.Star.Value, starPosition, null, col2, starRotation, starOrigin, scale3 * 0.9f, SpriteEffects.None, 0f);
-                    Main.spriteBatch.Draw(TextureRegistry.Star.Value, starPosition, null, col2, starRotation, starOrigin, scale3 * 0.6f, SpriteEffects.None, 0f);
-                    Main.spriteBatch.Draw(TextureRegistry.Star.Value, starPosition, null, col2, starRotation, starOrigin, scale3 * 0.55f, SpriteEffects.None, 0f);
+                    Main.spriteBatch.Draw(Textures.Star.Value, starPosition, null, col2, starRotation, starOrigin, scale3 * 0.9f, SpriteEffects.None, 0f);
+                    Main.spriteBatch.Draw(Textures.Star.Value, starPosition, null, col2, starRotation, starOrigin, scale3 * 0.6f, SpriteEffects.None, 0f);
+                    Main.spriteBatch.Draw(Textures.Star.Value, starPosition, null, col2, starRotation, starOrigin, scale3 * 0.55f, SpriteEffects.None, 0f);
                 }
             }
             return false;

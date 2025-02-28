@@ -13,6 +13,7 @@ using Terraria.Utilities;
 using WizenkleBoss.Common.Config;
 using WizenkleBoss.Common.Helpers;
 using WizenkleBoss.Common.Ink;
+using WizenkleBoss.Common.Registries;
 
 namespace WizenkleBoss.Content.Rarities
 {
@@ -47,18 +48,18 @@ namespace WizenkleBoss.Content.Rarities
 
             var snapshit = Main.spriteBatch.CaptureSnapshot();
 
-            var barrierShader = Helper.ObjectBarrierShader;
+            var inkShader = Shaders.ObjectInkShader;
 
-            barrierShader.Value.Parameters["embossColor"]?.SetValue(InkSystem.InkColor.ToVector4());
+            inkShader.Value.Parameters["embossColor"]?.SetValue(InkSystem.InkColor.ToVector4());
 
-            barrierShader.Value.Parameters["Size"]?.SetValue(fontSize);
+            inkShader.Value.Parameters["Size"]?.SetValue(fontSize);
 
-            barrierShader.Value.Parameters["uTime"]?.SetValue(Main.GlobalTimeWrappedHourly);
+            inkShader.Value.Parameters["uTime"]?.SetValue(Main.GlobalTimeWrappedHourly);
 
-            barrierShader.Value.CurrentTechnique.Passes[0].Apply();
+            inkShader.Value.CurrentTechnique.Passes[0].Apply();
 
             Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, barrierShader.Value, Main.UIScaleMatrix);
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, inkShader.Value, Main.UIScaleMatrix);
 
             ChatManager.DrawColorCodedStringShadow(Main.spriteBatch, font, line.Text, pos, InkSystem.InkColor * 0.3f, rotation, origin, baseScale);
             ChatManager.DrawColorCodedString(Main.spriteBatch, font, line.Text, pos, InkSystem.InkColor, rotation, origin, baseScale);

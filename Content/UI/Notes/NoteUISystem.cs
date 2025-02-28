@@ -17,6 +17,7 @@ using Terraria.UI;
 using Terraria.UI.Chat;
 using WizenkleBoss.Common.Config;
 using WizenkleBoss.Common.Helpers;
+using WizenkleBoss.Common.Registries;
 
 namespace WizenkleBoss.Content.UI.Notes
 {
@@ -59,7 +60,7 @@ namespace WizenkleBoss.Content.UI.Notes
 
                         float ease = 2f * interpolator * (1f - (interpolator / 2f));
 
-                        Main.spriteBatch.Draw(TextureRegistry.Pixel.Value, new Rectangle(0, 0, (int)ScreenSize.X + 20, (int)ScreenSize.Y + 20), null, Color.Black * ease * 0.6f, 0, Vector2.Zero, SpriteEffects.None, 0f);
+                        Main.spriteBatch.Draw(Textures.Pixel.Value, new Rectangle(0, 0, (int)ScreenSize.X + 20, (int)ScreenSize.Y + 20), null, Color.Black * ease * 0.6f, 0, Vector2.Zero, SpriteEffects.None, 0f);
 
                         Vector2 noteCenter = Vector2.Lerp(new Vector2(ScreenSize.X / 2f, Main.screenHeight * 1.6f), ScreenSize / 2f, ease);
 
@@ -77,7 +78,7 @@ namespace WizenkleBoss.Content.UI.Notes
 
                         Main.spriteBatch.Draw(noteOverlay, noteCenter, null, color * (1 - Magnify), rotation, noteOverlay.Size() / 2f, scale, SpriteEffects.None, 0f);
 
-                        BaseFancyUI.DrawGenericBackButton(Main.spriteBatch, FontAssets.DeathText.Value, noteUI.BackPanel, ScreenSize, Language.GetTextValue("UI.Back"));
+                        Main.spriteBatch.DrawGenericBackButton(FontAssets.DeathText.Value, noteUI.BackPanel, ScreenSize, Language.GetTextValue("UI.Back"));
 
                         DrawMagnifyButton();
 
@@ -98,7 +99,7 @@ namespace WizenkleBoss.Content.UI.Notes
             float lerp = Utils.Remap(interpolator, 0.94f, 1f, 0f, 1f);
             Color color = new Color(21, 30, 39) * lerp;
 
-            SpriteFont font = FontRegistry.Microserif.Value;
+            SpriteFont font = Fonts.Microserif.Value;
             font.LineSpacing = 16;
             string log = Language.GetTextValue(CurrentNote.Text);
 
@@ -113,7 +114,7 @@ namespace WizenkleBoss.Content.UI.Notes
 
             if (Magnify > 0f)
             {
-                    // Main.spriteBatch.Draw(TextureRegistry.Ball.Value, new Rectangle(0, 0, (int)ScreenSize.X, (int)ScreenSize.Y), color * 0.5f);
+                    // Main.spriteBatch.Draw(Textures.Ball.Value, new Rectangle(0, 0, (int)ScreenSize.X, (int)ScreenSize.Y), color * 0.5f);
 
                 Vector2 origin = ((size / 2f) - margin) * scale;
                 ChatManager.DrawColorCodedStringShadow(spriteBatch, FontAssets.MouseText.Value, snippets, center + (Vector2.UnitY * 8), color, 0f, origin / 1.2f, Vector2.One * 1.2f, (size.X - 20) * scale);
@@ -131,7 +132,7 @@ namespace WizenkleBoss.Content.UI.Notes
                 Color color = magnify.IsMouseHovering ? Color.White : Color.Gray;
                 color *= interpolator;
 
-                Texture2D icon = TextureRegistry.MagnifyIcon.Value;
+                Texture2D icon = Textures.MagnifyIcon.Value;
 
                 Vector2 origin = new(icon.Width / 2f, icon.Height);
                 Main.spriteBatch.Draw(icon, position, null, color, 0f, origin, Vector2.One, SpriteEffects.None, 0f);

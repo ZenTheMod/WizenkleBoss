@@ -13,11 +13,32 @@ using Terraria.UI.Chat;
 using Terraria.DataStructures;
 using Terraria.ObjectData;
 using Microsoft.Xna.Framework.Graphics;
+using Terraria.Utilities;
 
 namespace WizenkleBoss.Common.Helpers
 {
     public static partial class Helper
     {
+        /// <summary>
+        /// Shorthand for the screens size.
+        /// </summary>
+        public static Vector2 ScreenSize => new(Main.screenWidth, Main.screenHeight);
+
+        /// <summary>
+        /// Shorthand for half of the screens size
+        /// </summary>
+        public static Vector2 HalfScreenSize => ScreenSize * 0.5f;
+
+        /// <summary>
+        /// Shorthand for the screens size when it gets fucked up by the uiscale for some reason.
+        /// </summary>
+        public static Vector2 UIScreenSize => ScreenSize * Main.UIScale;
+
+        /// <summary>
+        /// Shorthand for the half the screens size when it gets fucked up by the uiscale for some reason.
+        /// </summary>
+        public static Vector2 HalfUIScreenSize => UIScreenSize * 0.5f;
+
         /// <summary>
         /// Hides <paramref name="n"/> from the bestiary, useful for Projectile NPCs.
         /// </summary>
@@ -30,6 +51,7 @@ namespace WizenkleBoss.Common.Helpers
             };
             NPCID.Sets.NPCBestiaryDrawOffset.Add(n.Type, value);
         }
+
         /// <summary>
         /// Checks for any active boss.
         /// <para>Use <paramref name="type"/> to check for that NPC as a boss.</para>
@@ -46,6 +68,7 @@ namespace WizenkleBoss.Common.Helpers
             }
             return flag1;
         }
+
         /// <summary>
         /// Uses the vanilla screenshake but I made it dumber.
         /// </summary>
@@ -69,29 +92,7 @@ namespace WizenkleBoss.Common.Helpers
             PunchCameraModifier modifier = new(startPosition, direction, strength * s, vibrations * s, frames, fallOff, modType.FullName);
             Main.instance.CameraModifiers.Add(modifier);
         }
-        /// <summary>
-        /// Generate a random string of garbage characters.
-        /// </summary>
-        /// <param name="length"></param>
-        /// <param name="badidea">Terrible idea.</param>
-        /// <returns></returns>
-        public static string RandomString(int length, bool badidea = false)
-        {
-            if (length >= 2000)
-            {
-                return "F"; // :(
-            }
-            string value = "";
-                // i smashed my keyboard for this
-            string text = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890";
-                // this maybe a bad idea. but i dont care, i can do whatever i want :troll:
-            if (badidea) { text += "!@#$%&*()-=_+~`[]{}|;'<>?,./"; }
-            for (int i = 0; i < length; i++)
-            {
-                value += text[Main.rand.Next(0, text.Length)];
-            }
-            return value;
-        }
+
         /// <summary>
         /// </summary>
         /// <param name="projectileID"></param>
@@ -105,6 +106,7 @@ namespace WizenkleBoss.Common.Helpers
             }
             return false;
         }
+
         /// <summary>
 		/// Atttempts to find the top-left corner of a multitile at location (<paramref name="x"/>, <paramref name="y"/>)
 		/// </summary>
@@ -135,6 +137,7 @@ namespace WizenkleBoss.Common.Helpers
 
             return new Point16(x - frameX, y - frameY);
         }
+
         /// <summary>
 		/// Uses <seealso cref="GetTopLeftTileInMultitile(int, int)"/> to try to get the entity bound to the multitile at (<paramref name="i"/>, <paramref name="j"/>).
 		/// </summary>
@@ -158,6 +161,7 @@ namespace WizenkleBoss.Common.Helpers
             entity = null;
             return false;
         }
+
         public static bool IsOnGroundPrecise(this Player player)
         {
             var tile1 = Main.tile[(int)(player.position.X / 16f), (int)((player.position.Y + (player.gravDir == 1 ? player.Size.Y + 1 : -1)) / 16f)];
@@ -165,6 +169,14 @@ namespace WizenkleBoss.Common.Helpers
 
             return (tile1.HasTile && (Main.tileSolid[tile1.TileType] || Main.tileSolidTop[tile1.TileType]) && player.velocity.Y == 0f) ||
                 (tile2.HasTile && (Main.tileSolid[tile2.TileType] || Main.tileSolidTop[tile2.TileType]) && player.velocity.Y == 0f);
+        }
+
+        public static Vector2 NextUniformVector2Circular(this UnifiedRandom rand, float radius)
+        {
+            float a = rand.NextFloat() * 2 * MathHelper.Pi;
+            float r = radius * MathF.Sqrt(rand.NextFloat());
+
+            return new Vector2(r * MathF.Cos(a), r * MathF.Sin(a));
         }
     }
 }

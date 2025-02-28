@@ -17,6 +17,7 @@ using WizenkleBoss.Common.Config;
 using WizenkleBoss.Common.Helpers;
 using WizenkleBoss.Common.ILDetourSystems;
 using WizenkleBoss.Common.Packets;
+using WizenkleBoss.Common.Registries;
 using WizenkleBoss.Content.Buffs;
 using WizenkleBoss.Content.Dusts;
 using WizenkleBoss.Content.Items.Dyes;
@@ -43,7 +44,7 @@ namespace WizenkleBoss.Common.Ink
                 if (value != _InTile && Player.whoAmI == Main.myPlayer)
                 {
                     this.CameraShakeSimple(Player.position, Vector2.Zero, 10f, 19, 11, 0);
-                    SoundEngine.PlaySound(value ? AudioRegistry.InkEnterTile : AudioRegistry.InkExitTile, null);
+                    SoundEngine.PlaySound(value ? Sounds.InkEnterTile : Sounds.InkExitTile, null);
                     ArmorShaderData shader = GameShaders.Armor.GetShaderFromItemId(ModContent.ItemType<InkDye>());
                     for (int i = 0; i < 25; i++)
                     {
@@ -65,7 +66,7 @@ namespace WizenkleBoss.Common.Ink
             {
                 if (value != _InkBuffActive && value == false && Player.whoAmI == Main.myPlayer)
                 {
-                    SoundEngine.PlaySound(AudioRegistry.InkEffectEnd, null);
+                    SoundEngine.PlaySound(Sounds.InkEffectEnd, null);
                 }
                 _InkBuffActive = value;
             }
@@ -90,7 +91,7 @@ namespace WizenkleBoss.Common.Ink
             if (InkKeybindSystem.InkDash.JustPressed && InkDashCooldown == -60 && InGhostInk)
             {
                 if (Player.whoAmI == Main.myPlayer)
-                    SoundEngine.PlaySound(AudioRegistry.InkDash, null);
+                    SoundEngine.PlaySound(Sounds.InkDash, null);
                 dashOldPos = new Vector2[15];
                 if (Player.mount.Active)
                 {
@@ -181,7 +182,7 @@ namespace WizenkleBoss.Common.Ink
                 ArmorShaderData shader = GameShaders.Armor.GetShaderFromItemId(ModContent.ItemType<InkDye>());
                 if (InkDashCooldown == -1)
                 {
-                    SoundEngine.PlaySound(AudioRegistry.InkDashEnd, null);
+                    SoundEngine.PlaySound(Sounds.InkDashEnd, null);
                     for (int i = 0; i < 15; i++)
                     {
                         Vector2 vel = Vector2.Normalize(DashVelocity).RotatedByRandom(0.6f);
@@ -236,7 +237,7 @@ namespace WizenkleBoss.Common.Ink
                         {
                             if (timer++ >= 20)
                             {
-                                SoundEngine.PlaySound(AudioRegistry.InkBurrowing, null);
+                                SoundEngine.PlaySound(Sounds.InkBurrowing, null);
                                 timer = 0;
                             }
                             this.CameraShakeSimple(Player.position, Vector2.Zero, 2.4f, 11, 2, 0);

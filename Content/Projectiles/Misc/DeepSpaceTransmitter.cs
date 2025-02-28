@@ -9,6 +9,7 @@ using Terraria.ModLoader;
 using Terraria.UI;
 using WizenkleBoss.Common.Config;
 using WizenkleBoss.Common.Helpers;
+using WizenkleBoss.Common.Registries;
 using WizenkleBoss.Content.Dusts;
 using WizenkleBoss.Content.UI;
 using static WizenkleBoss.Content.Projectiles.Misc.DeepSpaceTransmitterHelper;
@@ -87,13 +88,13 @@ namespace WizenkleBoss.Content.Projectiles.Misc
                         //  triangles are so hot am i right          :+#%%%%*:                     ::++-::                    
                         //                                              ::::                                                  
 
-                vertices.Add(new VertexPositionColorTexture(new Vector3((_PointsCache[(int)i] - Main.screenPosition + new Vector2(width, 0).RotatedBy(Projectile.rotation - MathHelper.PiOver2)) / 2, 0),
+                vertices.Add(new VertexPositionColorTexture(new Vector3(_PointsCache[(int)i] - Main.screenPosition + new Vector2(width, 0).RotatedBy(Projectile.rotation - MathHelper.PiOver2), 0),
                     Color.White, // doesnt matter what color (itll get replaced by our shader anyway)
                     new Vector2(progress, 0f)
                     ));
 
                     // Then copy my own homework and change - MathHelper.PiOver2 to + MathHelper.PiOver2;
-                vertices.Add(new VertexPositionColorTexture(new Vector3((_PointsCache[(int)i] - Main.screenPosition + new Vector2(width, 0).RotatedBy(Projectile.rotation + MathHelper.PiOver2)) / 2, 0),
+                vertices.Add(new VertexPositionColorTexture(new Vector3(_PointsCache[(int)i] - Main.screenPosition + new Vector2(width, 0).RotatedBy(Projectile.rotation + MathHelper.PiOver2), 0),
                     Color.White, // doesnt matter what color (itll get replaced by our shader anyway)
                     new Vector2(progress, 1f)
                     ));
@@ -201,7 +202,7 @@ namespace WizenkleBoss.Content.Projectiles.Misc
             _PointsCache.Clear();
             Vector2 offset = Vector2.One * 30;
             for (int i = 0; i < length; i++)
-                _PointsCache.Add(Vector2.Lerp(Projectile.Center + offset, endPoint, (float)i / (float)(length - 1))); // FLOAT CAST (I FORGOT THIS, DO NOT PULL A ZEN)
+                _PointsCache.Add(Vector2.Lerp(Projectile.Center + offset, endPoint, (float)i / (length - 1))); // FLOAT CAST (I FORGOT THIS, DO NOT PULL A ZEN)
         }
 
         private void FadeInAI()
@@ -219,10 +220,10 @@ namespace WizenkleBoss.Content.Projectiles.Misc
             {
                     // Don't defean the elderly.
                 if (ModContent.GetInstance<SFXConfig>().LaserLoop)
-                    SoundEngine.PlaySound(AudioRegistry.SateliteDeathray);
+                    SoundEngine.PlaySound(Sounds.SateliteDeathray);
                 SoundPlayed = true;
             }
-            MusicKiller.MuffleFactor = 1f - ((float)counter / 200f);
+            MusicKiller.MuffleFactor = 1f - (counter / 200f);
             if (counter >= 200)
             {
                 if (darkness >= 0.3f)

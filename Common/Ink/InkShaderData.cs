@@ -9,6 +9,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using WizenkleBoss.Common.Config;
 using WizenkleBoss.Common.Helpers;
+using WizenkleBoss.Common.Registries;
 using WizenkleBoss.Content.NPCs.InkCreature;
 
 namespace WizenkleBoss.Common.Ink
@@ -26,11 +27,11 @@ namespace WizenkleBoss.Common.Ink
 
             bool shouldBeActive = InkSystem.AnyActiveInk;
 
-            if (shouldBeActive && !Helper.InkShader.Active)
-                Helper.InkShader.Active = true;
+            if (shouldBeActive && !Shaders.InkShader.Active)
+                Shaders.InkShader.Active = true;
 
-            if (!shouldBeActive && Helper.InkShader.Active)
-                Helper.InkShader.Active = false;
+            if (!shouldBeActive && Shaders.InkShader.Active)
+                Shaders.InkShader.Active = false;
         }
         public override void Update(GameTime gameTime)
         {

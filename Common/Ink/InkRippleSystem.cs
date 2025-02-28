@@ -6,6 +6,7 @@ using Terraria.GameContent;
 using Terraria.ModLoader;
 using Terraria.GameContent.Shaders;
 using WizenkleBoss.Common.Helpers;
+using WizenkleBoss.Common.Registries;
 
 namespace WizenkleBoss.Common.Ink
 {
@@ -115,7 +116,7 @@ namespace WizenkleBoss.Common.Ink
                     // GREEN: Previous state
                     // BLUE: New ripples
                     // ALPHA: Unused
-            var Processor = Helper.WaterProcessor;
+            var Processor = Shaders.WaterProcessor;
 
             Processor.Value.Parameters["ScreenSize"]?.SetValue(targetSize);
             Processor.Value.Parameters["Decay"]?.SetValue(0.94f);    // DO NOT SET ABOVE 1.f
@@ -137,10 +138,10 @@ namespace WizenkleBoss.Common.Ink
                 Vector2 position = ripple.Position - offset;
                 Vector2 size = ripple.Size;
 
-                Texture2D value = TextureRegistry.Bloom.Value;
+                Texture2D value = Textures.Bloom.Value;
                 spriteBatch.Draw(value, position * scale, null, new Color(0f, 0f, ripple.Intensity * ripple.BloomIntensity) with { A = 0 }, 0f, value.Size() / 2, size * scale * 1.2f, SpriteEffects.None, 0f);
 
-                Texture2D circle = TextureRegistry.Circle.Value;
+                Texture2D circle = Textures.Circle.Value;
                 spriteBatch.Draw(circle, position * scale, null, new Color(0f, 0f, ripple.Intensity), 0f, circle.Size() / 2, size * scale, SpriteEffects.None, 0f);
             }
             rippleCount = 0;

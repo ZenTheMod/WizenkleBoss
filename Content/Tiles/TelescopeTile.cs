@@ -51,7 +51,7 @@ namespace WizenkleBoss.Content.Tiles
 
             TelescopeUISystem.telescopeTilePosition = new Point(i, j).ToWorldCoordinates();
 
-            BaseFancyUI.GenericOpenFancyUI(TelescopeUISystem.barrierTelescopeUI, player);
+            Helper.GenericOpenFancyUI(TelescopeUISystem.telescopeUI, player);
 
             return true;
         }

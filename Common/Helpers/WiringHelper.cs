@@ -13,9 +13,7 @@ using Terraria.ID;
 
 namespace WizenkleBoss.Common.Helpers
 {
-        // FUCK THE SERVER WOOOOOOOOO
-    [Autoload(Side = ModSide.Client)]
-    public static class WiringHelper
+    public static partial class Helper
     {
 
             // ALL CREDIT OF THIS GOES TO JUNE, IM SO ASS AT GOOD CODE ITS NOT EVEN FUNNY.

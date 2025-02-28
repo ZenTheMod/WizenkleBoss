@@ -3,16 +3,18 @@
 	<!-- Import tModLoader mod properties -->
 	<Import Project="..\tModLoader.targets" />
 
-	<!-- General -->
+	<!-- Make the compiler shut the fuck up -->
 	<PropertyGroup>
 	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-	  <NoWarn>MSB3270, SYSLIB0050, SYSLIB00</NoWarn>
+	  <NoWarn>MSB3270, CS0436, CS8618, CS8605, CS8603, CS8601, CS8600, CS8625, SYSLIB0050, SYSLIB00, X3206, X4717</NoWarn>
 	</PropertyGroup>
 
-	<!-- References -->
+	<!-- Find shaders to compile -->
 	<ItemGroup>
 	  <EffectFiles Include="**/*.fx" />
 	</ItemGroup>
+	
+	<!-- References -->
 	<ItemGroup>
 	  <Reference Include="NetEasy">
 	    <HintPath>lib\NetEasy_v0.1.8.dll</HintPath>
@@ -20,16 +22,21 @@
 	  <Reference Include="NetSerializer">
 	    <HintPath>lib\NetSerializer.dll</HintPath>
 	  </Reference>
+	  <Reference Include="RealisticSky">
+	    <HintPath>..\ModAssemblies\RealisticSky_v1.0.24.dll</HintPath>
+	  </Reference>
 	  <Reference Include="StructureHelper">
 	    <HintPath>lib\StructureHelper.dll</HintPath>
 	  </Reference>
 	</ItemGroup>
+	
+	<!-- Publicizer -->
 	<ItemGroup>
       <PackageReference Include="Krafs.Publicizer" PrivateAssets="true" Version="2.2.1" />
 	  <Publicize Include="tModLoader" IncludeVirtualMembers="false" IncludeCompilerGeneratedMembers="false" />
 	</ItemGroup>
 
-	<!-- Compilation -->
+	<!-- FXC Compilation -->
 	<Target Name="BuildEffects" BeforeTargets="Build">
       <Exec Command="@(EffectFiles->'&quot;$(ProjectDir)/Assets/Effects/Compiler/fxc.exe&quot; &quot;%(RecursiveDir)%(FileName)%(Extension)&quot; /T fx_2_0 /nologo /Fo &quot;%(RecursiveDir)%(FileName).fxc&quot; &#xA;&#xD;')" WorkingDirectory="$(ProjectDir)" IgnoreExitCode="false" />
     </Target>

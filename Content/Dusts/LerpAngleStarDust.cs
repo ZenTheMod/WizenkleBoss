@@ -8,6 +8,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using WizenkleBoss.Common.Helpers;
+using WizenkleBoss.Common.Registries;
 using static WizenkleBoss.Content.Projectiles.Misc.DeepSpaceTransmitterHelper;
 
 namespace WizenkleBoss.Content.Dusts
@@ -78,11 +79,11 @@ namespace WizenkleBoss.Content.Dusts
             {
                 float progress = (float)i / (float)length; // float cast ffs
 
-                float width = 2.3f * dust.scale * (1 - progress);
+                float width = 4.3f * dust.scale * (1 - progress);
 
                 Color col = dust.color * (1 - progress) * dust.fadeIn;
 
-                Vector2 position = (Trail[i].Position - Main.screenPosition) / 2f;
+                Vector2 position = Trail[i].Position - Main.screenPosition;
 
                 vertices.Add(new VertexPositionColorTexture(new Vector3(position + new Vector2(width, 0).RotatedBy(Trail[i].Rotation - MathHelper.PiOver2), 0),
                     col,
@@ -95,7 +96,7 @@ namespace WizenkleBoss.Content.Dusts
                     ));
             }
 
-            Main.instance.GraphicsDevice.Textures[0] = TextureRegistry.TextBoxStars.Value;
+            Main.instance.GraphicsDevice.Textures[0] = Textures.TextBoxStars.Value;
 
             if (vertices.Count > 3)
                 Main.instance.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, vertices.Count - 2);

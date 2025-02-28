@@ -1,14 +1,6 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Graphics;
-using Terraria;
-using Terraria.Chat;
-using Terraria.GameContent;
-using Terraria.GameContent.UI.Chat;
 using Terraria.UI.Chat;
 
 namespace WizenkleBoss.Common.Helpers

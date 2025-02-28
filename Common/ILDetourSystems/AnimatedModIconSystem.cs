@@ -11,6 +11,8 @@ using Terraria;
 using WizenkleBoss.Content.NPCs.InkCreature;
 using ReLogic.Content;
 using WizenkleBoss.Common.Ink;
+using Terraria.ModLoader.UI;
+using WizenkleBoss.Common.Registries;
 
 namespace WizenkleBoss.Common.ILDetourSystems
 {
@@ -40,7 +42,7 @@ namespace WizenkleBoss.Common.ILDetourSystems
                 spriteBatch.Draw(BaseIcon.Value, Vector2.Zero, Color.White);
                 spriteBatch.Draw(InkIcon.Value, Vector2.Zero, Color.White);
 
-                var barrierShader = Helper.ObjectBarrierShader;
+                var barrierShader = Shaders.ObjectInkShader;
 
                 barrierShader.Value.Parameters["embossColor"]?.SetValue(InkSystem.InkColor.ToVector4());
                 barrierShader.Value.Parameters["Size"]?.SetValue(new Vector2(80));
@@ -66,8 +68,7 @@ namespace WizenkleBoss.Common.ILDetourSystems
 
         public override void Load()
         {
-            var UIModItem = typeof(Mod).Assembly.GetType("Terraria.ModLoader.UI.UIModItem");
-            MethodInfo Draw = UIModItem.GetMethod("Draw", BindingFlags.Instance | BindingFlags.Public);
+            MethodInfo Draw = typeof(UIModItem).GetMethod("Draw", BindingFlags.Instance | BindingFlags.Public);
 
             ModIconDrawDetour = new(Draw, UpdateModIcon);
             ModIconDrawDetour?.Apply();
@@ -82,18 +83,9 @@ namespace WizenkleBoss.Common.ILDetourSystems
             Main.ContentThatNeedsRenderTargets.Remove(modIconTargetByRequest);
         }
 
-        private static void UpdateModIcon(orig_Draw orig, object self, SpriteBatch spriteBatch)
+        private static void UpdateModIcon(orig_Draw orig, UIModItem self, SpriteBatch spriteBatch)
         {
-            var UIModItem = typeof(Mod).Assembly.GetType("Terraria.ModLoader.UI.UIModItem");
-            UIImage icon = (UIImage)UIModItem.GetField("_modIcon", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(self);
-
-            object localModInstance = UIModItem.GetField("_mod", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(self);
-            var LocalMod = typeof(Mod).Assembly.GetType("Terraria.ModLoader.Core.LocalMod");
-
-            PropertyInfo nullcheckbitch = LocalMod.GetProperty("DisplayName", BindingFlags.Public | BindingFlags.Instance);
-            string displayName = (string)nullcheckbitch.GetValue(localModInstance);
-
-            if (displayName != ModContent.GetInstance<WizenkleBoss>().DisplayName)
+            if (self._mod.Name != ModContent.GetInstance<WizenkleBoss>().Name)
             {
                 orig(self, spriteBatch);
                 return;
@@ -101,7 +93,7 @@ namespace WizenkleBoss.Common.ILDetourSystems
 
             modIconTargetByRequest.Request();
             if (modIconTargetByRequest.IsReady)
-                icon.SetImage(modIconTargetByRequest.GetTarget());
+                self._modIcon.SetImage(modIconTargetByRequest.GetTarget());
             orig(self, spriteBatch);
         }
     }

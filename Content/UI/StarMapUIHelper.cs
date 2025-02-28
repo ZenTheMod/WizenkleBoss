@@ -16,6 +16,7 @@ using WizenkleBoss.Content.Projectiles.Misc;
 using System.Linq;
 using Terraria.ObjectData;
 using WizenkleBoss.Content.Tiles;
+using WizenkleBoss.Common.Registries;
 
 namespace WizenkleBoss.Content.UI
 {
@@ -112,8 +113,8 @@ namespace WizenkleBoss.Content.UI
                 Color color = config.IsMouseHovering ? Color.White : Color.Gray;
                 color *= ScaleAnim;
 
-                Vector2 origin = new(TextureRegistry.ConfigIcon.Value.Width / 2f, TextureRegistry.ConfigIcon.Value.Height);
-                Main.spriteBatch.Draw(TextureRegistry.ConfigIcon.Value, position, null, color, 0f, origin, Vector2.One, SpriteEffects.None, 0f);
+                Vector2 origin = new(Textures.ConfigIcon.Value.Width / 2f, Textures.ConfigIcon.Value.Height);
+                Main.spriteBatch.Draw(Textures.ConfigIcon.Value, position, null, color, 0f, origin, Vector2.One, SpriteEffects.None, 0f);
             }
         }
         public static void HandleTerminal()
@@ -132,7 +133,7 @@ namespace WizenkleBoss.Content.UI
                 string linereal = TerminalLines[clampedLine];
 
                 if (linereal != "\n" && linereal != "..." && linereal != " " && linereal != "" && line < TerminalLines.Length)
-                    SoundEngine.PlaySound(error ? AudioRegistry.BeepError : AudioRegistry.Beep);
+                    SoundEngine.PlaySound(error ? Sounds.BeepError : Sounds.Beep);
             }
             if (TerminalState == ContactingState.ContactingLowPower || TerminalState == ContactingState.ContactingHighPower)
             {
@@ -247,14 +248,14 @@ namespace WizenkleBoss.Content.UI
 
             if (JustReleasedTriggerSelect && TargetedStar > -1)
             {
-                SoundEngine.PlaySound(AudioRegistry.Select);
+                SoundEngine.PlaySound(Sounds.Select);
                 Prompt = PromptState.Fire;
                 FireAnim = 0f;
             }
 
             if ((triggers.JustPressed.Up || triggers.JustPressed.Left || triggers.JustPressed.Right || triggers.JustPressed.Down || JustPressedTriggerSelect) && TargetedStar > -1)
             {
-                SoundEngine.PlaySound(AudioRegistry.Deselect);
+                SoundEngine.PlaySound(Sounds.Deselect);
                 TargetedStar = -1;
                 Prompt = PromptState.None;
                 return;
@@ -335,7 +336,7 @@ namespace WizenkleBoss.Content.UI
                     {
                         if (triggers.JustReleased.MouseRight && hovering && FireAnim == 1f)
                         {
-                            SoundEngine.PlaySound(AudioRegistry.Fire);
+                            SoundEngine.PlaySound(Sounds.Fire);
                             FireAnim = 0f;
                             Prompt = PromptState.None;
                             TerminalLine = 0;
@@ -376,7 +377,7 @@ namespace WizenkleBoss.Content.UI
 
             Vector2 tileSize = new(data.Width, data.Height);
 
-            int consumed = WiringHelper.WireScanAndConsumePower(point.X, point.Y, (int)tileSize.X, (int)tileSize.Y, 200);
+            int consumed = Helper.WireScanAndConsumePower(point.X, point.Y, (int)tileSize.X, (int)tileSize.Y, 200);
             if (consumed >= 200)
                 return ContactingState.ContactingHighPower;
 

@@ -11,6 +11,7 @@ using Terraria.ModLoader;
 using Terraria.UI.Chat;
 using WizenkleBoss.Common.Config;
 using WizenkleBoss.Common.Helpers;
+using WizenkleBoss.Common.Registries;
 using static WizenkleBoss.Content.UI.StarMapUIHelper;
 
 namespace WizenkleBoss.Content.UI
@@ -37,7 +38,7 @@ namespace WizenkleBoss.Content.UI
                     spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
 
                         // Draw the background, i would normally use a different clear color, but that seems to break for some users.
-                    spriteBatch.Draw(TextureRegistry.Pixel.Value, new Rectangle(0, 0, (int)TargetSize.X, (int)TargetSize.Y), new Color(11, 8, 18) * Utils.Remap(overallcolormultiplier, 1, 2, 1, 10));
+                    spriteBatch.Draw(Textures.Pixel.Value, new Rectangle(0, 0, (int)TargetSize.X, (int)TargetSize.Y), new Color(11, 8, 18) * Utils.Remap(overallcolormultiplier, 1, 2, 1, 10));
 
                         // USE the matrix
                     spriteBatch.End();
@@ -46,7 +47,7 @@ namespace WizenkleBoss.Content.UI
 
                 Vector2 Center = new(_target.Width / 2f, _target.Height / 2f);
 
-                SpriteFont font = FontRegistry.SpaceMono.Value;
+                SpriteFont font = Fonts.SpaceMono.Value;
 
                 Color BloomColor = new Color(214, 196, 255) * 0.04f * overallcolormultiplier;
                 BloomColor.A = 0;
@@ -75,7 +76,7 @@ namespace WizenkleBoss.Content.UI
                 bool cursormode = ModContent.GetInstance<UIConfig>().SatelliteUseMousePosition;
 
                 if (BootAnim > 0.95f && CanTargetStar(false))
-                    spriteBatch.Draw(cursormode ? TextureRegistry.Cursor.Value : TextureRegistry.Circle.Value, cursormode ? (Main.MouseScreen - new Vector2(Main.screenWidth / 2, Main.screenHeight / 2)) / 2 + Center : Center, null, cursormode ? Color.White : Color.Gray with { A = 0 }, 0, cursormode ? Vector2.Zero : TextureRegistry.Circle.Value.Size() / 2, cursormode ? 1f : 0.1f, SpriteEffects.None, 0f);
+                    spriteBatch.Draw(cursormode ? Textures.Cursor.Value : Textures.Circle.Value, cursormode ? (Main.MouseScreen - new Vector2(Main.screenWidth / 2, Main.screenHeight / 2)) / 2 + Center : Center, null, cursormode ? Color.White : Color.Gray with { A = 0 }, 0, cursormode ? Vector2.Zero : Textures.Circle.Value.Size() / 2, cursormode ? 1f : 0.1f, SpriteEffects.None, 0f);
 
                     // Draw the error when you forget to plug in your router
                 if (!MapAccess && BootAnim > 0.4f)
@@ -91,11 +92,11 @@ namespace WizenkleBoss.Content.UI
             string error = Language.GetTextValue("Mods.WizenkleBoss.UI.SatelliteDish.NoMap");
             Vector2 textSize = Helper.GetStringSize(font, error, Vector2.One);
 
-            spriteBatch.Draw(TextureRegistry.Bloom.Value, Center, null, (Color.Red * 0.1f) with { A = 0 }, 0f, TextureRegistry.Bloom.Size() / 2f, (TextureRegistry.ConsoleError[1].Value.Size() / TextureRegistry.Ball.Size()) * 9f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(Textures.Bloom.Value, Center, null, (Color.Red * 0.1f) with { A = 0 }, 0f, Textures.Bloom.Size() / 2f, (Textures.ConsoleError[1].Value.Size() / Textures.Ball.Size()) * 9f, SpriteEffects.None, 0f);
             if (Main.GlobalTimeWrappedHourly * 60 % 50 < 25)
-                spriteBatch.Draw(TextureRegistry.ConsoleError[1].Value, Center, null, Color.Red, 0, TextureRegistry.ConsoleError[1].Value.Size() / 2, 1, SpriteEffects.None, 0f);
+                spriteBatch.Draw(Textures.ConsoleError[1].Value, Center, null, Color.Red, 0, Textures.ConsoleError[1].Value.Size() / 2, 1, SpriteEffects.None, 0f);
 
-            Helper.DrawColorCodedString(spriteBatch, font, error, Center + new Vector2(0, 20 + TextureRegistry.ConsoleError[1].Value.Height / 2), Color.Red, 0, textSize / 2, Vector2.One * 0.4f);
+            Helper.DrawColorCodedString(spriteBatch, font, error, Center + new Vector2(0, 20 + Textures.ConsoleError[1].Value.Height / 2), Color.Red, 0, textSize / 2, Vector2.One * 0.4f);
         }
         public static void DrawLog(SpriteBatch spriteBatch, Color BloomColor, SpriteFont font)
         {
@@ -110,7 +111,7 @@ namespace WizenkleBoss.Content.UI
                 Vector2 position = new(30, 30 + (textSize.Y * i * 0.25f));
                 bool error = TerminalState > ContactingState.ContactingHighPower && TerminalLine > 9 && i > 1;
 
-                spriteBatch.Draw(TextureRegistry.Bloom.Value, position + (textSize / 2f * 0.22f), null, error ? (Color.Red * 0.1f) with { A = 0 } : (BloomColor * 2f), 0f, TextureRegistry.Bloom.Value.Size() / 2f, (textSize / TextureRegistry.Ball.Size()) * 1.4f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(Textures.Bloom.Value, position + (textSize / 2f * 0.22f), null, error ? (Color.Red * 0.1f) with { A = 0 } : (BloomColor * 2f), 0f, Textures.Bloom.Value.Size() / 2f, (textSize / Textures.Ball.Size()) * 1.4f, SpriteEffects.None, 0f);
 
                 if (error && easteregg)
                     ChatManager.DrawColorCodedString(spriteBatch, FontAssets.DeathText.Value, TerminalLines[i], position, Color.Red, 0, Vector2.Zero, Vector2.One * 0.22f);
@@ -141,10 +142,10 @@ namespace WizenkleBoss.Content.UI
 
             float heightmultiplier = Prompt >= PromptState.Fire ? 1.3f : 1.6f;
             Rectangle backing = new(-(int)(Center.X * 2f), (int)((Center.Y - (fontSizePrompt.Y * size)) - (17 * PromptAnim)), (int)(Center.X * 6f), (int)((fontSizePrompt.Y * heightmultiplier * size) + (34 * PromptAnim)));
-            spriteBatch.Draw(TextureRegistry.Pixel.Value, backing with { Y = (int)((Center.Y - (fontSizePrompt.Y * size)) - (19 * PromptAnim)), Height = (int)((fontSizePrompt.Y * heightmultiplier * size) + (38 * PromptAnim)) }, BloomColor * 10f);
+            spriteBatch.Draw(Textures.Pixel.Value, backing with { Y = (int)((Center.Y - (fontSizePrompt.Y * size)) - (19 * PromptAnim)), Height = (int)((fontSizePrompt.Y * heightmultiplier * size) + (38 * PromptAnim)) }, BloomColor * 10f);
             Color backingColor = ModContent.GetInstance<UIConfig>().SatelliteMidnightMode ? Color.Black : new Color(11, 8, 18);
-            spriteBatch.Draw(TextureRegistry.Pixel.Value, backing, backingColor);
-            spriteBatch.Draw(TextureRegistry.Bloom.Value, backing, BloomColor * 4f);
+            spriteBatch.Draw(Textures.Pixel.Value, backing, backingColor);
+            spriteBatch.Draw(Textures.Bloom.Value, backing, BloomColor * 4f);
 
             if (Prompt == PromptState.None)
                 return;
@@ -170,21 +171,21 @@ namespace WizenkleBoss.Content.UI
             BarrierStar star = GetStarFromIndex(TargetedStar);
             Vector2 position = star.Position + UIPosition;
 
-            Vector2 origin = TextureRegistry.Circle.Value.Size() / 2;
+            Vector2 origin = Textures.Circle.Value.Size() / 2;
 
-            spriteBatch.Draw(TextureRegistry.Circle.Value, position, null, color * FireAnim, 0, origin, 0.28f * interpolator, SpriteEffects.None, 0f);
-            spriteBatch.Draw(TextureRegistry.Circle.Value, position, null, new Color(11, 8, 18) * MathHelper.Clamp(FireAnim * 4, 0, 1), 0, origin, 0.26f * interpolator, SpriteEffects.None, 0f);
+            spriteBatch.Draw(Textures.Circle.Value, position, null, color * FireAnim, 0, origin, 0.28f * interpolator, SpriteEffects.None, 0f);
+            spriteBatch.Draw(Textures.Circle.Value, position, null, new Color(11, 8, 18) * MathHelper.Clamp(FireAnim * 4, 0, 1), 0, origin, 0.26f * interpolator, SpriteEffects.None, 0f);
 
-            spriteBatch.Draw(TextureRegistry.Circle.Value, position, null, color * FireAnim * 2, 0, origin, 0.26f * interpolator * FireAnim, SpriteEffects.None, 0f);
+            spriteBatch.Draw(Textures.Circle.Value, position, null, color * FireAnim * 2, 0, origin, 0.26f * interpolator * FireAnim, SpriteEffects.None, 0f);
 
             Vector2 offsetPosition = new(position.X + MathHelper.Lerp(1, 5, interpolator + (MathHelper.Clamp(FireAnim * 4, 0, 1) * 2.1f * (interpolator - 1))), position.Y);
 
-            spriteBatch.Draw(TextureRegistry.Bracket.Value, offsetPosition, null, offsetColor * interpolator, 0, TextureRegistry.Bracket.Value.Size() / 2, 0.06f * interpolator, SpriteEffects.FlipHorizontally, 0f);
+            spriteBatch.Draw(Textures.Bracket.Value, offsetPosition, null, offsetColor * interpolator, 0, Textures.Bracket.Value.Size() / 2, 0.06f * interpolator, SpriteEffects.FlipHorizontally, 0f);
 
             offsetPosition = new Vector2(position.X - MathHelper.Lerp(1, 5, interpolator + (MathHelper.Clamp(FireAnim * 4, 0, 1) * 2.1f * (interpolator - 1))), position.Y);
 
             if (BootAnim > 0.45f)
-                spriteBatch.Draw(TextureRegistry.Bracket.Value, offsetPosition, null, offsetColor * interpolator, 0, TextureRegistry.Bracket.Value.Size() / 2, 0.06f * interpolator, SpriteEffects.None, 0f);
+                spriteBatch.Draw(Textures.Bracket.Value, offsetPosition, null, offsetColor * interpolator, 0, Textures.Bracket.Value.Size() / 2, 0.06f * interpolator, SpriteEffects.None, 0f);
         }
         public static void DrawStars(SpriteBatch spriteBatch, Color BloomColor, SpriteFont font)
         {
@@ -265,13 +266,13 @@ namespace WizenkleBoss.Content.UI
 
             if (BootAnim > 0.7f)
             {
-                spriteBatch.Draw(TextureRegistry.Bloom.Value, position, null, BloomColor, 0, TextureRegistry.Bloom.Value.Size() / 2, size * 1.2f, SpriteEffects.None, 0f);
-                spriteBatch.Draw(TextureRegistry.Bloom.Value, position, null, BloomColor * 0.3f, 0, TextureRegistry.Bloom.Value.Size() / 2, size * 2.2f, SpriteEffects.None, 0f);
-                spriteBatch.Draw(TextureRegistry.Bloom.Value, position, null, BloomColor * 0.05f, 0, TextureRegistry.Bloom.Value.Size() / 2, size * 4.4f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(Textures.Bloom.Value, position, null, BloomColor, 0, Textures.Bloom.Value.Size() / 2, size * 1.2f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(Textures.Bloom.Value, position, null, BloomColor * 0.3f, 0, Textures.Bloom.Value.Size() / 2, size * 2.2f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(Textures.Bloom.Value, position, null, BloomColor * 0.05f, 0, Textures.Bloom.Value.Size() / 2, size * 4.4f, SpriteEffects.None, 0f);
             }
 
             if (BootAnim > 0.55f)
-                spriteBatch.Draw(TextureRegistry.Circle.Value, position, null, color, 0, TextureRegistry.Circle.Value.Size() / 2, 0.2f * size, SpriteEffects.None, 0f);
+                spriteBatch.Draw(Textures.Circle.Value, position, null, color, 0, Textures.Circle.Value.Size() / 2, 0.2f * size, SpriteEffects.None, 0f);
         }
 
         public static SatelliteDishTargetContent satelliteDishTargetByRequest;

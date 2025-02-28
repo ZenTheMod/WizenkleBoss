@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using System.Security.Policy;
 using rail;
 using System.Collections.Generic;
+using WizenkleBoss.Common.Registries;
 
 namespace WizenkleBoss.Content.NPCs.InkCreature
 {
@@ -44,10 +45,10 @@ namespace WizenkleBoss.Content.NPCs.InkCreature
             Vector2 position = NPC.Center - Main.screenPosition;
 
 
-            Main.spriteBatch.Draw(TextureRegistry.Bloom.Value, position, null, (Color.White * 0.22f) with { A = 0 }, 0f, TextureRegistry.Bloom.Value.Size() / 2f, 3.6f, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(Textures.Bloom.Value, position, null, (Color.White * 0.22f) with { A = 0 }, 0f, Textures.Bloom.Value.Size() / 2f, 3.6f, SpriteEffects.None, 0f);
             Main.spriteBatch.Draw(InkCreatureAssetRegistry.Eye.Value, position, null, Color.White with { A = 0 }, 0f, InkCreatureAssetRegistry.Eye.Value.Size() / 2f, 0.8f, SpriteEffects.None, 0f);
 
-            Main.spriteBatch.Draw(TextureRegistry.Bloom.Value, position, null, (Color.White * 0.08f) with { A = 0 }, 0f, TextureRegistry.Bloom.Value.Size() / 2f, 5.6f, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(Textures.Bloom.Value, position, null, (Color.White * 0.08f) with { A = 0 }, 0f, Textures.Bloom.Value.Size() / 2f, 5.6f, SpriteEffects.None, 0f);
         }
     }
 }

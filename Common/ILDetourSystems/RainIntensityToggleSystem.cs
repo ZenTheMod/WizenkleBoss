@@ -21,6 +21,7 @@ using WizenkleBoss.Common.Config;
 using WizenkleBoss.Common.Helpers;
 using WizenkleBoss.Common.Ink;
 using WizenkleBoss.Common.MenuStyles;
+using WizenkleBoss.Common.Registries;
 
 namespace WizenkleBoss.Common.ILDetourSystems
 {
@@ -76,7 +77,7 @@ namespace WizenkleBoss.Common.ILDetourSystems
                     {
                         if (isGay)
                         {
-                            SoundEngine.PlaySound(AudioRegistry.Fire with { Volume = 0.4f});
+                            SoundEngine.PlaySound(Sounds.Fire with { Volume = 0.4f});
                             InkSystem.PrideMonth = !InkSystem.PrideMonth;
                         }
                         else

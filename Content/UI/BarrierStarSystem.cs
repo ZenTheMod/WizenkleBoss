@@ -117,12 +117,6 @@ namespace WizenkleBoss.Content.UI
                     Name = Language.GetTextValue("Mods.WizenkleBoss.StarNames.ImportantStarName")
                 };
             }
-            else // EVEN WORSE IDEA (IF YOU ARE READING THIS DO NOT DO THIS)
-            {
-                    // Get star array for joining players.
-                var requeststars = new RequestStars(Main.myPlayer);
-                requeststars.Send();
-            }
         }
         public override void PostUpdateEverything()
         {

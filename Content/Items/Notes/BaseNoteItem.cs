@@ -13,6 +13,7 @@ using WizenkleBoss.Content.Rarities;
 using WizenkleBoss.Content.UI.Notes;
 using WizenkleBoss.Common.Ink;
 using WizenkleBoss.Content.UI;
+using WizenkleBoss.Common.Helpers;
 
 namespace WizenkleBoss.Content.Items.Notes
 {
@@ -50,7 +51,7 @@ namespace WizenkleBoss.Content.Items.Notes
 
             NoteUISystem.CurrentNote = Note;
 
-            BaseFancyUI.GenericOpenFancyUI(NoteUISystem.noteUI, player);
+            Helper.GenericOpenFancyUI(NoteUISystem.noteUI, player);
         }
         public override LocalizedText Tooltip => Language.GetText("Mods.WizenkleBoss.Lore.Read");
     }

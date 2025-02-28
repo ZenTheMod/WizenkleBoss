@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 using Terraria.Localization;
 using static WizenkleBoss.Content.UI.StarMapUIHelper;
+using WizenkleBoss.Common.Registries;
 
 namespace WizenkleBoss.Content.UI
 {
@@ -27,7 +28,7 @@ namespace WizenkleBoss.Content.UI
             satelliteDishTargetByRequest.Request();
             if (satelliteDishTargetByRequest.IsReady)
             {
-                var oldMonitorShader = Helper.OldMonitorShader;
+                var oldMonitorShader = Shaders.OldMonitorShader;
                 var gd = Main.instance.GraphicsDevice;
 
                 oldMonitorShader.Value.Parameters["uTime"]?.SetValue(Main.GlobalTimeWrappedHourly * 0.06f);
@@ -35,7 +36,7 @@ namespace WizenkleBoss.Content.UI
 
                 oldMonitorShader.Value.Parameters["dithering"]?.SetValue(12);
 
-                gd.Textures[1] = TextureRegistry.Dither.Value;
+                gd.Textures[1] = Textures.Dither.Value;
                 gd.SamplerStates[1] = SamplerState.LinearWrap;
 
                 oldMonitorShader.Value.CurrentTechnique.Passes[0].Apply();
@@ -67,11 +68,11 @@ namespace WizenkleBoss.Content.UI
                         Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
 
                         float interpolator = MathF.Pow(2f, 10 * (ScaleAnim - 1));
-                        Main.spriteBatch.Draw(TextureRegistry.Pixel.Value, new Rectangle(0, 0, (int)ScreenSize.X + 30, (int)ScreenSize.Y + 30), Color.Black * interpolator);
+                        Main.spriteBatch.Draw(Textures.Pixel.Value, new Rectangle(0, 0, (int)ScreenSize.X + 30, (int)ScreenSize.Y + 30), Color.Black * interpolator);
 
                         DrawMap();
 
-                        BaseFancyUI.DrawGenericBackButton(Main.spriteBatch, FontAssets.DeathText.Value, satelliteUI.BackPanel, ScreenSize, Language.GetTextValue("UI.Back"), 0.8f);
+                        Main.spriteBatch.DrawGenericBackButton(FontAssets.DeathText.Value, satelliteUI.BackPanel, ScreenSize, Language.GetTextValue("UI.Back"), 0.8f);
 
                         DrawConfigButton();
 

@@ -4,18 +4,14 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.Graphics.Shaders;
 using ReLogic.Content;
 using Terraria.Graphics.Effects;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Terraria;
 using WizenkleBoss.Common.Ink;
 
-namespace WizenkleBoss.Common.Helpers
+namespace WizenkleBoss.Common.Registries
 {
-    public static partial class Helper
+    public class Shaders : ModSystem
     {
         internal static Asset<Effect> RotationShader;
-        internal static Asset<Effect> ObjectBarrierShader;
+        internal static Asset<Effect> ObjectInkShader;
         internal static Asset<Effect> PixelationShader;
         internal static Asset<Effect> CoronariesShader;
         internal static Asset<Effect> GlitchyShader;
@@ -31,7 +27,7 @@ namespace WizenkleBoss.Common.Helpers
 
         private const string ShaderPath = "WizenkleBoss/Assets/Effects/";
 
-        public static void LoadShaders()
+        public override void Load()
         {
             static Asset<Effect> LoadShader(string path) => ModContent.Request<Effect>($"{ShaderPath}{path}"); // wooooo async loadinggg !! (lolxd would be proud)
             string pass = "AutoloadPass";
@@ -39,7 +35,7 @@ namespace WizenkleBoss.Common.Helpers
             RotationShader = LoadShader("Shaders/Rotation");
             PixelationShader = LoadShader("Shaders/PixelationShader");
 
-            ObjectBarrierShader = LoadShader("Shaders/BarrierButSingleLayer");
+            ObjectInkShader = LoadShader("Shaders/BarrierButSingleLayer");
 
             CoronariesShader = LoadShader("Shaders/Coronaries");
 

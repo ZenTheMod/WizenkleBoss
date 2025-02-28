@@ -94,7 +94,7 @@ namespace WizenkleBoss.Content.Tiles
             StarMapUIHelper.TerminalAnim = 0f;
             StarMapUIHelper.TerminalState = ContactingState.None;
 
-            BaseFancyUI.GenericOpenFancyUI(StarMapUIHelper.satelliteUI, player);
+            Helper.GenericOpenFancyUI(StarMapUIHelper.satelliteUI, player);
 
             return true;
         }
@@ -109,7 +109,7 @@ namespace WizenkleBoss.Content.Tiles
                 return false;
 
             Vector2 tileSize = new(data.Width, data.Height);
-            if (WiringHelper.WireScanForTileType(pos16.X, pos16.Y, (int)tileSize.X, (int)tileSize.Y, ModContent.TileType<ObservatorySatelliteDishTile>(), out Point16? tl))
+            if (Helper.WireScanForTileType(pos16.X, pos16.Y, (int)tileSize.X, (int)tileSize.Y, ModContent.TileType<ObservatorySatelliteDishTile>(), out Point16? tl))
             {
                 if (tl == null)
                     return false;

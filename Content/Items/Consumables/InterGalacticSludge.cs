@@ -5,6 +5,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using WizenkleBoss.Common.Helpers;
 using WizenkleBoss.Common.Ink;
+using WizenkleBoss.Common.Registries;
 using WizenkleBoss.Content.Buffs;
 using WizenkleBoss.Content.Dusts;
 using WizenkleBoss.Content.Items.Dyes;
@@ -32,7 +33,7 @@ namespace WizenkleBoss.Content.Items.Consumables
             Item.useAnimation = 23;
             Item.useTime = 23;
             Item.useTurn = true;
-            Item.UseSound = AudioRegistry.InkEffectDrinkStart;
+            Item.UseSound = Sounds.InkEffectDrinkStart;
             Item.maxStack = Item.CommonMaxStack;
             Item.consumable = true;
 

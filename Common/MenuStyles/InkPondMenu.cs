@@ -21,14 +21,15 @@ using Terraria.ID;
 using Terraria.Graphics.Effects;
 using Terraria.GameContent.Skies;
 using Terraria.GameContent.Events;
+using WizenkleBoss.Common.Registries;
 
 namespace WizenkleBoss.Common.MenuStyles
 {
     public class InkPondMenu : ModMenu
     {
         public override string DisplayName => Language.GetTextValue("Mods.WizenkleBoss.MenuStyles.InkPond");
-        public override Asset<Texture2D> SunTexture => TextureRegistry.Invis;
-        public override Asset<Texture2D> MoonTexture => TextureRegistry.Invis;
+        public override Asset<Texture2D> SunTexture => Textures.Invis;
+        public override Asset<Texture2D> MoonTexture => Textures.Invis;
 
         private static Vector2 OldMouseScreen;
 
@@ -58,7 +59,7 @@ namespace WizenkleBoss.Common.MenuStyles
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.UIScaleMatrix);
 
-            spriteBatch.Draw(TextureRegistry.Pixel.Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.Black * (HeavyRain ? 1f : 0.9f));
+            spriteBatch.Draw(Textures.Pixel.Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.Black * (HeavyRain ? 1f : 0.9f));
 
                 // Mouse ripple trail
             Vector2 MouseScale = Vector2.One * 0.4f * Main.UIScale;
@@ -88,7 +89,7 @@ namespace WizenkleBoss.Common.MenuStyles
             InkRippleSystem.requestedThisFrame = true;
             if (InkRippleSystem.isReady)
             {
-                var Ink = Helper.WaterInkColorizer;
+                var Ink = Shaders.WaterInkColorizer;
 
                 Ink.Value.Parameters["InkColor"]?.SetValue(InkSystem.InkColor.ToVector4());
                 Ink.Value.Parameters["RippleStrength"]?.SetValue(20f);
@@ -97,13 +98,13 @@ namespace WizenkleBoss.Common.MenuStyles
                 spriteBatch.Draw(InkRippleSystem.rippleTarget, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White);
             }
 
-            var barrierShader = Helper.ObjectBarrierShader;
+            var inkShader = Shaders.ObjectInkShader;
 
-            barrierShader.Value.Parameters["embossColor"]?.SetValue(InkSystem.InkColor.ToVector4());
-            barrierShader.Value.Parameters["Size"]?.SetValue(Logo.Value.Size());
-            barrierShader.Value.Parameters["uTime"]?.SetValue(Main.GlobalTimeWrappedHourly);
+            inkShader.Value.Parameters["embossColor"]?.SetValue(InkSystem.InkColor.ToVector4());
+            inkShader.Value.Parameters["Size"]?.SetValue(Logo.Value.Size());
+            inkShader.Value.Parameters["uTime"]?.SetValue(Main.GlobalTimeWrappedHourly);
 
-            barrierShader.Value.CurrentTechnique.Passes[0].Apply();
+            inkShader.Value.CurrentTechnique.Passes[0].Apply();
 
             Vector2 logoOffset = new Vector2(MathF.Sin(Main.GlobalTimeWrappedHourly * 0.3f), MathF.Cos(Main.GlobalTimeWrappedHourly * 0.07f)) * 13f;
             Vector2 logoPosition = logoDrawCenter + logoOffset;

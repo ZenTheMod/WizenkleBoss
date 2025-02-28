@@ -5,6 +5,7 @@ using Terraria;
 using Terraria.ModLoader;
 using WizenkleBoss.Common.Helpers;
 using WizenkleBoss.Common.Ink;
+using WizenkleBoss.Common.Registries;
 using WizenkleBoss.Content.Rarities;
 
 namespace WizenkleBoss.Content.Items
@@ -25,18 +26,18 @@ namespace WizenkleBoss.Content.Items
 
             var snapshit = Main.spriteBatch.CaptureSnapshot();
 
-            var barrierShader = Helper.ObjectBarrierShader;
+            var inkShader = Shaders.ObjectInkShader;
 
-            barrierShader.Value.Parameters["embossColor"]?.SetValue(InkSystem.InkColor.ToVector4());
+            inkShader.Value.Parameters["embossColor"]?.SetValue(InkSystem.InkColor.ToVector4());
 
-            barrierShader.Value.Parameters["Size"]?.SetValue(glowTexture.Size());
+            inkShader.Value.Parameters["Size"]?.SetValue(glowTexture.Size());
 
-            barrierShader.Value.Parameters["uTime"]?.SetValue(Main.GlobalTimeWrappedHourly);
+            inkShader.Value.Parameters["uTime"]?.SetValue(Main.GlobalTimeWrappedHourly);
 
-            barrierShader.Value.CurrentTechnique.Passes[0].Apply();
+            inkShader.Value.CurrentTechnique.Passes[0].Apply();
 
             Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, barrierShader.Value, Main.GameViewMatrix.ZoomMatrix);
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, inkShader.Value, Main.GameViewMatrix.ZoomMatrix);
 
             Main.spriteBatch.Draw(glowTexture, Item.position - Main.screenPosition + (glowTexture.Size() / 2), null, Color.White, rotation, glowTexture.Size() / 2, scale, SpriteEffects.None, 0f);
 
@@ -51,18 +52,18 @@ namespace WizenkleBoss.Content.Items
 
             var snapshit = Main.spriteBatch.CaptureSnapshot();
 
-            var barrierShader = Helper.ObjectBarrierShader;
+            var inkShader = Shaders.ObjectInkShader;
 
-            barrierShader.Value.Parameters["embossColor"]?.SetValue(InkSystem.InkColor.ToVector4());
+            inkShader.Value.Parameters["embossColor"]?.SetValue(InkSystem.InkColor.ToVector4());
 
-            barrierShader.Value.Parameters["Size"]?.SetValue(glowTexture.Size());
+            inkShader.Value.Parameters["Size"]?.SetValue(glowTexture.Size());
 
-            barrierShader.Value.Parameters["uTime"]?.SetValue(Main.GlobalTimeWrappedHourly);
+            inkShader.Value.Parameters["uTime"]?.SetValue(Main.GlobalTimeWrappedHourly);
 
-            barrierShader.Value.CurrentTechnique.Passes[0].Apply();
+            inkShader.Value.CurrentTechnique.Passes[0].Apply();
 
             Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, barrierShader.Value, Main.UIScaleMatrix);
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, inkShader.Value, Main.UIScaleMatrix);
 
             Main.spriteBatch.Draw(glowTexture, position, null, Color.White, 0, glowTexture.Size() / 2, scale, SpriteEffects.None, 0f);
 

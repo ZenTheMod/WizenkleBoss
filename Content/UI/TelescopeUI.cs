@@ -4,6 +4,7 @@ using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.UI.Gamepad;
 using WizenkleBoss.Common.Helpers;
+using WizenkleBoss.Common.Registries;
 
 namespace WizenkleBoss.Content.UI
 {
@@ -18,7 +19,7 @@ namespace WizenkleBoss.Content.UI
 
             InitializeUI();
 
-            SoundEngine.PlaySound(AudioRegistry.TelescopeOpen);
+            SoundEngine.PlaySound(Sounds.TelescopeOpen);
             if (PlayerInput.UsingGamepadUI)
                 UILinkPointNavigator.ChangePoint(3002);
         }
@@ -30,7 +31,7 @@ namespace WizenkleBoss.Content.UI
             DIE = SoundEngine.FindActiveSound(SoundID.MenuOpen);
             DIE?.Stop();
 
-            SoundEngine.PlaySound(AudioRegistry.TelescopeClose);
+            SoundEngine.PlaySound(Sounds.TelescopeClose);
             Main.playerInventory = false;
         }
     }
