@@ -13,8 +13,6 @@ namespace WizenkleBoss.Common.StarRewrite
 {
     public class StarRendererSystem : ModSystem
     {
-        public static bool drawingRealisticStars = false;
-
         public class StarTargetContent : ARenderTargetContentByRequest
         {
             protected override void HandleUseReqest(GraphicsDevice device, SpriteBatch spriteBatch)
@@ -30,7 +28,7 @@ namespace WizenkleBoss.Common.StarRewrite
                 device.SetRenderTarget(_target);
                 device.Clear(Color.Transparent);
 
-                Vector2 center = new(Main.screenWidth * 0.5f, Main.screenHeight * 0.7f);
+                Vector2 center = Helper.HalfScreenSize;
 
                 if (pixelated)
                     spriteBatch.BeginHalfScale(SpriteSortMode.Deferred, BlendState.AlphaBlend);
@@ -42,12 +40,7 @@ namespace WizenkleBoss.Common.StarRewrite
                 if (alpha != 0)
                     DrawStars(spriteBatch, center, alpha);
 
-                if (ModContent.GetInstance<VFXConfig>().DrawRealisticStars)
-                {
-                    drawingRealisticStars = true;
-                    RealisticSkyCompatSystem.DrawRealisticStarsAtTheCorrectLayer(alpha * 0.5f, pixelated ? Helper.HalfScale : Matrix.Identity);
-                    drawingRealisticStars = false;
-                }
+                RealisticSkyCompatHelper.DrawRealisticStars(alpha * 0.5f, pixelated ? Helper.HalfScale : Matrix.Identity);
 
                     // InteractableStar inkStar = StarSystem.stars[0];
 
@@ -63,7 +56,7 @@ namespace WizenkleBoss.Common.StarRewrite
                 for (int i = 1; i < starCount - 1; i++)
                 {
                     if (supernovae[i] >= (byte)SupernovaProgress.Exploding)
-                        return;
+                        continue;
 
                     InteractableStar star = stars[i];
 

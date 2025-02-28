@@ -12,6 +12,8 @@ namespace WizenkleBoss.Common.StarRewrite
         public static float SunMoonRotation;
         public static float SunMoonScale;
 
+        public static Vector2 SceneAreaSize;
+
             // This is fine because this is ONLY changed on load.
         private static bool ShouldSkipSunMoonDrawing => ModContent.GetInstance<VFXConfig>().SunAndMoonRework;
 
@@ -33,18 +35,17 @@ namespace WizenkleBoss.Common.StarRewrite
                 i => i.MatchCall<Vector2>("op_Addition"),
                 i => i.MatchStloc(22));
 
-                // skip sun drawing
-            if (ShouldSkipSunMoonDrawing)
-                c.EmitBr(sunSkipTarget);
+            c.EmitDelegate(() => ShouldSkipSunMoonDrawing);
+            c.EmitBrtrue(sunSkipTarget);
 
             c.GotoNext(MoveType.Before,
                 i => i.MatchLdsfld<Main>("dayTime"),
                 i => i.MatchBrtrue(out _),
                 i => i.MatchLdcR4(1f));
 
-            if (ShouldSkipSunMoonDrawing)
-                c.MarkLabel(sunSkipTarget);
+            c.MarkLabel(sunSkipTarget);
 
+            c.EmitLdarg1(); // SceneArea
             c.EmitLdloc(22); // Position
             c.EmitLdloc(18); // Color
             c.EmitLdloc(7); // Rotation
@@ -59,17 +60,17 @@ namespace WizenkleBoss.Common.StarRewrite
                 i => i.MatchCall<Vector2>("op_Addition"),
                 i => i.MatchStloc(25));
 
-            if (ShouldSkipSunMoonDrawing)
-                c.EmitBr(moonSkipTarget);
+            c.EmitDelegate(() => ShouldSkipSunMoonDrawing);
+            c.EmitBrtrue(moonSkipTarget);
 
             c.GotoNext(MoveType.Before,
                 i => i.MatchLdsfld<Main>("dayTime"),
                 i => i.MatchBrfalse(out _),
                 i => i.MatchLdloc(4));
 
-            if (ShouldSkipSunMoonDrawing)
-                c.MarkLabel(moonSkipTarget);
+            c.MarkLabel(moonSkipTarget);
 
+            c.EmitLdarg1(); // SceneArea
             c.EmitLdloc(25); // Position
             c.EmitLdarg2(); // Color
             c.EmitLdloc(11); // Rotation
@@ -78,12 +79,14 @@ namespace WizenkleBoss.Common.StarRewrite
             c.EmitDelegate(FetchInfo); // (Rectangle?)new Rectangle(0, TextureAssets.Moon[num].Width() * Main.moonPhase, TextureAssets.Moon[num].Width(), TextureAssets.Moon[num].Width())
         }
 
-        private void FetchInfo(Vector2 position, Color color, float rotation, float scale)
+        private void FetchInfo(Main.SceneArea sceneArea, Vector2 position, Color color, float rotation, float scale)
         {
             SunMoonPosition = position;
             SunMoonColor = color;
             SunMoonRotation = rotation;
             SunMoonScale = scale;
+
+            SceneAreaSize = new(sceneArea.totalWidth, sceneArea.totalHeight);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace WizenkleBoss.Common.StarRewrite
         public static readonly Asset<Texture2D> PumpkinMoon = LoadTexture2D("Moon_Pumpkin");
         public static readonly Asset<Texture2D> SnowMoon = LoadTexture2D("Moon_Snow");
 
-        public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<VFXConfig>().SunAndMoonRework;
+            // public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<VFXConfig>().SunAndMoonRework;
 
         private static Asset<Texture2D> LoadTexture2D(string TexturePath)
         {

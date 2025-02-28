@@ -13,9 +13,6 @@ namespace WizenkleBoss.Common.Config
         public override ConfigScope Mode => ConfigScope.ClientSide;
 
         [DefaultValue(false)]
-        public bool TelescopeDebugText;
-
-        [DefaultValue(false)]
         public bool DebugColoredRipples;
     }
 }

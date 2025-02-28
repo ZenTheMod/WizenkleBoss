@@ -25,13 +25,15 @@ namespace WizenkleBoss.Content.UI
         public static bool inUI => telescopeUI.InUI;
 
         public static Vector2 telescopeTilePosition;
-        public static Vector2 telescopeUIOffset;
-        public static Vector2 telescopeUIOffsetVelocity;
+        public static Vector2 telescopeUIPosition;
+        public static Vector2 telescopeUIVelocity;
 
         public static int blinkCounter = -10;
         private static int blinkFrame = -1;
 
         private static bool prompt = true;
+
+        public static Matrix TelescopeMatrix => Matrix.CreateTranslation(TargetSize.X / 2f, TargetSize.Y / 2f, 0f) * Matrix.CreateTranslation(-telescopeUIPosition.X, -telescopeUIPosition.Y, 0f) * Matrix.CreateScale(0.75f);
 
         private static void DrawTelescope()
         {
@@ -121,30 +123,14 @@ namespace WizenkleBoss.Content.UI
             if (inUI)
             {
                 Main.LocalPlayer.mouseInterface = true;
-                Vector2 normalized = Vector2.Zero;
 
-                if ((PlayerInput.Triggers.JustPressed.Up || PlayerInput.Triggers.JustPressed.Left || PlayerInput.Triggers.JustPressed.Right || PlayerInput.Triggers.JustPressed.Down) && Main.rand.NextBool(2))
-                    SoundEngine.PlaySound(Sounds.TelescopePan);
+                float speed = Utils.Remap(ModContent.GetInstance<UIConfig>().TelescopeMovementVelocity / 100, 0f, 1f, 0.05f, 0.2f);
 
-                if ((PlayerInput.Triggers.Current.Up || PlayerInput.Triggers.Current.Left || PlayerInput.Triggers.Current.Right || PlayerInput.Triggers.Current.Down) && prompt && ModContent.GetInstance<UIConfig>().TelescopeMovementKeyPrompt)
+                    // Nest it in a fucking if bcus yes.
+                if (Helper.DoPanningMovement(ref telescopeUIPosition, ref telescopeUIVelocity, 0.96f, speed, 1000, true, Sounds.TelescopePan, 2) 
+                    && prompt && ModContent.GetInstance<UIConfig>().TelescopeMovementKeyPrompt)
                     prompt = false;
-
-                if (PlayerInput.Triggers.Current.Up)
-                    normalized += new Vector2(0, 1);
-                if (PlayerInput.Triggers.Current.Left)
-                    normalized += new Vector2(1, 0);
-                if (PlayerInput.Triggers.Current.Right)
-                    normalized += new Vector2(-1, 0);
-                if (PlayerInput.Triggers.Current.Down)
-                    normalized += new Vector2(0, -1);
-
-                normalized = normalized.SafeNormalize(Vector2.Zero);
-
-                telescopeUIOffsetVelocity += normalized * 0.06f * Utils.Remap(ModContent.GetInstance<UIConfig>().TelescopeMovementVelocity / 100, 0f, 1f, 1f, 3f);
             }
-            telescopeUIOffsetVelocity *= 0.96f;
-            telescopeUIOffset += telescopeUIOffsetVelocity;
-            telescopeUIOffset = telescopeUIOffset.SafeNormalize(Vector2.Zero) * Utils.Clamp(telescopeUIOffset.Length(), 0, 1000);
 
             UpdateBlinkAnimation();
         }

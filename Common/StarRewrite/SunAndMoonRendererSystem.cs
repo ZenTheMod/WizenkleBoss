@@ -44,6 +44,7 @@ namespace WizenkleBoss.Common.StarRewrite
                 float rotation = SunMoonRotation;
                 float scale = SunMoonScale;
                 float centerX = Main.screenWidth / 2f;
+                float distanceFromTop = (position.Y + 50) / SceneAreaSize.Y;
 
                 Color sky = Main.ColorOfTheSkies.MultiplyRGB(new Color(128, 168, 248));
                 Color moonShadowColor = ModContent.GetInstance<VFXConfig>().TransparentMoonShadow ? Color.Transparent : sky;
@@ -51,7 +52,7 @@ namespace WizenkleBoss.Common.StarRewrite
 
                     // Actually draw shit.
                 if (Main.dayTime)
-                    DrawSun(spriteBatch, position, color, rotation, scale, centerX, device);
+                    DrawSun(spriteBatch, position, color, rotation, scale, centerX, distanceFromTop, device);
                 else
                     DrawMoon(spriteBatch, position, color, rotation, scale, moonColor, moonShadowColor, device);
 
@@ -61,7 +62,7 @@ namespace WizenkleBoss.Common.StarRewrite
             }
         }
 
-        public static void DrawSun(SpriteBatch spriteBatch, Vector2 position, Color color, float rotation, float scale, float centerX, GraphicsDevice device)
+        public static void DrawSun(SpriteBatch spriteBatch, Vector2 position, Color color, float rotation, float scale, float centerX, float distanceFromTop, GraphicsDevice device)
         {
             if (Main.eclipse)
             {
@@ -72,25 +73,24 @@ namespace WizenkleBoss.Common.StarRewrite
             Texture2D bloom = Bloom.Value;
             Vector2 origin = bloom.Size() / 2f;
 
-            // calculate how big the flare should be
+                // calculate how big the flare should be
             float distanceFromCenter = MathF.Abs(centerX - position.X) / centerX;
-            float distanceFromTop = (position.Y + 50) / Main.screenHeight;
 
             float flareWidth = distanceFromCenter * distanceFromTop * Utils.Remap(distanceFromCenter, 1f, 1.11f, 1f, 0f);
 
-            // outer vauge glow
+                // outer vauge glow
             spriteBatch.Draw(bloom, position, null, (color * 0.2f) with { A = 0 }, 0, origin, 0.35f * scale, SpriteEffects.None, 0f);
 
-            // inner glow
+                // inner glow
             Color innerColor = (color * (1f + (distanceFromCenter * 5f))) with { A = 0 };
             spriteBatch.Draw(bloom, position, null, innerColor, 0, origin, 0.23f * scale, SpriteEffects.None, 0f);
 
-            // for the "line" effect like the one on the 1.4.5 sun.
+                // for the "line" effect like the one on the 1.4.5 sun.
             spriteBatch.Draw(bloom, position, null, (color * 0.6f) with { A = 0 }, 0, origin, new Vector2(6 * flareWidth, 0.02f) * scale, SpriteEffects.None, 0f); // thinest and longest
             spriteBatch.Draw(bloom, position, null, (color * 0.3f) with { A = 0 }, 0, origin, new Vector2(3.3f * flareWidth, 0.09f) * scale, SpriteEffects.None, 0f); // shorter glow
             spriteBatch.Draw(bloom, position, null, color with { A = 0 }, 0, origin, new Vector2(2f * flareWidth, 0.06f) * scale, SpriteEffects.None, 0f); // make it blend in more
 
-            // sungalses.
+                // sungalses.
             if (!Main.gameMenu && Main.player[Main.myPlayer].head == 12)
                 spriteBatch.Draw(Sunglasses.Value, position, null, Color.White, 0, Sunglasses.Value.Size() / 2f, 0.3f * scale, SpriteEffects.None, 0f);
         }
@@ -99,7 +99,7 @@ namespace WizenkleBoss.Common.StarRewrite
         {
             Texture2D texture = Bloom.Value;
             spriteBatch.Draw(texture, position, null, color with { A = 0 }, 0, texture.Size() / 2f, scale * 0.4f, SpriteEffects.None, 0f);
-            // DrawMoon(spriteBatch, position, Color.Black, rotation, scale, device);
+                // DrawMoon(spriteBatch, position, Color.Black, rotation, scale, device);
         }
 
         public static void DrawMoon(SpriteBatch spriteBatch, Vector2 position, Color color, float rotation, float scale, Color moonColor, Color shadowColor, GraphicsDevice device)
@@ -126,7 +126,7 @@ namespace WizenkleBoss.Common.StarRewrite
 
             spriteBatch.Draw(moon, rect, null, moonColor, rotation, moon.Size() / 2f, SpriteEffects.None, 0f);
 
-            // Gives it a subtle bloom effect to make it softer on the eyes.
+                // Gives it a subtle bloom effect to make it softer on the eyes.
             DrawBloom(spriteBatch, position, rotation, scale * 1.2f, moonColor, planet, 0.8f);
         }
 
@@ -153,7 +153,7 @@ namespace WizenkleBoss.Common.StarRewrite
 
             spriteBatch.Draw(moon, rect, null, moonColor, rotation - MathHelper.PiOver2, moon.Size() / 2f, SpriteEffects.None, 0f);
 
-            // Gives it a subtle bloom effect to make it softer on the eyes.
+                // Gives it a subtle bloom effect to make it softer on the eyes.
             DrawBloom(spriteBatch, position, rotation - MathHelper.PiOver2, scale * 1.45f, moonColor, planet, 0.8f);
         }
 

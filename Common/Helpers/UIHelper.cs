@@ -10,6 +10,8 @@ using Terraria.UI;
 using Terraria;
 using WizenkleBoss.Common.Registries;
 using WizenkleBoss.Content.UI;
+using Terraria.GameInput;
+using Terraria.Audio;
 
 namespace WizenkleBoss.Common.Helpers
 {
@@ -83,6 +85,45 @@ namespace WizenkleBoss.Common.Helpers
                 ChatManager.DrawColorCodedStringShadow(spriteBatch, font, text, position, StringShadowCol * alpha, 0, origin, Vector2.One * scale);
                 ChatManager.DrawColorCodedString(spriteBatch, font, text, position, StringCol * alpha, 0, origin, Vector2.One * scale);
             }
+        }
+
+        public static bool DoPanningMovement(ref Vector2 position, ref Vector2 velocity, float slowdown, float speed, float maxRadius, bool restrictToNegative, SoundStyle? sound = null, int soundChance = 2)
+        {
+            Vector2 normalized = Vector2.Zero;
+
+            TriggersSet JustPressed = PlayerInput.Triggers.JustPressed;
+            bool anyJustPressed = JustPressed.Up || JustPressed.Left || JustPressed.Right || JustPressed.Down;
+
+            TriggersSet Current = PlayerInput.Triggers.JustPressed;
+            bool anyCurrent = Current.Up || Current.Left || Current.Right || Current.Down;
+
+            if (anyJustPressed && Main.rand.NextBool(soundChance) && sound != null)
+                SoundEngine.PlaySound(sound);
+
+            if (PlayerInput.Triggers.Current.Up)
+                normalized += new Vector2(0, -1);
+            if (PlayerInput.Triggers.Current.Left)
+                normalized += new Vector2(-1, 0);
+            if (PlayerInput.Triggers.Current.Right)
+                normalized += new Vector2(1, 0);
+            if (PlayerInput.Triggers.Current.Down)
+                normalized += new Vector2(0, 1);
+
+            normalized = normalized.SafeNormalize(Vector2.Zero);
+
+            velocity += normalized * speed;
+            velocity *= slowdown;
+
+            position += velocity;
+            position = position.SafeNormalize(Vector2.Zero) * Utils.Clamp(position.Length(), 0, maxRadius);
+
+            if (restrictToNegative && position.Y > 0f)
+            { 
+                position.Y = 0f;
+                velocity.Y = 0f;
+            }
+
+            return anyCurrent || anyJustPressed;
         }
 
         // Random shit I wanna remember:

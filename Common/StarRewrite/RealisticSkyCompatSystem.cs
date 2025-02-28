@@ -16,6 +16,7 @@ using RealisticSky.Content.Clouds;
 
 namespace WizenkleBoss.Common.StarRewrite
 {
+        // Disable JIT when loading this class without realistic sky.
     [ExtendsFromMod("RealisticSky")]
     public class RealisticSkyCompatSystem : ModSystem
     {
@@ -32,18 +33,15 @@ namespace WizenkleBoss.Common.StarRewrite
 
         public static bool RealisticSkyEnabled = false;
 
-        [JITWhenModsEnabled("RealisticSky")]
         private static bool RealisticClouds => RealisticSkyConfig.Instance.RealisticClouds;
-
-        [JITWhenModsEnabled("RealisticSky")]
         private static Texture2D CloudDensityMap => TexturesRegistry.CloudDensityMap.Value;
-
-        [JITWhenModsEnabled("RealisticSky")]
         private static float CloudHorizontalOffsetValue => CloudsRenderer.CloudHorizontalOffset;
+
+        private static bool DrawingRealisticStarsCorrectly;
 
         public override void Load()
         {
-                // If this loads realistic sky is enabled.
+                // If this loads at all realistic sky is enabled.
             RealisticSkyEnabled = true;
 
             MethodInfo RenderStars = typeof(StarsRenderer).GetMethod("Render", BindingFlags.Public | BindingFlags.Static);
@@ -91,22 +89,16 @@ namespace WizenkleBoss.Common.StarRewrite
             IWouldActuallyLikeToMoveMyCelestialBodiesOnTheTitleScreenThankYouVeryMuch?.Dispose();
         }
 
-        [JITWhenModsEnabled("RealisticSky")]
         public static void DrawRealisticStarsAtTheCorrectLayer(float opacity, Matrix backgroundMatrix)
         {
-            if (!RealisticSkyEnabled)
-                return;
-
+            DrawingRealisticStarsCorrectly = true;
             StarsRenderer.Render(opacity, backgroundMatrix);
+            DrawingRealisticStarsCorrectly = false;
         }
 
-        [JITWhenModsEnabled("RealisticSky")]
         public static bool DrawRealisticCloudsManually(Vector2 worldPosition, Vector2 screenSize, Vector2 sunMoonPosition)
         {
-            if (!RealisticSkyEnabled)
-                return false;
-
-            if (!RealisticClouds) // Seperate check cus it could be null.
+            if (!RealisticClouds) // Seperate check cus jit can suck my ass.
                 return false;
 
                 // This is prolly guaranteed to work.
@@ -140,7 +132,7 @@ namespace WizenkleBoss.Common.StarRewrite
         private void StopRealisticStarsRendering(orig_StarsRender orig, float opacity, Matrix backgroundMatrix)
         {
                 // So then I dont call orig*
-            if (StarRendererSystem.drawingRealisticStars)
+            if (DrawingRealisticStarsCorrectly)
                 orig(opacity, backgroundMatrix);
         }
 
@@ -148,11 +140,15 @@ namespace WizenkleBoss.Common.StarRewrite
         private void ApplyCorrectStarRotation(ILContext il)
         {
             ILCursor c = new(il);
+
+                // Goto right before the reverse rotation is applied.
             c.GotoNext(MoveType.After,
                 i => i.MatchCall("RealisticSky.Content.RealisticSkyManager", "get_StarViewRotation"));
 
+                // Exorcise that shit from the stack.
             c.EmitPop();
 
+                // Make it woke.
             c.EmitDelegate(() => StarSystem.starRotation);
         }
 

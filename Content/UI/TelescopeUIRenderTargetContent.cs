@@ -27,25 +27,24 @@ namespace WizenkleBoss.Content.UI
                 device.SetRenderTarget(_target);
                 device.Clear(Color.Transparent);
 
-                Vector2 center = new(_target.Width / 2f, _target.Height / 2f);
-                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, TelescopeMatrix);
 
                     // Draw the Sky.
                 Texture2D skyTexture = TextureAssets.Background[Main.background].Value;
-                Rectangle destinationRectangle = new(0, 0, _target.Width, _target.Height);
+                Rectangle destinationRectangle = new(-1200, -1200, 2400, 2400);
 
                 spriteBatch.Draw(skyTexture, destinationRectangle, Main.ColorOfTheSkies);
 
                     // Draw the stars.
-                DrawStars(spriteBatch, center + telescopeUIOffset, starAlpha);
+                DrawStars(spriteBatch, Vector2.Zero, starAlpha);
 
                     // Store a million god damn values.
-                Vector2 position = SunMoonPosition + telescopeUIOffset;
-                position /= 1.5f;
+                Vector2 position = SunMoonPosition - (SceneAreaSize * 0.5f);
                 Color color = SunMoonColor;
                 float rotation = SunMoonRotation;
-                float scale = SunMoonScale / 1.5f;
-                float centerX = Main.screenWidth / 2f;
+                float scale = SunMoonScale;
+                float centerX = -telescopeUIPosition.X;
+                float distanceFromTop = (SunMoonPosition.Y + 50) / SceneAreaSize.Y;
 
                 Color skyColor = Main.ColorOfTheSkies.MultiplyRGB(new Color(128, 168, 248));
                 Color moonShadowColor = ModContent.GetInstance<VFXConfig>().TransparentMoonShadow ? Color.Transparent : skyColor;
@@ -53,16 +52,16 @@ namespace WizenkleBoss.Content.UI
 
                     // For easier shader fuckery.
                 spriteBatch.End();
-                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, TelescopeMatrix);
 
                     // Draw the sun/moon.
                 if (Main.dayTime)
-                    SunAndMoonRendererSystem.DrawSun(spriteBatch, position, color, rotation, scale, centerX, device);
+                    SunAndMoonRendererSystem.DrawSun(spriteBatch, position, color, rotation, scale, centerX, distanceFromTop, device);
                 else
                     SunAndMoonRendererSystem.DrawMoon(spriteBatch, position, color, rotation, scale, moonColor, moonShadowColor, device);
 
                     // Draw the lame clouds
-                if (!RealisticSkyCompatSystem.DrawRealisticCloudsManually(Vector2.Zero, TargetSize, position))
+                if (!RealisticSkyCompatHelper.DrawRealisticClouds(Vector2.Zero, TargetSize, position))
                 {
                         // Draw the normal clouds
                     //djisbvshivbfusdh
@@ -80,12 +79,11 @@ namespace WizenkleBoss.Content.UI
                 for (int i = 1; i < starCount - 1; i++)
                 {
                     if (supernovae[i] >= (byte)SupernovaProgress.Exploding)
-                        return;
+                        continue;
 
                     InteractableStar star = stars[i];
 
                     Vector2 position = center + star.position.RotatedBy(starRotation);
-                    position /= 1.5f;
 
                     float rotation = star.rotation;
                     float twinkle = (MathF.Sin(star.twinkle + Main.GlobalTimeWrappedHourly / 12) * 0.2f) + 1f;
@@ -95,10 +93,10 @@ namespace WizenkleBoss.Content.UI
                     Texture2D texture = TextureAssets.Star[star.starType].Value;
                     Vector2 origin = texture.Size() / 2f;
 
-                    spriteBatch.Draw(texture, position, null, color, rotation, origin, scale / 2f, SpriteEffects.None, 0f);
+                    spriteBatch.Draw(texture, position, null, color, rotation, origin, scale / 1.3f, SpriteEffects.None, 0f);
 
-                    spriteBatch.Draw(flare, position, null, (color * 0.13f) with { A = 0 }, 0, flareOrigin, scale / 4.5f, SpriteEffects.None, 0f);
-                    spriteBatch.Draw(flare, position, null, (color * 0.6f) with { A = 0 }, 0, flareOrigin, scale / 7f, SpriteEffects.None, 0f);
+                    spriteBatch.Draw(flare, position, null, (color * 0.13f) with { A = 0 }, 0, flareOrigin, scale / 2.5f, SpriteEffects.None, 0f);
+                    spriteBatch.Draw(flare, position, null, (color * 0.6f) with { A = 0 }, 0, flareOrigin, scale / 5f, SpriteEffects.None, 0f);
                 }
             }
         }
