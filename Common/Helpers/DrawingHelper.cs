@@ -16,9 +16,30 @@ namespace WizenkleBoss.Common.Helpers
     {
         public static Matrix HalfScale => Matrix.CreateScale(0.5f);
 
+        public static void BeginToggledHalfScale(this SpriteBatch spriteBatch, SpriteSortMode sortMode, BlendState blendState, bool usingHalf)
+        {
+            if (usingHalf)
+                spriteBatch.BeginHalfScale(sortMode, blendState);
+            else
+                spriteBatch.Begin(sortMode, blendState);
+        }
+
+        public static void BeginToggledHalfScaleWrap(this SpriteBatch spriteBatch, SpriteSortMode sortMode, BlendState blendState, bool usingHalf)
+        {
+            if (usingHalf)
+                spriteBatch.BeginHalfScale(sortMode, blendState, SamplerState.LinearWrap);
+            else
+                spriteBatch.Begin(sortMode, blendState, SamplerState.LinearWrap, DepthStencilState.None, RasterizerState.CullCounterClockwise);
+        }
+
         public static void BeginHalfScale(this SpriteBatch spriteBatch, SpriteSortMode sortMode, BlendState blendState)
         {
             spriteBatch.Begin(sortMode, blendState, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, HalfScale);
+        }
+
+        public static void BeginHalfScale(this SpriteBatch spriteBatch, SpriteSortMode sortMode, BlendState blendState, SamplerState samplerState)
+        {
+            spriteBatch.Begin(sortMode, blendState, samplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, HalfScale);
         }
 
         public static void RequestAndDrawRenderTarget(this SpriteBatch spriteBatch, ARenderTargetContentByRequest renderTarget)

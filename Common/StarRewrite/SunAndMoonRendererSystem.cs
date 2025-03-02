@@ -33,17 +33,17 @@ namespace WizenkleBoss.Common.StarRewrite
                 device.Clear(Color.Transparent);
 
                     // More pixelated garbage.
-                if (pixelated)
-                    spriteBatch.BeginHalfScale(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-                else
-                    spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+                spriteBatch.BeginToggledHalfScale(SpriteSortMode.Immediate, BlendState.AlphaBlend, pixelated);
 
                     // Params.
                 Vector2 position = SunMoonPosition;
                 Color color = SunMoonColor;
                 float rotation = SunMoonRotation;
                 float scale = SunMoonScale;
+
                 float centerX = Main.screenWidth / 2f;
+                float distanceFromCenter = MathF.Abs(centerX - position.X) / centerX;
+
                 float distanceFromTop = (position.Y + 50) / SceneAreaSize.Y;
 
                 Color sky = Main.ColorOfTheSkies.MultiplyRGB(new Color(128, 168, 248));
@@ -52,7 +52,7 @@ namespace WizenkleBoss.Common.StarRewrite
 
                     // Actually draw shit.
                 if (Main.dayTime)
-                    DrawSun(spriteBatch, position, color, rotation, scale, centerX, distanceFromTop, device);
+                    DrawSun(spriteBatch, position, color, rotation, scale, distanceFromCenter, distanceFromTop, device);
                 else
                     DrawMoon(spriteBatch, position, color, rotation, scale, moonColor, moonShadowColor, device);
 
@@ -62,7 +62,7 @@ namespace WizenkleBoss.Common.StarRewrite
             }
         }
 
-        public static void DrawSun(SpriteBatch spriteBatch, Vector2 position, Color color, float rotation, float scale, float centerX, float distanceFromTop, GraphicsDevice device)
+        public static void DrawSun(SpriteBatch spriteBatch, Vector2 position, Color color, float rotation, float scale, float distanceFromCenter, float distanceFromTop, GraphicsDevice device)
         {
             if (Main.eclipse)
             {
@@ -74,9 +74,7 @@ namespace WizenkleBoss.Common.StarRewrite
             Vector2 origin = bloom.Size() / 2f;
 
                 // calculate how big the flare should be
-            float distanceFromCenter = MathF.Abs(centerX - position.X) / centerX;
-
-            float flareWidth = distanceFromCenter * distanceFromTop * Utils.Remap(distanceFromCenter, 1f, 1.11f, 1f, 0f);
+            float flareWidth = distanceFromCenter * distanceFromTop * Utils.Remap(distanceFromCenter, 1f, 1.11f, 1f, 0f); // this last one makes the flare shrink before the sun goes offscreen so it just doesnt vanish.
 
                 // outer vauge glow
             spriteBatch.Draw(bloom, position, null, (color * 0.2f) with { A = 0 }, 0, origin, 0.35f * scale, SpriteEffects.None, 0f);

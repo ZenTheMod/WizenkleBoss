@@ -13,9 +13,7 @@ namespace WizenkleBoss.Content.UI
         public override bool DistanceCheck => Main.LocalPlayer.Center.Distance(TelescopeUISystem.telescopeTilePosition) >= 140;
         public override void OnActivate()
         {
-            TelescopeUISystem.telescopeUIPosition = Vector2.Zero;
-            TelescopeUISystem.telescopeUIVelocity = Vector2.Zero;
-            TelescopeUISystem.blinkCounter = -10;
+            TelescopeUISystem.ResetValues();
 
             InitializeUI();
 

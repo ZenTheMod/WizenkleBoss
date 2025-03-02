@@ -12,6 +12,7 @@ using WizenkleBoss.Common.Registries;
 using WizenkleBoss.Common.StarRewrite;
 using static WizenkleBoss.Common.StarRewrite.StarSystem;
 using static WizenkleBoss.Common.StarRewrite.SunAndMoonSystem;
+using static WizenkleBoss.Common.StarRewrite.RealisticSkyCompatHelper;
 
 namespace WizenkleBoss.Content.UI
 {
@@ -31,19 +32,27 @@ namespace WizenkleBoss.Content.UI
 
                     // Draw the Sky.
                 Texture2D skyTexture = TextureAssets.Background[Main.background].Value;
-                Rectangle destinationRectangle = new(-1200, -1200, 2400, 2400);
+                Rectangle destinationRectangle = new(-1300, -1300, 2600, 1600);
 
                 spriteBatch.Draw(skyTexture, destinationRectangle, Main.ColorOfTheSkies);
 
                     // Draw the stars.
                 DrawStars(spriteBatch, Vector2.Zero, starAlpha);
 
+                DrawRealisticGalaxy(destinationRectangle.Size() * 0.6f, 2600);
+
                     // Store a million god damn values.
                 Vector2 position = SunMoonPosition - (SceneAreaSize * 0.5f);
+                position.X *= 1.2f;
+
                 Color color = SunMoonColor;
                 float rotation = SunMoonRotation;
                 float scale = SunMoonScale;
-                float centerX = -telescopeUIPosition.X;
+
+                if (Main.dayTime)
+                    scale += MathF.Pow(2, 10 * ((blindnessCounter / 400f) - 1)) * 10f;
+
+                float distanceFromCenter = MathF.Abs(position.X) / (SceneAreaSize.X * 0.5f);
                 float distanceFromTop = (SunMoonPosition.Y + 50) / SceneAreaSize.Y;
 
                 Color skyColor = Main.ColorOfTheSkies.MultiplyRGB(new Color(128, 168, 248));
@@ -51,17 +60,30 @@ namespace WizenkleBoss.Content.UI
                 Color moonColor = skyColor.MultiplyRGB(color) * 16f * scale;
 
                     // For easier shader fuckery.
+                if (RealisticSkyCompatSystem.RealisticSkyEnabled)
+                {
+                        // Could not compile input layout! Error Code: The parameter is incorrect (0x80070057)
+                        // Could not compile input layout! Error Code: The parameter is incorrect (0x80070057)
+                        // Could not compile input layout! Error Code: The parameter is incorrect (0x80070057)
+                        // Could not compile input layout! Error Code: The parameter is incorrect (0x80070057)
+                        // Could not compile input layout! Error Code: The parameter is incorrect (0x80070057)
+                    spriteBatch.End();
+                    spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearWrap, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Matrix.CreateTranslation(-1, -1, 0f));
+
+                    DrawRealisticStars(device, starAlpha, destinationRectangle.Size(), position, Matrix.Identity, Main.GlobalTimeWrappedHourly, Main.eclipse ? 0.05f : 0.3f);
+                }
+
                 spriteBatch.End();
-                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, TelescopeMatrix);
+                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearWrap, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, TelescopeMatrix);
 
                     // Draw the sun/moon.
                 if (Main.dayTime)
-                    SunAndMoonRendererSystem.DrawSun(spriteBatch, position, color, rotation, scale, centerX, distanceFromTop, device);
+                    SunAndMoonRendererSystem.DrawSun(spriteBatch, position, color, rotation, scale, distanceFromCenter, distanceFromTop, device);
                 else
                     SunAndMoonRendererSystem.DrawMoon(spriteBatch, position, color, rotation, scale, moonColor, moonShadowColor, device);
 
                     // Draw the lame clouds
-                if (!RealisticSkyCompatHelper.DrawRealisticClouds(Vector2.Zero, TargetSize, position))
+                if (!DrawRealisticClouds(Vector2.Zero, destinationRectangle, position + new Vector2(1300, 1300)));
                 {
                         // Draw the normal clouds
                     //djisbvshivbfusdh

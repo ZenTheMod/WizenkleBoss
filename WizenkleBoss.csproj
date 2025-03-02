@@ -8,6 +8,11 @@
 	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	  <NoWarn>MSB3270, CS0436, CS8618, CS8605, CS8603, CS8601, CS8600, CS8625, SYSLIB0050, SYSLIB00, X3206, X4717</NoWarn>
 	</PropertyGroup>
+	
+	<!-- Shut the absolute fuck up -->
+	<PropertyGroup>
+      <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
+	</PropertyGroup>
 
 	<!-- Find shaders to compile -->
 	<ItemGroup>

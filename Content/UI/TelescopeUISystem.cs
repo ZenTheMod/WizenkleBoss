@@ -15,6 +15,10 @@ using Terraria.UI.Chat;
 using WizenkleBoss.Common.Helpers;
 using WizenkleBoss.Common.Config;
 using WizenkleBoss.Common.Registries;
+using static WizenkleBoss.Common.StarRewrite.SunAndMoonSystem;
+using Terraria.ID;
+using WizenkleBoss.Content.Buffs;
+using WizenkleBoss.Common.ILDetourSystems;
 
 namespace WizenkleBoss.Content.UI
 {
@@ -25,25 +29,37 @@ namespace WizenkleBoss.Content.UI
         public static bool inUI => telescopeUI.InUI;
 
         public static Vector2 telescopeTilePosition;
-        public static Vector2 telescopeUIPosition;
-        public static Vector2 telescopeUIVelocity;
+        public static Vector2 telescopeUIPosition = Vector2.Zero;
+        public static Vector2 telescopeUIVelocity = Vector2.Zero;
 
         public static int blinkCounter = -10;
-        private static int blinkFrame = -1;
+        public static int blinkFrame = -1;
 
         private static bool prompt = true;
 
-        public static Matrix TelescopeMatrix => Matrix.CreateTranslation(TargetSize.X / 2f, TargetSize.Y / 2f, 0f) * Matrix.CreateTranslation(-telescopeUIPosition.X, -telescopeUIPosition.Y, 0f) * Matrix.CreateScale(0.75f);
+        public static float fadeValue => blinkFrame >= 0 ? 1 : Utils.Remap(blinkCounter, -10, 5, 0, 1);
+
+        public static Matrix TelescopeMatrix => Matrix.CreateTranslation(TargetSize.X / 2f, TargetSize.Y / 2f, 0f) * Matrix.CreateTranslation(-telescopeUIPosition.X, -telescopeUIPosition.Y, 0f);
+
+        public static int blindnessCounter = 0;
+
+        public static void ResetValues()
+        {
+                // telescopeUIPosition = Vector2.Zero;
+            telescopeUIVelocity = Vector2.Zero;
+            blinkCounter = -10;
+            blindnessCounter = 0;
+        }
 
         private static void DrawTelescope()
         {
-            var frostyLensShader = Shaders.FrostyLensShader;
+            Effect frostyLensShader = Shaders.FrostyLensShader.Value;
             var gd = Main.instance.GraphicsDevice;
 
             gd.Textures[1] = Textures.Lichen.Value;
             gd.SamplerStates[1] = SamplerState.LinearWrap;
 
-            frostyLensShader.Value.CurrentTechnique.Passes[0].Apply();
+            frostyLensShader.CurrentTechnique.Passes[0].Apply();
 
             int size = (int)(Helper.UIScreenSize.Y * 0.85f);
             Rectangle frame = new((int)Helper.HalfUIScreenSize.X, (int)Helper.HalfUIScreenSize.Y, size, size);
@@ -70,8 +86,7 @@ namespace WizenkleBoss.Content.UI
                         Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
 
                             // Draw a black base for everything else to sit on.
-                        float colormult = blinkFrame >= 0 ? 1 : Utils.Remap(blinkCounter, -10, 6, 0, 1);
-                        Main.spriteBatch.Draw(Textures.Pixel.Value, new Rectangle(0, 0, (int)Helper.UIScreenSize.X + 10, (int)Helper.UIScreenSize.Y + 10), Color.Black * colormult);
+                        Main.spriteBatch.Draw(Textures.Pixel.Value, new Rectangle(0, 0, (int)Helper.UIScreenSize.X + 10, (int)Helper.UIScreenSize.Y + 10), Color.Black * fadeValue);
 
                             // this sb code is a bit goofy but idc
                         if (blinkFrame >= 0)
@@ -94,7 +109,7 @@ namespace WizenkleBoss.Content.UI
                         }
 
                         DynamicSpriteFont font = FontAssets.DeathText.Value;
-                        Main.spriteBatch.DrawGenericBackButton(font, telescopeUI.BackPanel, Helper.UIScreenSize, Language.GetTextValue("UI.Back"), alpha: colormult);
+                        Main.spriteBatch.DrawGenericBackButton(font, telescopeUI.BackPanel, Helper.UIScreenSize, Language.GetTextValue("UI.Back"), alpha: fadeValue);
 
                             // Draw the movement key prompt.
                         if (ModContent.GetInstance<UIConfig>().TelescopeMovementKeyPrompt && prompt && blinkFrame >= 0)
@@ -118,6 +133,7 @@ namespace WizenkleBoss.Content.UI
                 );
             }
         }
+
         public override void UpdateUI(GameTime gameTime)
         {
             if (inUI)
@@ -130,14 +146,35 @@ namespace WizenkleBoss.Content.UI
                 if (Helper.DoPanningMovement(ref telescopeUIPosition, ref telescopeUIVelocity, 0.96f, speed, 1000, true, Sounds.TelescopePan, 2) 
                     && prompt && ModContent.GetInstance<UIConfig>().TelescopeMovementKeyPrompt)
                     prompt = false;
+
+                BlindThoseWhoLookAtTheSun();
             }
 
             UpdateBlinkAnimation();
         }
+
         public static void UpdateBlinkAnimation()
         {
-            if (!inUI)
+            if (inUI)
             {
+                    // Gradual build up from -10, then it resets to 0 when it reaches 5.
+
+                    // When the blinkFrame is -1, fadeValue uses blinkCounter as a range from -10 to 5, else its just 1.
+                if (blinkFrame >= 3)
+                    return;
+
+                if (++blinkCounter >= 5)
+                {
+                    blinkCounter = 0;
+                    blinkFrame++;
+                }
+            }
+            else
+            {
+                    // Same thing in reverse.
+                if (blinkCounter < -10)
+                    return;
+
                 if (blinkFrame >= 0)
                 {
                     if (--blinkCounter <= 0)
@@ -150,17 +187,36 @@ namespace WizenkleBoss.Content.UI
                 {
                     blinkCounter--;
                 }
-                return;
             }
+        }
 
-            if (blinkFrame >= 3)
+        public static void BlindThoseWhoLookAtTheSun()
+        {
+                // The moon doesn't hate you dw. (but I do (reaper))
+            if (!Main.dayTime)
                 return;
 
-            if (++blinkCounter >= 5)
+            Vector2 position = SunMoonPosition - (SceneAreaSize * 0.5f);
+            position.X *= 1.2f;
+
+            float blindness = blindnessCounter / 400f;
+            if (BlindPlayerSystem.BlindnessInterpolator < blindness)
+                BlindPlayerSystem.BlindnessInterpolator = blindness;
+
+            if (blindnessCounter >= 400)
             {
-                blinkCounter = 0;
-                blinkFrame++;
+                Main.LocalPlayer.AddBuff(ModContent.BuffType<BlindnessBuff>(), 10800);
+                Main.menuMode = 0;
+                IngameFancyUI.Close();
+                return;
             }
+
+            float distance = Vector2.Distance(telescopeUIPosition, position);
+
+            if (distance <= 100)
+                blindnessCounter++;
+            else
+                blindnessCounter--;
         }
     }
 }

@@ -105,6 +105,11 @@ Buffs: {
 		DisplayName: Amalgamate
 		Description: …
 	}
+
+	BlindnessBuff: {
+		DisplayName: Blindness Buff
+		Description: Mods.WizenkleBoss.Buffs.BlindnessBuff.Description
+	}
 }
 
 Keybinds.InkDash.DisplayName: Ink Dash

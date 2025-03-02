@@ -69,7 +69,7 @@ namespace WizenkleBoss.Common.Ink
                 if (InkRippleSystem.isReady)
                 {
                     spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, default, default, default, null, Main.GameViewMatrix.ZoomMatrix);
-                    var Ink = Shaders.WaterInkColorizer;
+                    var Ink = Shaders.WaterProcessor;
 
                     Ink.Value.Parameters["InkColor"]?.SetValue(InkColor.ToVector4());
                     Ink.Value.Parameters["RippleStrength"]?.SetValue(5f * Utils.Remap(ModContent.GetInstance<VFXConfig>().InkContrast / 100f, 0f, 1f, 1f, 4f));

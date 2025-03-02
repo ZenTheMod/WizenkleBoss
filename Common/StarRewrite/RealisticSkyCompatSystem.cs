@@ -13,6 +13,11 @@ using RealisticSky.Content.NightSky;
 using RealisticSky.Content.Sun;
 using RealisticSky.Assets;
 using RealisticSky.Content.Clouds;
+using RealisticSky.Content.Atmosphere;
+using Terraria.GameContent;
+using RealisticSky.Common.Utilities;
+using RealisticSky.Content;
+using WizenkleBoss.Common.Registries;
 
 namespace WizenkleBoss.Common.StarRewrite
 {
@@ -25,6 +30,9 @@ namespace WizenkleBoss.Common.StarRewrite
 
         public static ILHook MatchStarRotation;
 
+        public static Hook MatchGalaxyRotation;
+        public delegate void orig_GalaxyRender();
+
         public static Hook DisableRealisticSun;
         public delegate void orig_SunRender(float sunriseAndSetInterpolant);
 
@@ -33,11 +41,17 @@ namespace WizenkleBoss.Common.StarRewrite
 
         public static bool RealisticSkyEnabled = false;
 
+        public static MethodInfo CalculatePerspectiveMatrix;
+        public static FieldInfo AtmosphereTarget;
+
+        public static FieldInfo StarVertexBuffer;
+        public static FieldInfo StarIndexBuffer;
+
+        public static MethodInfo UpdateOpacity;
+
         private static bool RealisticClouds => RealisticSkyConfig.Instance.RealisticClouds;
         private static Texture2D CloudDensityMap => TexturesRegistry.CloudDensityMap.Value;
         private static float CloudHorizontalOffsetValue => CloudsRenderer.CloudHorizontalOffset;
-
-        private static bool DrawingRealisticStarsCorrectly;
 
         public override void Load()
         {
@@ -52,13 +66,28 @@ namespace WizenkleBoss.Common.StarRewrite
                 DisableRealisticStars?.Apply();
             }
 
-            MethodInfo CalculatePerspectiveMatrix = typeof(StarsRenderer).GetMethod("CalculatePerspectiveMatrix", BindingFlags.NonPublic | BindingFlags.Static);
+            StarVertexBuffer = typeof(StarsRenderer).GetField("StarVertexBuffer", BindingFlags.NonPublic | BindingFlags.Static);
+            StarIndexBuffer = typeof(StarsRenderer).GetField("StarIndexBuffer", BindingFlags.NonPublic | BindingFlags.Static);
+
+            CalculatePerspectiveMatrix = typeof(StarsRenderer).GetMethod("CalculatePerspectiveMatrix", BindingFlags.NonPublic | BindingFlags.Static);
 
             if (CalculatePerspectiveMatrix != null)
             {
-                MatchStarRotation = new(CalculatePerspectiveMatrix, ApplyCorrectStarRotation);
+                MatchStarRotation = new(CalculatePerspectiveMatrix, ApplyCorrectRotation);
                 MatchStarRotation?.Apply();
             }
+
+            AtmosphereTarget = typeof(AtmosphereRenderer).GetField("AtmosphereTarget", BindingFlags.NonPublic | BindingFlags.Static);
+
+            MethodInfo RenderGalaxy = typeof(GalaxyRenderer).GetMethod("Render", BindingFlags.Public | BindingFlags.Static);
+
+            if (RenderGalaxy != null)
+            {
+                MatchGalaxyRotation = new(RenderGalaxy, StopGalaxyRendering);
+                MatchGalaxyRotation?.Apply();
+            }
+
+            UpdateOpacity = typeof(GalaxyRenderer).GetMethod("UpdateOpacity", BindingFlags.NonPublic | BindingFlags.Static);
 
                 // if people want the realistic sun
             if (!ModContent.GetInstance<VFXConfig>().SunAndMoonRework)
@@ -89,14 +118,87 @@ namespace WizenkleBoss.Common.StarRewrite
             IWouldActuallyLikeToMoveMyCelestialBodiesOnTheTitleScreenThankYouVeryMuch?.Dispose();
         }
 
-        public static void DrawRealisticStarsAtTheCorrectLayer(float opacity, Matrix backgroundMatrix)
+        public static void DrawRealisticStarsAtTheCorrectLayer(GraphicsDevice device, float opacity, Vector2 screenSize, Vector2 sunPosition, Matrix backgroundMatrix, float globalTime, float falloffsize)
         {
-            DrawingRealisticStarsCorrectly = true;
-            StarsRenderer.Render(opacity, backgroundMatrix);
-            DrawingRealisticStarsCorrectly = false;
+            if (RealisticSkyConfig.Instance.NightSkyStarCount <= 0)
+                return;
+
+            Effect stars = GameShaders.Misc["RealisticSky:StarShader"].Shader;
+
+            float num = MathUtils.Saturate(MathF.Pow(1f - Main.atmo, 3f) + MathF.Pow(1f - RealisticSkyManager.SkyBrightness, 5f)) * opacity;
+
+            stars.Parameters["opacity"]?.SetValue(num);
+            stars.Parameters["projection"]?.SetValue((Matrix)CalculatePerspectiveMatrix.Invoke(null, null) * backgroundMatrix);
+            stars.Parameters["globalTime"]?.SetValue(globalTime);
+            stars.Parameters["sunPosition"]?.SetValue(Main.dayTime ? sunPosition : (Vector2.One * 50000f));
+            stars.Parameters["minTwinkleBrightness"]?.SetValue(0.2f);
+            stars.Parameters["maxTwinkleBrightness"]?.SetValue(3.37f);
+                
+                // Why on EARTH does this even EXIST.
+            stars.Parameters["distanceFadeoff"]?.SetValue(falloffsize);
+            stars.Parameters["screenSize"]?.SetValue(screenSize);
+
+            stars.CurrentTechnique.Passes[0].Apply();
+
+                // Why must we be internal?
+            AtmosphereTargetContent atmosphere = (AtmosphereTargetContent)AtmosphereTarget?.GetValue(null);
+            atmosphere?.Request();
+
+            device.Textures[1] = TexturesRegistry.BloomCircle.Value;
+            device.SamplerStates[1] = SamplerState.LinearWrap;
+
+            device.Textures[2] = atmosphere.IsReady ? atmosphere.GetTarget() : TextureAssets.MagicPixel.Value;
+            device.SamplerStates[2] = SamplerState.LinearClamp;
+
+            device.RasterizerState = RasterizerState.CullNone;
+            
+                // Why must we continue to be internal?
+            VertexBuffer vertexBuffer = (VertexBuffer)StarVertexBuffer.GetValue(null);
+            IndexBuffer indexBuffer = (IndexBuffer)StarIndexBuffer.GetValue(null);
+
+            device.Indices = indexBuffer;
+            device.SetVertexBuffer(vertexBuffer);
+            device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, vertexBuffer.VertexCount, 0, indexBuffer.IndexCount / 3);
+            device.SetVertexBuffer(null);
+            device.Indices = null;
         }
 
-        public static bool DrawRealisticCloudsManually(Vector2 worldPosition, Vector2 screenSize, Vector2 sunMoonPosition)
+        public static void ApplyAtmosphereShader(GraphicsDevice device, float opacity)
+        {
+            Effect atmo = Shaders.StarAtmosphereShader.Value;
+
+            if (atmo == null)
+                return;
+
+            atmo.Parameters["alpha"]?.SetValue(opacity);
+
+            atmo.CurrentTechnique.Passes[0].Apply();
+
+            AtmosphereTargetContent atmosphere = (AtmosphereTargetContent)AtmosphereTarget.GetValue(null);
+            atmosphere.Request();
+
+            device.Textures[1] = atmosphere.IsReady ? atmosphere.GetTarget() : TextureAssets.MagicPixel.Value;
+            device.SamplerStates[1] = SamplerState.LinearClamp;
+        }
+
+        public static void DrawGalaxy(Vector2 position, float screenWidth)
+        {
+            UpdateOpacity.Invoke(null, null);
+
+            Texture2D galaxy = TexturesRegistry.Galaxy.Value;
+            Texture2D bloom = TexturesRegistry.BloomCircleBig.Value;
+
+            float num = screenWidth / galaxy.Width * 1.3f;
+            Color color = new Color(1.2f, 0.9f, 1f) * GalaxyRenderer.MovingGalaxyOpacity;
+
+                // I ain't touchin this mess.
+            Main.spriteBatch.Draw(bloom, position, null, (color * MathF.Sqrt(GalaxyRenderer.MovingGalaxyOpacity) * 0.55f) with { A = 0 }, 0f, bloom.Size() * 0.5f, num * 0.29f, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(bloom, position, null, (color * GalaxyRenderer.MovingGalaxyOpacity * 0.3f) with { A = 0 }, 0f, bloom.Size() * 0.5f, num * 3f, SpriteEffects.None, 0f);
+
+            Main.spriteBatch.Draw(galaxy, position, null, (color * 0.34f) with { A = 0 }, StarSystem.starRotation, galaxy.Size() * 0.5f, num, SpriteEffects.None, 0f);
+        }
+
+        public static bool DrawRealisticCloudsManually(Vector2 worldPosition, Rectangle dimentions, Vector2 sunMoonPosition)
         {
             if (!RealisticClouds) // Seperate check cus jit can suck my ass.
                 return false;
@@ -108,7 +210,7 @@ namespace WizenkleBoss.Common.StarRewrite
             clouds.Parameters["globalTime"]?.SetValue(Main.GlobalTimeWrappedHourly);
             
             clouds.Parameters["invertedGravity"]?.SetValue(false); // no
-            clouds.Parameters["screenSize"]?.SetValue(screenSize);
+            clouds.Parameters["screenSize"]?.SetValue(dimentions.Size());
             
             clouds.Parameters["worldPosition"]?.SetValue(worldPosition);
             clouds.Parameters["sunPosition"]?.SetValue(new Vector3(sunMoonPosition, 5f)); // fucking why is this a vec3.
@@ -124,20 +226,12 @@ namespace WizenkleBoss.Common.StarRewrite
             clouds.CurrentTechnique.Passes[0].Apply();
 
             Texture2D cloud = CloudDensityMap; // uuuuuuuuhhhhhhhhhhhhhhhhhhhhhhhhh
-            Main.spriteBatch.Draw(cloud, new Rectangle(0, 0, (int)screenSize.X, (int)screenSize.Y), Color.White);
+            Main.spriteBatch.Draw(cloud, dimentions, Color.White);
 
             return true;
         }
 
-        private void StopRealisticStarsRendering(orig_StarsRender orig, float opacity, Matrix backgroundMatrix)
-        {
-                // So then I dont call orig*
-            if (DrawingRealisticStarsCorrectly)
-                orig(opacity, backgroundMatrix);
-        }
-
-            // ofc this is not perfect, but it feels better then not having it.
-        private void ApplyCorrectStarRotation(ILContext il)
+        private void ApplyCorrectRotation(ILContext il)
         {
             ILCursor c = new(il);
 
@@ -152,11 +246,18 @@ namespace WizenkleBoss.Common.StarRewrite
             c.EmitDelegate(() => StarSystem.starRotation);
         }
 
+        private void StopRealisticStarsRendering(orig_StarsRender orig, float opacity, Matrix backgroundMatrix)
+        {
+                // So then I dont call orig*
+        }
+        private void StopGalaxyRendering(orig_GalaxyRender orig)
+        {
+                // So then I dont call orig.
+        }
         private void StopRealisticSunRendering(orig_SunRender orig, float sunriseAndSetInterpolant)
         {
                 // So then I dont call orig.
         }
-
         private void HorizontalBias(orig_VerticallyBiasSunAndMoon orig) // THIS IS NOT REALISTIJC YOU STUPID UNINELLIJENT FRICK I HATE YOU (Reaper)
         {
                 // So then I dont call orig.

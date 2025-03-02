@@ -8,6 +8,7 @@ using WizenkleBoss.Common.Config;
 using WizenkleBoss.Common.Helpers;
 using WizenkleBoss.Common.Registries;
 using static WizenkleBoss.Common.StarRewrite.StarSystem;
+using static WizenkleBoss.Common.StarRewrite.RealisticSkyCompatHelper;
 
 namespace WizenkleBoss.Common.StarRewrite
 {
@@ -30,18 +31,30 @@ namespace WizenkleBoss.Common.StarRewrite
 
                 Vector2 center = Helper.HalfScreenSize;
 
-                if (pixelated)
-                    spriteBatch.BeginHalfScale(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-                else
-                    spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+                spriteBatch.BeginToggledHalfScaleWrap(SpriteSortMode.Deferred, BlendState.AlphaBlend, pixelated);
 
                 float alpha = starAlpha;
 
                 if (alpha != 0)
                     DrawStars(spriteBatch, center, alpha);
 
-                RealisticSkyCompatHelper.DrawRealisticStars(alpha * 0.5f, pixelated ? Helper.HalfScale : Matrix.Identity);
+                DrawRealisticGalaxy(Helper.ScreenSize * 0.6f, Helper.ScreenSize.X);
 
+                if (RealisticSkyCompatSystem.RealisticSkyEnabled)
+                {
+                    spriteBatch.End();
+                    spriteBatch.BeginToggledHalfScale(SpriteSortMode.Immediate, BlendState.AlphaBlend, pixelated);
+
+                    Vector2 sunPos = SunAndMoonSystem.SunMoonPosition;
+                    float falloff = Main.eclipse ? 0.05f : 0.3f;
+                    if (pixelated)
+                    {
+                        sunPos /= 2f;
+                        falloff /= 2f;
+                    }
+
+                    DrawRealisticStars(device, alpha * 0.5f, size, sunPos, Matrix.Identity, Main.GlobalTimeWrappedHourly, falloff);
+                }
                     // InteractableStar inkStar = StarSystem.stars[0];
 
                 spriteBatch.End();
@@ -100,7 +113,23 @@ namespace WizenkleBoss.Common.StarRewrite
                 return;
             }
 
+            var snapshit = Main.spriteBatch.CaptureSnapshot();
+
+            if (RealisticSkyCompatSystem.RealisticSkyEnabled)
+            {
+                Main.spriteBatch.End();
+                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.BackgroundViewMatrix.EffectMatrix);
+
+                ApplyStarAtmosphereShader(Main.instance.GraphicsDevice, 1f);
+            }
+
             Main.spriteBatch.RequestAndDrawRenderTarget(starTargetByRequest);
+
+            if (RealisticSkyCompatSystem.RealisticSkyEnabled)
+            {
+                Main.spriteBatch.End();
+                Main.spriteBatch.Begin(in snapshit);
+            }
         }
     }
 }

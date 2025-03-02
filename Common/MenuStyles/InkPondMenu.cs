@@ -89,7 +89,7 @@ namespace WizenkleBoss.Common.MenuStyles
             InkRippleSystem.requestedThisFrame = true;
             if (InkRippleSystem.isReady)
             {
-                var Ink = Shaders.WaterInkColorizer;
+                var Ink = Shaders.WaterProcessor;
 
                 Ink.Value.Parameters["InkColor"]?.SetValue(InkSystem.InkColor.ToVector4());
                 Ink.Value.Parameters["RippleStrength"]?.SetValue(20f);

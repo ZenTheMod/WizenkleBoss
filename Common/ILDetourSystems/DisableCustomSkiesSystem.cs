@@ -15,15 +15,15 @@ namespace WizenkleBoss.Common.ILDetourSystems
     {
         public override void Load()
         {
-            On_SkyManager.DrawDepthRange += On_SkyManager_DrawDepthRange;
+            On_SkyManager.DrawDepthRange += MenuFix;
         }
 
         public override void Unload()
         {
-            On_SkyManager.DrawDepthRange -= On_SkyManager_DrawDepthRange;
+            On_SkyManager.DrawDepthRange -= MenuFix;
         }
 
-        private void On_SkyManager_DrawDepthRange(On_SkyManager.orig_DrawDepthRange orig, SkyManager self, SpriteBatch spriteBatch, float minDepth, float maxDepth)
+        private void MenuFix(On_SkyManager.orig_DrawDepthRange orig, SkyManager self, SpriteBatch spriteBatch, float minDepth, float maxDepth)
         {
             if (!InkPondMenu.InMenu)
                 orig(self, spriteBatch, minDepth, maxDepth);

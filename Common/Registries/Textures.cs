@@ -29,7 +29,6 @@ namespace WizenkleBoss.Common.Registries
         public static readonly Asset<Texture2D> BlinkOuter = LoadTexture2D("Telescope/BlinkOuter");
         public static readonly Asset<Texture2D> InkDash = LoadTexture2D("InkDash");
         public static readonly Asset<Texture2D> TextBoxStars = LoadTexture2D("Telescope/TextBoxStars");
-        public static readonly Asset<Texture2D> TelescopeMap = LoadTexture2D("Telescope/Map");
         public static readonly Asset<Texture2D> Cursor = LoadTexture2D("Cursor");
         public static readonly Asset<Texture2D>[] ConsoleError = [LoadTexture2D("Icons/NotConnectedToPower"), LoadTexture2D("Icons/NotConnectedToSatelliteDish")];
         public static readonly Asset<Texture2D> ConfigIcon = LoadTexture2D("Icons/Settings");

@@ -19,9 +19,9 @@ namespace WizenkleBoss.Common.Registries
         internal static Asset<Effect> FrostyLensShader;
         internal static Asset<Effect> TransmitShader;
         internal static Asset<Effect> OldMonitorShader;
+        internal static Asset<Effect> StarAtmosphereShader;
 
         internal static Asset<Effect> WaterProcessor;
-        internal static Asset<Effect> WaterInkColorizer;
 
         internal static Filter InkShader;
 
@@ -49,9 +49,9 @@ namespace WizenkleBoss.Common.Registries
 
             OldMonitorShader = LoadShader("Shaders/OldMonitor");
 
-            WaterProcessor = LoadShader("Water/WaterProcesser");
+            StarAtmosphereShader = LoadShader("Shaders/StarAtmosphere");
 
-            WaterInkColorizer = LoadShader("Water/WaterProcesser");
+            WaterProcessor = LoadShader("Water/WaterProcesser");
 
             Asset<Effect> BarrierShader = LoadShader("Shaders/Barrier");
             InkShader = new(new InkShaderData(BarrierShader, pass)); // EffectPriority is completely irrelevant (I am forcefully applying my filter after normal filters are applied).
